@@ -22,15 +22,17 @@ $cfg['blowfish_secret'] = 'wamp'; /* YOU MUST FILL IN THIS FOR COOKIE AUTH! */
 $i = 0;
 
 /*
- * First server
+ * First server : MySQL
  */
 $i++;
 /* Authentication type */
 $cfg['Servers'][$i]['auth_type'] = 'cookie';
-// $cfg['Servers'][$i]['user']          = 'root';      // MySQL user
-// $cfg['Servers'][$i]['password']      = '';          // MySQL password (only needed)
+// $cfg['Servers'][$i]['user']          = 'phlyper';      // MySQL user
+// $cfg['Servers'][$i]['password']      = 'azerty';          // MySQL password (only needed)
 /* Server parameters */
+$cfg['Servers'][$i]['verbose'] = 'localhost MySQL port 3306';
 $cfg['Servers'][$i]['host'] = 'localhost';
+$cfg['Servers'][$i]['port'] = '3306';
 $cfg['Servers'][$i]['connect_type'] = 'tcp';
 $cfg['Servers'][$i]['compress'] = false;
 /* Select mysql if your server does not have mysqli */
@@ -45,6 +47,7 @@ $cfg['Servers'][$i]['AllowNoPassword'] = false;
 
 /* User used to manipulate with storage */
 // $cfg['Servers'][$i]['controlhost'] = '';
+// $cfg['Servers'][$i]['controlport'] = '';
 $cfg['Servers'][$i]['controluser'] = 'pma';
 $cfg['Servers'][$i]['controlpass'] = '';
 
@@ -69,6 +72,63 @@ $cfg['Servers'][$i]['savedsearches'] = 'pma_savedsearches';
 /* Contrib / Swekey authentication */
 // $cfg['Servers'][$i]['auth_swekey_config'] = '/etc/swekey-pma.conf';
 
+// -----------------------------------------------
+/*
+ * Second server : MariaDB
+ */
+$i++;
+/* Authentication type */
+$cfg['Servers'][$i]['auth_type'] = 'cookie';
+// $cfg['Servers'][$i]['user']          = 'phlyper';      // MySQL user
+// $cfg['Servers'][$i]['password']      = 'azerty';          // MySQL password (only needed)
+/* Server parameters */
+$cfg['Servers'][$i]['verbose'] = 'localhost MariaDB port 3307';
+$cfg['Servers'][$i]['host'] = 'localhost';
+$cfg['Servers'][$i]['port'] = '3307';
+$cfg['Servers'][$i]['connect_type'] = 'tcp';
+$cfg['Servers'][$i]['compress'] = false;
+/* Select mysql if your server does not have mysqli */
+$cfg['Servers'][$i]['extension'] = 'mysqli';
+$cfg['Servers'][$i]['AllowNoPassword'] = false;
+
+//$cfg['AllowArbitraryServer'] = true; //activer la synchronisation a distance
+
+/*
+ * phpMyAdmin configuration storage settings.
+ */
+
+/* User used to manipulate with storage */
+// $cfg['Servers'][$i]['controlhost'] = '';
+// $cfg['Servers'][$i]['controlport'] = '';
+$cfg['Servers'][$i]['controluser'] = 'pma';
+$cfg['Servers'][$i]['controlpass'] = '';
+
+/* Storage database and tables */
+$cfg['Servers'][$i]['pmadb'] = 'phpmyadmin';
+$cfg['Servers'][$i]['bookmarktable'] = 'pma_bookmark';
+$cfg['Servers'][$i]['relation'] = 'pma_relation';
+$cfg['Servers'][$i]['table_info'] = 'pma_table_info';
+$cfg['Servers'][$i]['table_coords'] = 'pma_table_coords';
+$cfg['Servers'][$i]['pdf_pages'] = 'pma_pdf_pages';
+$cfg['Servers'][$i]['column_info'] = 'pma_column_info';
+$cfg['Servers'][$i]['history'] = 'pma_history';
+$cfg['Servers'][$i]['table_uiprefs'] = 'pma_table_uiprefs';
+$cfg['Servers'][$i]['tracking'] = 'pma_tracking';
+$cfg['Servers'][$i]['designer_coords'] = 'pma_designer_coords';
+$cfg['Servers'][$i]['userconfig'] = 'pma_userconfig';
+$cfg['Servers'][$i]['recent'] = 'pma_recent';
+$cfg['Servers'][$i]['users'] = 'pma_users';
+$cfg['Servers'][$i]['usergroups'] = 'pma_usergroups';
+$cfg['Servers'][$i]['navigationhiding'] = 'pma_navigationhiding';
+$cfg['Servers'][$i]['savedsearches'] = 'pma_savedsearches';
+/* Contrib / Swekey authentication */
+// $cfg['Servers'][$i]['auth_swekey_config'] = '/etc/swekey-pma.conf';
+
+
+/*
+ * End of servers configuration
+ */
+
 if(!isset($_SESSION['event_scheduler'])) {
 $ldb = mysql_connect($cfg['Servers'][$i]['host'], $cfg['Servers'][$i]['controluser'], $cfg['Servers'][$i]['controlpass']);
 $dbq = mysql_query("SHOW VARIABLES LIKE 'event_scheduler'");
@@ -78,10 +138,8 @@ if($dba['Value'] === 0 || $dba['Value'] === "OFF") {
 	$_SESSION['event_scheduler'] = true;
 }
 }
-/*
- * End of servers configuration
- */
 
+//$cfg['ThemeDefault'] = 'metro';
 $cfg['DefaultLang'] = 'fr-utf-8';
 $cfg['ServerDefault'] = 1;
 
