@@ -27,8 +27,8 @@ $i = 0;
 $i++;
 /* Authentication type */
 $cfg['Servers'][$i]['auth_type'] = 'cookie';
-// $cfg['Servers'][$i]['user']          = 'phlyper';      // MySQL user
-// $cfg['Servers'][$i]['password']      = 'azerty';          // MySQL password (only needed)
+// $cfg['Servers'][$i]['user']          = 'root';      // MySQL user
+// $cfg['Servers'][$i]['password']      = '';          // MySQL password (only needed)
 /* Server parameters */
 $cfg['Servers'][$i]['host'] = 'localhost';
 $cfg['Servers'][$i]['connect_type'] = 'tcp';
