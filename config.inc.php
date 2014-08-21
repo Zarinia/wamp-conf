@@ -140,6 +140,7 @@ if($dba['Value'] === 0 || $dba['Value'] === "OFF") {
 }
 
 //$cfg['ThemeDefault'] = 'metro';
+$cfg['DefaultConnectionCollation'] = 'utf8_general_ci';
 $cfg['DefaultLang'] = 'fr-utf-8';
 $cfg['ServerDefault'] = 1;
 
@@ -221,7 +222,7 @@ $cfg['DefaultLang'] = 'fr';
  * This requires configuration storage enabled, see above.
  * default = false
  */
-//$cfg['QueryHistoryDB'] = true;
+$cfg['QueryHistoryDB'] = true;
 
 /**
  * When using DB-based query history, how many entries should be kept?
