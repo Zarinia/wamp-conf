@@ -130,13 +130,15 @@ $cfg['Servers'][$i]['savedsearches'] = 'pma_savedsearches';
  */
 
 if(!isset($_SESSION['event_scheduler'])) {
-$ldb = mysql_connect($cfg['Servers'][$i]['host'], $cfg['Servers'][$i]['controluser'], $cfg['Servers'][$i]['controlpass']);
-$dbq = mysql_query("SHOW VARIABLES LIKE 'event_scheduler'");
-$dba = mysql_fetch_array($dbq);
-if($dba['Value'] === 0 || $dba['Value'] === "OFF") {
-	mysql_query("SET GLOBAL event_scheduler = 1");
-	$_SESSION['event_scheduler'] = true;
-}
+	for($k = 0; $k<$i; $k++) {
+		$ldb = mysql_connect($cfg['Servers'][$k]['host'], $cfg['Servers'][$k]['controluser'], $cfg['Servers'][$k]['controlpass']);
+		$dbq = mysql_query("SHOW VARIABLES LIKE 'event_scheduler'");
+		$dba = mysql_fetch_array($dbq);
+		if($dba['Value'] === 0 || $dba['Value'] === "OFF") {
+			mysql_query("SET GLOBAL event_scheduler = 1");
+			$_SESSION['event_scheduler'] = true;
+		}
+	}
 }
 
 //$cfg['ThemeDefault'] = 'metro';
