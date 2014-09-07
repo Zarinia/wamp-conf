@@ -141,10 +141,15 @@ if(!isset($_SESSION['event_scheduler'])) {
 	}
 }
 
-//$cfg['ThemeDefault'] = 'metro';
 $cfg['DefaultConnectionCollation'] = 'utf8_general_ci';
-$cfg['DefaultLang'] = 'fr-utf-8';
 $cfg['ServerDefault'] = 1;
+$cfg['ShowPhpInfo'] = true;
+//$cfg['ThemeDefault'] = 'metro';
+# Debug
+#$cfg['DBG']['sql'] = true;
+$cfg['DBG']['demo'] = true;
+#$cfg['Error_Handler']['display'] = true;
+
 
  /*
   * Type:	integer [number of seconds]
