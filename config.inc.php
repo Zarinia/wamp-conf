@@ -39,8 +39,6 @@ $cfg['Servers'][$i]['compress'] = false;
 $cfg['Servers'][$i]['extension'] = 'mysqli';
 $cfg['Servers'][$i]['AllowNoPassword'] = false;
 
-//$cfg['AllowArbitraryServer'] = true; //activer la synchronisation a distance
-
 /*
  * phpMyAdmin configuration storage settings.
  */
@@ -91,8 +89,6 @@ $cfg['Servers'][$i]['compress'] = false;
 $cfg['Servers'][$i]['extension'] = 'mysqli';
 $cfg['Servers'][$i]['AllowNoPassword'] = false;
 
-//$cfg['AllowArbitraryServer'] = true; //activer la synchronisation a distance
-
 /*
  * phpMyAdmin configuration storage settings.
  */
@@ -130,7 +126,7 @@ $cfg['Servers'][$i]['savedsearches'] = 'pma_savedsearches';
  */
 
 if(!isset($_SESSION['event_scheduler'])) {
-	for($k = 0; $k<$i; $k++) {
+	for($k = 1; $k<=$i; $k++) {
 		$ldb = mysql_connect($cfg['Servers'][$k]['host'], $cfg['Servers'][$k]['controluser'], $cfg['Servers'][$k]['controlpass']);
 		$dbq = mysql_query("SHOW VARIABLES LIKE 'event_scheduler'");
 		$dba = mysql_fetch_array($dbq);
@@ -141,6 +137,7 @@ if(!isset($_SESSION['event_scheduler'])) {
 	}
 }
 
+//$cfg['AllowArbitraryServer'] = true; //activer la synchronisation a distance
 $cfg['DefaultConnectionCollation'] = 'utf8_general_ci';
 $cfg['ServerDefault'] = 1;
 $cfg['ShowPhpInfo'] = true;
@@ -149,6 +146,9 @@ $cfg['ShowPhpInfo'] = true;
 #$cfg['DBG']['sql'] = true;
 $cfg['DBG']['demo'] = true;
 #$cfg['Error_Handler']['display'] = true;
+
+# Lien sur la documentation francophone
+$cfg['MySQLManualBase'] = 'http://dev.mysql.com/doc/refman/5.0/fr/';
 
 
  /*
