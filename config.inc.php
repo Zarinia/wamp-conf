@@ -67,6 +67,7 @@ $cfg['Servers'][$i]['users'] = 'pma_users';
 $cfg['Servers'][$i]['usergroups'] = 'pma_usergroups';
 $cfg['Servers'][$i]['navigationhiding'] = 'pma_navigationhiding';
 $cfg['Servers'][$i]['savedsearches'] = 'pma_savedsearches';
+$cfg['Servers'][$i]['central_columns'] = 'pma_central_columns';
 /* Contrib / Swekey authentication */
 // $cfg['Servers'][$i]['auth_swekey_config'] = '/etc/swekey-pma.conf';
 
@@ -117,6 +118,7 @@ $cfg['Servers'][$i]['users'] = 'pma_users';
 $cfg['Servers'][$i]['usergroups'] = 'pma_usergroups';
 $cfg['Servers'][$i]['navigationhiding'] = 'pma_navigationhiding';
 $cfg['Servers'][$i]['savedsearches'] = 'pma_savedsearches';
+$cfg['Servers'][$i]['central_columns'] = 'pma_central_columns';
 /* Contrib / Swekey authentication */
 // $cfg['Servers'][$i]['auth_swekey_config'] = '/etc/swekey-pma.conf';
 
