@@ -128,15 +128,24 @@ $cfg['Servers'][$i]['central_columns'] = 'pma_central_columns';
 /*
  * End of servers configuration
  */
-
-if(!isset($_SESSION['event_scheduler'])) {
-	for($k = 1; $k<=$i; $k++) {
-		$ldb = mysql_connect($cfg['Servers'][$k]['host'], $cfg['Servers'][$k]['controluser'], $cfg['Servers'][$k]['controlpass']);
-		$dbq = mysql_query("SHOW VARIABLES LIKE 'event_scheduler'");
-		$dba = mysql_fetch_array($dbq);
-		if($dba['Value'] === 0 || $dba['Value'] === "OFF") {
-			mysql_query("SET GLOBAL event_scheduler = 1");
-			$_SESSION['event_scheduler'] = true;
+$evf = "event_scheduler.json";
+$cdate = date("Y-m-d");
+$vdate = "";
+if(file_exists($evf)) {
+	$vdate = file_get_contents($evf);
+}
+if(strlen($vdate) == 0 || $vdate != $cdate) {
+	for($k = 1; $k <= $i; $k++) {
+		if($dbl = mysqli_connect($cfg['Servers'][$k]['host'], $cfg['Servers'][$k]['controluser'], $cfg['Servers'][$k]['controlpass'], "", $cfg['Servers'][$k]['port'])) {
+			if($dbq = mysqli_query($dbl, "SHOW VARIABLES LIKE 'event_scheduler'")) {
+				$dba = mysqli_fetch_assoc($dbq);
+				if($dba['Value'] === 0 || $dba['Value'] === "OFF") {
+					mysqli_query($dbl, "SET GLOBAL event_scheduler = 1");
+				}
+				file_put_contents($evf, $cdate);
+				mysqli_free_result($dba);
+			}
+			mysqli_close($dbl);
 		}
 	}
 }
@@ -148,7 +157,7 @@ $cfg['ShowPhpInfo'] = true;
 //$cfg['ThemeDefault'] = 'metro';
 # Debug
 #$cfg['DBG']['sql'] = true;
-$cfg['DBG']['demo'] = true;
+#$cfg['DBG']['demo'] = true;
 #$cfg['Error_Handler']['display'] = true;
 
 # Lien sur la documentation francophone
@@ -265,4 +274,3 @@ $cfg['QueryHistoryDB'] = true;
  * You can find more configuration options in the documentation
  * in the doc/ folder or at <http://docs.phpmyadmin.net/>.
  */
-?>
