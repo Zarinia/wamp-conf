@@ -175,6 +175,12 @@ $cfg['UploadDir'] = '';
 $cfg['SaveDir'] = '';
 
 /**
+ * Whether to display icons or text or both icons and text in table row
+ * action segment. Value can be either of 'icons', 'text' or 'both'.
+ */
+//$cfg['RowActionType'] = 'both';
+
+/**
  * Defines whether a user should be displayed a "show all (records)"
  * button in browse mode or not.
  * default = false
@@ -199,6 +205,7 @@ $cfg['ShowAll'] = true;
  * valid values are:
  *   false  allow editing
  *   'blob' allow editing except for BLOB fields
+ *   'noblob' disallow editing except for BLOB fields
  *   'all'  disallow editing
  * default = blob
  */
@@ -258,5 +265,4 @@ $cfg['QueryHistoryDB'] = true;
  * You can find more configuration options in the documentation
  * in the doc/ folder or at <http://docs.phpmyadmin.net/>.
  */
-
 ?>
