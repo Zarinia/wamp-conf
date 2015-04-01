@@ -72,3 +72,11 @@ Wampserver 2.2e 32bits - Apache `2.4.12`/2.2.29 - Nginx 1.7.10 - PHP 5.5.21/`5.4
 ## 24/01/2015
 
 Wampserver 2.2e 32bits - Apache `2.4.10`/2.2.29 - Nginx 1.7.9 - PHP `5.4.37`/5.3.29 - MySQL 5.6.23/`5.5.40` - MariaDB 10.0.16/`5.5.40` - PhpMyAdmin 4.3.8 - MysqlDumper 1.24.4 - Adminer 4.2.0 - PhpSysInfo 3.2.0 - (Windows 7 Ultimate SP1 32bits) --- _Si debugger, c'est supprimer des bugs, alors programmer ne peut être que les ajouter._
+
+- - -
+
+## 20/05/2014
+
+Wampserver 2.2e 32bits - Apache `2.2.2` - PHP `5.4.3` - MySQL `5.5.24` - MariaDB `5.5.37` - PhpMyAdmin 4.2.2 - MysqlDumper 1.24.4 - Adminer 4.1.0 - PhpSysInfo 3.1.12 - (Windows 7 Ultimate SP1 32bits) --- _Si debugger, c'est supprimer des bugs, alors programmer ne peut être que les ajouter._
+
+- - -
