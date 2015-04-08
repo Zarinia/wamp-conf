@@ -5,7 +5,13 @@ wamp signature
 
 ## 08/04/2015
 
-Wampserver 2.2e 32bits - Apache `2.4.12`/2.2.29 - Nginx 1.7.12 - PHP 5.5.7/5.5.23/`5.4.39`/5.3.29 - MySQL 5.6.23/`5.5.40` - MariaDB 10.0.17/`5.5.40` - PhpMyAdmin 4.4.1 - Xdebug 2.3.2 - MysqlDumper 1.24.4 - Adminer 4.2.1 - PhpSysInfo 3.2.1 - (Windows 7 Ultimate SP1 32bits) --- _Si debugger, c'est supprimer des bugs, alors programmer ne peut être que les ajouter._
+Wampserver 2.2e 32bits - Apache `2.4.12`/2.2.29 - Nginx 1.7.12 - PHP 5.5.7/5.5.23/`5.4.39`/5.3.29 - MySQL 5.6.24/`5.5.40` - MariaDB 10.0.17/`5.5.40` - PhpMyAdmin 4.4.1.1 - Xdebug 2.3.2 - MysqlDumper 1.24.4 - Adminer 4.2.1 - PhpSysInfo 3.2.1 - (Windows 7 Ultimate SP1 32bits) --- _Si debugger, c'est supprimer des bugs, alors programmer ne peut être que les ajouter._
+
+- - -
+
+## 07/04/2015
+
+Wampserver 2.2e 32bits - Apache `2.4.12`/2.2.29 - Nginx 1.7.11 - PHP 5.5.7/5.5.23/`5.4.39`/5.3.29 - MySQL 5.6.23/`5.5.40` - MariaDB 10.0.17/`5.5.40` - PhpMyAdmin 4.4.1 - Xdebug 2.3.2 - MysqlDumper 1.24.4 - Adminer 4.2.1 - PhpSysInfo 3.2.1 - (Windows 7 Ultimate SP1 32bits) --- _Si debugger, c'est supprimer des bugs, alors programmer ne peut être que les ajouter._
 
 - - -
 
