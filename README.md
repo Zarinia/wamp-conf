@@ -119,6 +119,6 @@ Wampserver 2.2e 32bits - Apache `2.4.10`/2.2.29 - Nginx 1.7.9 - PHP `5.4.37`/5.3
 
 ## 20/05/2014
 
-Wampserver 2.2e - Apache `2.2.2` - PHP `5.4.3` - MySQL `5.5.24` - MariaDB `5.5.37` - PhpMyAdmin 4.2.2 - MysqlDumper 1.24.4 - Adminer 4.1.0 - PhpSysInfo 3.1.12 - (Windows 7 Ultimate SP1)
+Wampserver 2.2e - Apache `2.2.2` - Nginx 1.7.0 - PHP `5.4.3` - MySQL `5.5.24` - MariaDB `5.5.37` - PhpMyAdmin 4.2.2 - MysqlDumper 1.24.4 - Adminer 4.1.0 - PhpSysInfo 3.1.12 - (Windows 7 Ultimate SP1)
 
 - - -
