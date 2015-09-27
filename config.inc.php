@@ -57,18 +57,19 @@ $cfg['Servers'][$i]['table_info'] = 'pma_table_info';
 $cfg['Servers'][$i]['table_coords'] = 'pma_table_coords';
 $cfg['Servers'][$i]['pdf_pages'] = 'pma_pdf_pages';
 $cfg['Servers'][$i]['column_info'] = 'pma_column_info';
-$cfg['Servers'][$i]['favorite'] = 'pma_favorite';
 $cfg['Servers'][$i]['history'] = 'pma_history';
 $cfg['Servers'][$i]['table_uiprefs'] = 'pma_table_uiprefs';
 $cfg['Servers'][$i]['tracking'] = 'pma_tracking';
-$cfg['Servers'][$i]['designer_coords'] = 'pma_designer_coords';
 $cfg['Servers'][$i]['userconfig'] = 'pma_userconfig';
 $cfg['Servers'][$i]['recent'] = 'pma_recent';
+$cfg['Servers'][$i]['favorite'] = 'pma_favorite';
 $cfg['Servers'][$i]['users'] = 'pma_users';
 $cfg['Servers'][$i]['usergroups'] = 'pma_usergroups';
 $cfg['Servers'][$i]['navigationhiding'] = 'pma_navigationhiding';
 $cfg['Servers'][$i]['savedsearches'] = 'pma_savedsearches';
 $cfg['Servers'][$i]['central_columns'] = 'pma_central_columns';
+$cfg['Servers'][$i]['designer_settings'] = 'pma_designer_settings';
+$cfg['Servers'][$i]['export_templates'] = 'pma_export_templates';
 /* Contrib / Swekey authentication */
 // $cfg['Servers'][$i]['auth_swekey_config'] = '/etc/swekey-pma.conf';
 
@@ -109,18 +110,19 @@ $cfg['Servers'][$i]['table_info'] = 'pma_table_info';
 $cfg['Servers'][$i]['table_coords'] = 'pma_table_coords';
 $cfg['Servers'][$i]['pdf_pages'] = 'pma_pdf_pages';
 $cfg['Servers'][$i]['column_info'] = 'pma_column_info';
-$cfg['Servers'][$i]['favorite'] = 'pma_favorite';
 $cfg['Servers'][$i]['history'] = 'pma_history';
 $cfg['Servers'][$i]['table_uiprefs'] = 'pma_table_uiprefs';
 $cfg['Servers'][$i]['tracking'] = 'pma_tracking';
-$cfg['Servers'][$i]['designer_coords'] = 'pma_designer_coords';
 $cfg['Servers'][$i]['userconfig'] = 'pma_userconfig';
 $cfg['Servers'][$i]['recent'] = 'pma_recent';
+$cfg['Servers'][$i]['favorite'] = 'pma_favorite';
 $cfg['Servers'][$i]['users'] = 'pma_users';
 $cfg['Servers'][$i]['usergroups'] = 'pma_usergroups';
 $cfg['Servers'][$i]['navigationhiding'] = 'pma_navigationhiding';
 $cfg['Servers'][$i]['savedsearches'] = 'pma_savedsearches';
 $cfg['Servers'][$i]['central_columns'] = 'pma_central_columns';
+$cfg['Servers'][$i]['designer_settings'] = 'pma_designer_settings';
+$cfg['Servers'][$i]['export_templates'] = 'pma_export_templates';
 /* Contrib / Swekey authentication */
 // $cfg['Servers'][$i]['auth_swekey_config'] = '/etc/swekey-pma.conf';
 
