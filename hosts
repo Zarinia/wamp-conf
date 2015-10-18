@@ -37,7 +37,7 @@
 127.0.0.1 www.adobeereg.com wwis-dubc1-vip60.adobe.com www.wip.adobe.com www.wip1.adobe.com
 127.0.0.1 www.wip2.adobe.com www.wip3.adobe.com www.wip4.adobe.com wwis-dubc1-vip60.adobe.com crl.verisign.net CRL.VERISIGN.NET ood.opsource.net
 127.0.0.1 lmlicenses.wip4.adobe.com lm.licenses.adobe.com na1r.services.adobe.com hlrcv.stage.adobe.com
-# euro track sim2
+# euro track simulator 2
 127.0.0.1 act.eut2.online.scssoft.com
 # piriform ccleaner defraggler
 127.0.0.1 license.piriform.com
