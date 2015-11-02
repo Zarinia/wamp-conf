@@ -1,0 +1,220 @@
+﻿My edits and changes of WampServer
+
+WampServer 2.5.5
+--- Fixed bug
+- Fixed Unknown error for new version of PHP
+- Fixed bug in wampmanager.tpl in option [DnscacheServiceRestart]
+   name wampapache service was in clear, must be by ${c_apacheService} variable
+
+--- New Features
+- Detection incompatibilities between Apache and PHP versions
+- Your VirtualHosts added in Wampserver homepage
+- Added language files (English and french) for submenus
+   in the folder wamp/lang/modules/ Note: this possibility existed
+   since WampServer 2.0.
+
+- Added right-click sub-menu  'WampServer settings' with options:
+- VirtualHosts Submenu
+   Enables or disables the presence of Your VirtualHosts submenu in the menu and Wampmanager homepage
+- Your Projects submenu
+   Enables or disables the presence of Your Projects submenu in the menu Wampmanager
+- 'WampServer homepage at startup'
+   Enables or disables automatic startup on the home page of WampServer
+- Item Put Online menu is optional. Enables or disables the item Put Online
+   With VirtualHost there is no need to "go online" in the main menu.
+- Add localhost in the url
+   For fans (not curable) do not want to use the VirtualHost.
+   Makes (http://localhost/mon-projet/) In the sub-menu and your projects in the home page.
+
+- Added right-click sub-menu 'Tools' with options:
+- 'Restart DNS' automatically performs all commands
+     such as net stop dnscache 'necessary for the changes
+     File 'windows/system32/drivers/etc/hosts' be taken into effect
+     without a machine reboot.
+- 'Check httpd.conf syntax' automatically performing commands
+     check the syntax of the httpd.conf file and other files
+     associated and displays a window with the errors if there are any.
+- 'Check the status of services' Displays a window with the state
+   'started' or 'not running' for wampapache and wampmysqld services
+- 'Check VC compiler and compatibility' Displays a window with
+    versions of the VC compiler (when they exist) for all versions
+    PHP and Apache.
+    Displays the compatibility of versions of PHP with Apache versions
+    and reasons for incompatibilities.
+
+--- Changing scripts
+- Changes in wamp/scripts/config.inc.php
+- Simplification of the generation of the $phpDllToCopy
+- Adding tables for $wampParam settings submenu
+- Settings WampServer and $phpNotLoadExt for extensions
+   present in phpx.y.z/ext but can not be loaded
+   by extension= in php.ini
+- Changing refresh.php
+- Checking validity of ServerName
+- Verification section name in my.ini [wampmysqld] has the name of the service
+   in progress. Must be [wampmysqld64] for WampServer 64-bit.
+   /!\ Warning and error message.
+- Module Apache php5_module should not be disables.
+- Creation of all symbolic links grouped together in the function linkPhpDllToApacheBin
+- Important changes to the file wamp/scripts/msg.php in
+   correlation with wamp/scripts/refresh.php
+   explicit messages (English) on error
+- Explicit Messages (on validation) for menu items
+   with warning symbol: triangle /!\, Red Square, || blue
+
+--- Wampserver 2.5.6 ---
+- Add item in Apache->Service submenu:
+  Use port 8080 instead of 80
+Note: 8080 is the alternate port defined in [apache] section
+      80 is the port used by Apache
+   (See below)
+- If alternate port used:
+  -- Add port (:8080) all url, Projects et Virtualhost included,
+     Examples:
+     (http://localhost:8080/) (http://ServerName:8080/)  (http://myproject:8080/)
+     If Option Add localhost in url is validated :
+     (http://localhost:8080/myproject/)
+  -- add item to test this port
+  -- The port used is notified in Wampserver homepage.
+
+--- Wampserver 2.5.7
+- Function createWampConfParam in wampserver.lib.php to simplify the wampmanager.conf file
+  updates based on validated options.
+- Function update_wampmanager_file in wampserver.lib.php to simplify the wampmanager.tpl file
+  updates based on validated options.
+- Possibility for the user to choose the port number to use for Apache instead of port 80.
+
+--- Wampserver 2.5.8
+- Function update_wampmanager_file dans wampserver.lib.php in wampserver.lib.php to simplify
+  the modifications of wampmanager.tpl file (or other)
+- Verification of certain parameters on start WampServer
+   and update if necessary. In some cases, it will restart WampServer
+- Added new icons
+
+--- Wampserver 2.5.9
+- Checks that all Apache, PHP and MySQL versions are the same type
+   All in 32 bit or all in 64 bit.
+- Improved error detection of VirtualHost
+- Fixed forgetting change port for Apache 2.2 (NameVirtualHost)
+- Verification of VirtualHosts with a function in wampserver.lib.php
+  to be the same in the sub-menu and in index.php
+- Verification tool for VirtualHosts as taken into account by Apache
+- Test port 80 (or whatever used): In addition to testing by fsockopen
+   Adding a test by netstat and tasklist.
+- Port used transferred on change of Apache version
+
+--- Wampserver 2.5.10
+- Modification of VirtualHost test:
+-- to take into account possible Alias with Directory
+-- trim on the path of DocumentRoot to remove quotes, and other areas.
+- switch online / offline with preg_replace to be sure to replace the correct contents.
+- online/offline mode transfered with Apache version change.
+
+--- Wampserver 2.5.11
+- Ability to change the MySQL port between 3301 and 3309
+- Test port 3306 (or whatever used) by netstat and tasklist.
+- Check what php.ini file is actually loaded.
+- Possibility of changing the name of the two services
+
+--- Wampserver 2.5.12
+- Correct bug in refresh.php - Missing a "." in the language file name extension.
+   (Only seen if language different from French or English)
+- To avoid problems with file editing by notepad.exe (Default editor)
+   Verification that some files are with the DOS lines ending (CR/LF)
+   and replacement if necessary.
+  wampmanager.conf, wampmanager.tpl, phpForApache.ini, my.ini, httpd.conf, etc.
+
+--- Wampserver 2.5.13
+- Added some definitions in the language file
+- File default language file always loaded first.
+  The localized language file is then used to overwrite the definitions.
+  (If a variable does not exist in the language file, it will be the definition of the default language to be used, so no error.)
+- Fixed some typos.
+- Bug fixed: regex switch onlineOffline because DOS newline (\r\n) instead of (\n).
+
+--- Wampserver 2.5.14
+- Bug fixed: index.php detection php.ini file loaded because phpinfo for PHP 5.3.29 displays file pointed by the symbolic link, not the symbolic link name.
+- Minor fixes typos in index.php
+- Verification presence default-storage-engine=MyISAM in my.ini
+  To avoid innoDB problems with beginners.
+- Taking into account of PHP 5.6.4
+
+--- Wampserver 2.5.15
+- Fixed some cosmetic defects.
+- Update PhpMyAdmin version used in wampmanager.conf file
+- Adding libpq.dll in $phpDllToCopy for php_pgsql extension
+- Set manual mode for wampapache service by sc command
+  "sc"; Parameters: "\\. config wampapache start= demand";
+  instead of directly modifying the registry.
+  Simpler and more sustainable.
+
+If desired, the archive of all files added or changed here
+http://aviatechno.net/files/wamp2.5.15_oto.zip
+
+I - still - advise you  make a backup of the files that will be replaced:
+[code]
+wamp
+|   wampmanager.tpl
+|   images_off.bmp
+|   images_on.bmp
+|
++---lang
+|   english.lang
+|   french.lang
+|   romanian.lang
+|
+|   \---modules
+|           settings_english.php
+|           settings_french.php
+|           settings_romanian.php
+|
++---scripts
+|       checkWampFiles.php
+|       config.inc.php
+|       msg.php
+|       onlineOffline.php
+|       refresh.php
+|       switchServicesNames.php
+|       switchMysqlPort.php
+|       switchWampParam.php
+|       switchWampPort.php
+|       testPort.php
+|       wampserver.lib.php
+|
++---www
+|       index.php
+|       testmysql.php
+|
+\---bin\apache\apache2.x.y\conf\extra\httpd-vhosts.conf.example
+[/code]
+- 1 - Replace or add any files from above tree archive that is the same as WampServer.
+
+- 2 - (Optionnal) You can add options in wampmanager.conf file :
+After : defaultLanguage = english
+add :
+[options]
+urlAddLocalhost = "off"
+ChangeServicesNames = "off"
+MenuItemOnline = "off"
+HomepageAtStartup = "off"
+ProjectSubMenu = "off"
+VirtualHostSubMenu = "on"
+
+After : apacheServiceRemoveParams = "-n wampapache -k uninstall"
+or apacheServiceRemoveParams = "-n wampapache64 -k uninstall"
+(For Wampserver 64 bit)
+add :
+[apacheoptions]
+apachePortUsed = "80"
+apacheUseOtherPort = "off"
+
+After : mysqlServiceRemoveParams = "--remove wampmysqld"
+or mysqlServiceRemoveParams = "--remove wampmysqld64"
+(For Wampserver 64 bit)
+add:
+[mysqloptions]
+mysqlPortUsed = "3306"
+mysqlUseOtherPort = "off"
+
+All new features will be added automatically when you start WampServer.
+Note: You must exit and restart WampServer again.

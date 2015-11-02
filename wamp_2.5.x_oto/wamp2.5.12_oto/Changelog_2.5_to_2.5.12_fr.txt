@@ -1,0 +1,190 @@
+﻿Mes modifications et évolutions de Wampserver
+
+Wampserver 2.5.5
+--- Correction bug
+- Correction Unknown error pour les nouvelles version de PHP
+- Correction bug dans wampmanager.tpl dans option [DnscacheServiceRestart] nom du service wampapache était en clair, doit être par variable ${c_apacheService}
+  
+--- Nouvelles fonctionnalités
+-- Détection incompatibilités entre les versions Apache et PHP
+-- ajout Vos VirtualHosts dans page d'accueil
+-- Ajout de fichiers de langues (english et french) pour les sous-menus dans le dossier wamp/lang/modules/. Nota : cette possibilité existait depuis Wampserver 2.0.
+
+-- Ajout sous-menu clic-droit 'Paramètres Wampserver' avec les options :
+- Sous-menu VirtualHosts
+  Valide ou dévalide la présence du sous-menu Vos VirtualHosts dans le menu Wampmanager et la page d'accueil
+- Sous-menu Vos Projets
+  Valide ou dévalide la présence du sous-menu Vos Projets dans le menu Wampmanager
+- 'Page d'accueil Wampserver au démarrage'
+  Valide ou dévalide le démarrage automatique sur la page d'accueil de Wampserver
+- Item menu Put Online est en option. Valide ou dévalide l'item Put Online
+  Avec les VirtualHost, il n'y a aucun besoin de "passer Online" par le menu général.
+- Ajouter localhost dans les url
+  Pour les inconditionnels (non guérissables) qui ne veulent pas utiliser les VirtualHost.
+  Donne (http://localhost/mon-projet/) Dans le sous-menu Vos projets et dans la page d'accueil.
+  
+-- Ajout sous-menu clic-droit 'Outils' avec les options :
+- 'Redémarrage DNS' effectue automatiquement toutes les commandes
+    telles que 'net stop dnscache' nécessaires pour que les modifications
+    du fichier 'windows/system32/drivers/etc/hosts' soient prisent en compte
+    sans redémarrage machine.
+- 'Vérifier syntaxe httpd.conf' effectue automatiquement les commandes
+    de vérification de la syntaxe du fichier httpd.conf et autres fichiers
+    associés et affiche une fenêtre avec les erreurs si il y en a.
+- 'Vérifier l'état des services' Affiche une fenêtre avec l'état
+  'démarré' ou 'non démarré' pour les services wampapache, wampmysqld et dnscache
+  si non démarré, recherche du code d'erreur et affichage du message associé au code.
+- 'Vérifier compilateur VC et compatibilités' Affiche une fenêtre avec les
+   versions des compilateur VC (Quand elles existent) pour toutes les versions
+   de PHP et Apache.
+   Affiche les compatibilités des versions de PHP avec les versions d'Apache
+   et les raisons des incompatibilités.
+  
+--- Modification des scripts
+-- Modifications de wamp/scripts/config.inc.php
+- Simplification de la génération du tableau $phpDllToCopy
+- Ajout tableaux $wampParam pour les paramètres du sous-menu
+- Paramètres Wampserver et $phpNotLoadExt pour les extensions
+  présentes dans phpx.y.z/ext mais qui ne peuvent pas être chargées
+  par extension= dans php.ini
+-- Modification de refresh.php
+- Vérification de validité des ServerName
+- Vérification nom de section dans my.ini [wampmysqld] a bien le nom du service
+  en cours. Il faut [wampmysqld64] pour Wampserver 64 bit.
+- Module Apache php5_module ne doit pas pouvoir être dévalidé.
+- Création de tous les liens symboliques regroupés dans la fonction linkPhpDllToApacheBin
+-- Importantes modifications du fichier wamp/scripts/msg.php en
+  correlation avec wamp/scripts/refresh.php pour la gestion
+  des messages explicites (En anglais) en cas d'erreur
+- Messages explicites (sur validation) pour les items des menus
+  comportant symbole d'avertissement : triangle /!\, carré rouge, (i) bleu
+
+--- Wampserver 2.5.6 ---
+- Ajouter item dans le sous-menu Apache->Service
+  Utiliser port 8080 au lieu de 80
+Note: 8080 est le "alternate port" défini dans la section [apache]
+      80 est le port utilisé par Apache
+   (Voir ci-dessous) 
+- Si le port "alternate" est utilisé :
+  -- Ajout du port (:8080) dans toutes les url, Projets et Virtualhost incluses,
+     Exemples :
+     (http://localhost:8080/) (http://ServerName:8080/)  (http://monprojet:8080/)
+     Si Option Ajouter localhost dans url est validée :
+     (http://localhost:8080/monprojet/)
+  -- Affichage du port dans la page d'accueil de Wampserver
+  -- ajoute un item pour le tester dans le sous-menu Apache
+
+--- Wampserver 2.5.7
+- Fonction createWampConfParam dans wampserver.lib.php pour simplifier
+  les updates du fichier wampmanager.conf (ou autre) en fonction des options validées.
+- Modification fichier wamp/www/testmysql.php pour prendre en compte mysqli
+  car mysql est obsolète.
+- Évolution de la possibilité de changer de port en demandant à l'utilisateur
+  de choisir le numéro de port à utiliser par Apache à la place du port 80.
+- Toutes les options pour le port utilisé par Apache, le choix et les tests
+  sont dans le sous-menu wampmanager->Apache (Et dans Clic-Droit Outils)
+
+--- Wampserver 2.5.8
+- Fonction update_wampmanager_file dans wampserver.lib.php pour simplifier
+  modifications du fichier wampmanager.tpl (ou autre)
+- Vérifications de certains paramètres au démarrage de Wampserver
+  et mise à jour si nécessaire. Dans certains cas, il faudra redémarrer Wampserver
+- Ajout de nouvelles icônes
+- icône "En ligne" différente de icône "Hors ligne".
+
+--- Wampserver 2.5.9
+- Vérifications que toutes les versions Apache, PHP et MySQL sont du même type : Toutes en 32 bit ou toutes en 64 bit.
+- Amélioration détection erreur VirtualHost
+- Correction oubli changement port pour Apache 2.2 (NameVirtualHost)
+- Vérification VirtualHosts par fonction dans wampserver.lib.php pour être identique dans le sous-menu et dans index.php
+- Outil de vérification des VirtualHosts pris en compte par Apache
+- Test du port 80 (ou celui utilisé) : En plus du test par fsockopen ajout d'un test par netstat et tasklist.
+- Port utilisé transféré au changement de version Apache
+
+--- Wampserver 2.5.10
+- Modification du test des VirtualHost :
+-- pour tenir compte d'éventuel(s) Alias avec Directory
+-- trim sur le chemin de DocumentRoot pour éliminer les guillemets, espaces et autres.
+- switch online/offline par preg_replace pour être certain du contenu à remplacer.
+- mode online/offline transféré au changement de version Apache.
+
+--- Wampserver 2.5.11
+- Possibilité de changer le port de MySQL entre 3301 et 3309
+- Test du port 3306 (ou celui utilisé) : test par netstat et tasklist
+- Vérification quel est le php.ini effectivement chargé par php.
+- Possibilité de changer le nom des deux services
+
+--- Wampserver 2.5.12
+- Correction d'un bug dans refresh.php - manquait un "." dans l'extension du fichier langage.
+  (Vu uniquement si langue différente de French et de English)
+- Pour éviter les problèmes d'édition de fichier avec notepad.exe (Éditeur par défaut)
+  Vérification que les fichiers éditables sont bien avec des fins de ligne DOS (CR/LF)
+  et remplacements si nécessaire.
+  wampmanager.conf, wampmanager.tpl, phpForApache.ini, my.ini, httpd.conf, etc.
+
+Si vous le souhaitez, l'archive de tous les fichiers ajoutés ou modifiés est ici
+http://aviatechno.net/files/wamp2.5.12_oto.zip
+
+Je vous conseille d'effectuer une sauvegarde des fichiers qui seront remplacés :
+[code]
+wamp
+|   wampmanager.tpl
+|   images_off.bmp
+|   images_on.bmp
+|
++---lang
+|   \---modules
+|           settings_english.php
+|           settings_french.php
+|
++---scripts
+|       checkWampFiles.php
+|       config.inc.php
+|       msg.php
+|       onlineOffline.php
+|       refresh.php
+|       switchServicesNames.php
+|       switchMysqlPort.php
+|       switchWampParam.php
+|       switchWampPort.php
+|       testPort.php
+|       wampserver.lib.php
+|
++---www
+|       index.php
+|       testmysql.php
+|
+\---bin\apache\apache2.x.y\conf\extra\httpd-vhosts.conf.example
+[/code]
+Procédure d'installation :
+
+- 1 - Remplacer ou ajouter *tous* les fichiers selon l'arborescence de l'archive qui est la même que celle de Wampserver 2.5
+- 2 - Vour pouvez ajouter les options dans le fichier wampmanager.conf :
+Après : defaultLanguage = english
+ajouter :
+[options]
+urlAddLocalhost = "off"
+ChangeServicesNames = "off"
+MenuItemOnline = "off"
+HomepageAtStartup = "off"
+ProjectSubMenu = "off"
+VirtualHostSubMenu = "on"
+
+Après : apacheServiceRemoveParams = "-n wampapache -k uninstall"
+ou apacheServiceRemoveParams = "-n wampapache64 -k uninstall"
+(Pour Wampserver 64 bit)
+ajouter :
+[apacheoptions]
+apachePortUsed = "80"
+apacheUseOtherPort = "off"
+
+Après : mysqlServiceRemoveParams = "--remove wampmysqld"
+ou mysqlServiceRemoveParams = "--remove wampmysqld64"
+(Pour Wampserver 64 bit)
+ajouter
+[mysqloptions]
+mysqlPortUsed = "3306"
+mysqlUseOtherPort = "off"
+
+Néanmoins, toutes ces nouvelles options seront ajoutées automatiquement lors du démarrage de Wampserver si elles n'existaient pas.
+Nota : Vous devrez redémarrer Wampserver une seconde fois dans ce cas. 
