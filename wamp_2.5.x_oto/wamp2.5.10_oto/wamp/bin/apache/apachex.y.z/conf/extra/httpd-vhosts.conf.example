@@ -1,0 +1,66 @@
+﻿# Explanations in English / Explications en Français
+# localhost MUST be the first VHOST definition so that it is the default virtual host
+# Also access rights should remain restricted to the local PC
+# or local PC and the local network only!
+# So that any random ip address attack will be rejected with an error code and be refused access
+# --------------------------------------------------
+# localhost DOIT être la première définition de VHOST pour être l'hôte virtuel par défaut
+# Les droits d'accès doivent rester limités au PC local
+# Ou au PC local et le réseau local
+# Toute tentative d'acces avec IP d'attaque aléatoire sera rejetée avec un code d'erreur et l'accès sera refusé
+<VirtualHost *:80>
+	DocumentRoot "c:/wamp/www"
+	ServerName localhost
+	ServerAlias localhost
+	<Directory  "c:/wamp/www">
+		AllowOverride All
+		Require local
+	</Directory>
+</VirtualHost>
+
+#Example 1 / Exemple 1
+# Simple project located under the \wamp\www folder in a folder called \wamp\www\project1
+# and a domainaname of project1
+# This requires the following domain added to the c:\windows\system32\drivers\etc\hosts file
+# 127.0.0.1 project1
+# ::1 project1
+#----------------------------------------
+# Projet simple, situé dans le dossier \wamp\www dans un dossier nommé \wamp\www\project1
+# avec un nom de domaine project1
+# Cela demande à ce que le nom de domaine soit ajouté dans le fichier c:\windows\system32\drivers\etc\hosts
+# 127.0.0.1 project1
+# ::1 project1
+
+#<VirtualHost *:80>
+#	DocumentRoot "c:/wamp/www/project1"
+#	ServerName project1
+#	ServerAlias project1
+#	<Directory  "c:/wamp/www/project1">
+#		AllowOverride All
+#		Require local
+#	</Directory>
+#</VirtualHost>
+
+
+#Example 2 / Exemple 2
+# Project located on a seperate folder to \wamp\www
+# eg c:/websites/example2/www
+# This requires the following domain added to the
+# c:\windows\system32\drivers\etc\hosts file
+# 127.0.0.1 example2.dev
+# ::1 example2.dev
+#-------------------------------------------------
+# Projet situé hors de l'arborescence de _wamp\www
+# par exemple c:/websites/example2/www
+# Cela demande à ce que le nom de domaine (ServerName) soit ajouté au fichier c:\windows\system32\drivers\etc\hosts
+# 127.0.0.1 example2.dev
+# ::1 example2.dev
+#<VirtualHost *:80>
+#	DocumentRoot "c:/websites/example2/www"
+#	ServerName example2.dev
+# ServerAlias www.example2.dev
+# <Directory  "c:/websites/example2/www">
+#		AllowOverride All
+#		Require local
+#	</Directory>
+#</VirtualHost>
