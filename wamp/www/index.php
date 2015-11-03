@@ -596,7 +596,7 @@ $pageContents = <<< EOPAGE
 		            </dd>
 		        <dt>{$langues[$langue]['versm']}</dt>
 		            <dd>${mysqlVersion}&nbsp;-&nbsp;{$langues[$langue]['mysqlportUsed']}{$Mysqlport}&nbsp;-&nbsp; <a href='http://{$langues[$langue]['docm']}' target='_blank'>Documentation</a></dd>
-				<dt>{$langues[$langue]['versmariadb']}</dt>
+		        <dt>{$langues[$langue]['versmariadb']}</dt>
 		            <dd>${mariadbVersion}&nbsp;-&nbsp;{$langues[$langue]['mariadbportUsed']}{$Mariadbport}&nbsp;-&nbsp; <a href='http://{$langues[$langue]['docmariadb']}' target='_blank'>Documentation</a></dd>
 	        </dl>
         </div>
