@@ -33,8 +33,9 @@ WampServer Version ${c_wampVersion}
 
 Created by Romain Bourdon (romain@romainbourdon.com)
 Maintainer / Upgrade / RoadMap by Herve Leclerc (herve.leclerc@alterway.fr)
-Modified (2.5 to 2.5.17) by Otomatic (otomatic@otomatic.net)
+Modified (2.5 to 2.5.18) by Otomatic (otomatic@otomatic.net)
 Multi styles for homepage by Jojaba
+MariaDB by Phlyper (phlyper@live.fr)
 
 Sources are available at SourceForge
 
@@ -43,12 +44,15 @@ http://www.wampserver.com
 [Services]
 Name: ${c_apacheService}
 Name: ${c_mysqlService}
+Name: ${c_mariadbService}
 
 [Variables]
 Type: prompt; Name: "ApachePort"; PromptCaption: "${w_portForApache}"; PromptText: "${w_enterPort}"; DefaultValue: "${w_newPort}"
 Type: prompt; Name: "MysqlPort"; PromptCaption: "${w_portForMysql}"; PromptText: "${w_enterPort}"; DefaultValue: "${w_newMysqlPort}"
+Type: prompt; Name: "MariadbPort"; PromptCaption: "${w_portForMariadb}"; PromptText: "${w_enterPort}"; DefaultValue: "${w_newMariadbPort}"
 Type: prompt; Name: "ApacheService"; PromptCaption: "Apache Service"; PromptText: "${w_enterServiceNameApache}"; DefaultValue: "25"
-Type: prompt; Name: "MysqlService"; PromptCaption: "MySQL Service"; PromptText: "{$w_enterServiceNameMysql}"; DefaultValue: "25"
+Type: prompt; Name: "MysqlService"; PromptCaption: "MySQL Service"; PromptText: "${w_enterServiceNameMysql}"; DefaultValue: "25"
+Type: prompt; Name: "MariadbService"; PromptCaption: "MariaDB Service"; PromptText: "${w_enterServiceNameMariadb}"; DefaultValue: "25"
 
 [Messages]
 AllRunningHint=${w_serverOffline} - ${w_allServicesRunning}
@@ -63,7 +67,8 @@ Action: resetservices
 Action: readconfig;
 Action: service; Service: ${c_apacheService}; ServiceAction: startresume; Flags: ignoreerrors
 Action: service; Service: ${c_mysqlService}; ServiceAction: startresume; Flags: ignoreerrors
-Action: run; FileName: "${c_navigator}"; Parameters: "http://localhost${UrlPort}/"; ShowCmd: normal; Flags: ignoreerrors
+Action: service; Service: ${c_mariadbService}; ServiceAction: startresume; Flags: ignoreerrors
+;Action: run; FileName: "${c_navigator}"; Parameters: "http://localhost${UrlPort}/"; ShowCmd: normal; Flags: ignoreerrors
 
 ;WAMPSTARTUPACTIONEND
 
@@ -158,12 +163,14 @@ Type: item; Caption: "${w_wwwDirectory}"; Action: shellexecute; FileName: "${www
 Type: submenu; Caption: "Apache"; SubMenu: apacheMenu; Glyph: 3
 Type: submenu; Caption: "PHP"; SubMenu: phpMenu; Glyph: 3
 Type: submenu; Caption: "MySQL"; SubMenu: mysqlMenu; Glyph: 3
+Type: submenu; Caption: "MariaDB"; SubMenu: mariadbMenu; Glyph: 3
 Type: separator; Caption: "Debug"
 ;Type: item; Caption: "Client XDebug"; Glyph: 6; Action: run; FileName: "${c_installDir}/tools/xdc/xdc.exe"
 Type: item; Caption: "${c_webgrind}"; Action: run; FileName: "${c_navigator}"; Parameters: "http://localhost${UrlPort}/webgrind/"; Glyph: 5
 Type: separator; Caption: "Quick Admin"
 ;Type: servicesubmenu; Caption: "${w_apache}"; Service: ${c_apacheService}; SubMenu: apache
 ;Type: servicesubmenu; Caption: "${w_mysql}"; Service: ${c_mysqlService}; SubMenu: MySql
+;Type: servicesubmenu; Caption: "${w_mariadb}"; Service: ${c_mariadbService}; SubMenu: MariaDb
 Type: item; Caption: "${w_startServices}"; Action: multi; Actions: StartAll
 Type: item; Caption: "${w_stopServices}"; Action: multi; Actions: StopAll
 Type: item; Caption: "${w_restartServices}"; Action: multi; Actions: RestartAll
@@ -181,9 +188,9 @@ Type: item; Caption: "httpd.conf"; Glyph: 6; Action: run; FileName: "${c_editor}
 Type: item; Caption: "${w_apacheErrorLog}"; Glyph: 6; Action: run; FileName: "${c_editor}"; parameters: "${c_installDir}/${logDir}apache_error.log"
 Type: item; Caption: "${w_apacheAccessLog}"; Glyph: 6; Action: run; FileName: "${c_editor}"; parameters: "${c_installDir}/${logDir}access.log"
 Type: separator; Caption: "${w_portUsed}${c_UsedPort}"
-Type: item; Caption: "${w_testPort80}"; Action: run; FileName: "${c_phpExe}"; Parameters: "-c . testPort.php 80 ${c_apacheService}";WorkingDir: "$c_installDir/scripts"; Flags: waituntilterminated; Glyph: 9
+Type: item; Caption: "${w_testPort80}"; Action: run; FileName: "${c_phpExe}"; Parameters: "-c . testPort.php 80 ${c_apacheService}";WorkingDir: "${c_installDir}/scripts"; Flags: waituntilterminated; Glyph: 9
 Type: item; Caption: "${w_AlternatePort}"; Action: multi; Actions: UseAlternatePort; Glyph: 9
-;Type: item; Caption: "${w_testPortUsed}${c_UsedPort}"; Action: run; FileName: "${c_phpExe}"; Parameters: "-c . testPort.php ${c_UsedPort} ${c_apacheService}";WorkingDir: "$c_installDir/scripts"; Flags: waituntilterminated; Glyph: 9
+;Type: item; Caption: "${w_testPortUsed}${c_UsedPort}"; Action: run; FileName: "${c_phpExe}"; Parameters: "-c . testPort.php ${c_UsedPort} ${c_apacheService}";WorkingDir: "${c_installDir}/scripts"; Flags: waituntilterminated; Glyph: 9
 ;WAMPAPACHEMENUEND
 
 [apacheVersion]
@@ -217,6 +224,21 @@ Type: item; Caption: "${w_AlternateMysqlPort}"; Action: multi; Actions: UseAlter
 [mysqlVersion]
 ;WAMPMYSQLVERSIONSTART
 ;WAMPMYSQLVERSIONEND
+
+[mariadbMenu]
+;WAMPMARIADBMENUSTART
+Type: submenu; Caption: "${w_version}"; SubMenu: mariadbVersion; Glyph: 3
+Type: submenu; Caption: "${w_service}"; SubMenu: mariadbService; Glyph: 3
+Type: item; Caption: "${w_mariadbConsole}"; Action: run; FileName: "${c_mariadbConsole}"; Parameters: "-u root -p"; Glyph: 0
+Type: item; Caption: "my.ini"; Glyph: 6; Action: run; FileName: "${c_editor}"; parameters: "${c_mariadbConfFile}"
+Type: item; Caption: "${w_mariadbLog}"; Glyph: 6; Action: run; FileName: "${c_editor}"; parameters: "${c_installDir}/${logDir}mariadb.log"
+Type: separator; Caption: "${w_portUsedMariadb}${c_UsedMariadbPort}"
+Type: item; Caption: "${w_AlternateMariadbPort}"; Action: multi; Actions: UseAlternateMariadbPort; Glyph: 9
+;WAMPMARIADBMENUEND
+
+[mariadbVersion]
+;WAMPMARIADBVERSIONSTART
+;WAMPMARIADBVERSIONEND
 
 [alias_dir]
 ;WAMPALIAS_DIRSTART
@@ -279,30 +301,48 @@ Type: item; Caption: "${w_removeService}"; Action: multi; Actions: MySQLServiceR
 ;WAMPMYSQLSERVICEEND
 
 
+[MariaDbService]
+;WAMPMARIADBSERVICESTART
+Type: separator; Caption: "${w_mariadb}"
+Type: item; Caption: "${w_startResume}"; Action: service; Service: ${c_mariadbService}; ServiceAction: startresume; Glyph: 9; Flags: ignoreerrors
+;Type: item; Caption: "${w_pauseService}"; Action: service; Service: mariadb; ServiceAction: pause; Glyph: 10
+Type: item; Caption: "${w_stopService}"; Action: service; Service: ${c_mariadbService}; ServiceAction: stop; Glyph: 11
+Type: item; Caption: "${w_restartService}"; Action: service; Service: ${c_mariadbService}; ServiceAction: restart; Glyph: 12
+Type: separator
+Type: item; Caption: "${w_installService}"; Action: multi; Actions: MariaDBServiceInstall; Glyph: 8
+Type: item; Caption: "${w_removeService}"; Action: multi; Actions: MariaDBServiceRemove; Glyph: 7
+;WAMPMARIADBSERVICEEND
+
+
 [StartAll]
 ;WAMPSTARTALLSTART
 Action: service; Service: ${c_apacheService}; ServiceAction: startresume; Flags: ignoreerrors
 Action: service; Service: ${c_mysqlService}; ServiceAction: startresume; Flags: ignoreerrors
+Action: service; Service: ${c_mariadbService}; ServiceAction: startresume; Flags: ignoreerrors
 ;WAMPSTARTALLEND
 
 [StopAll]
 ;WAMPSTOPALLSTART
 Action: service; Service: ${c_apacheService}; ServiceAction: stop; Flags: ignoreerrors
 Action: service; Service: ${c_mysqlService}; ServiceAction: stop; Flags: ignoreerrors
+Action: service; Service: ${c_mariadbService}; ServiceAction: stop; Flags: ignoreerrors
 ;WAMPSTOPALLEND
 
 [RestartAll]
 ;WAMPRESTARTALLSTART
 Action: service; Service: ${c_apacheService}; ServiceAction: stop; Flags: ignoreerrors waituntilterminated
 Action: service; Service: ${c_mysqlService}; ServiceAction: stop; Flags: ignoreerrors waituntilterminated
+Action: service; Service: ${c_mariadbService}; ServiceAction: stop; Flags: ignoreerrors waituntilterminated
 Action: service; Service: ${c_apacheService}; ServiceAction: startresume; Flags: ignoreerrors waituntilterminated
 Action: service; Service: ${c_mysqlService}; ServiceAction: startresume; Flags: ignoreerrors waituntilterminated
+Action: service; Service: ${c_mariadbService}; ServiceAction: startresume; Flags: ignoreerrors waituntilterminated
 ;WAMPRESTARTALLEND
 
 [myexit]
 ;WAMPMYEXITSTART
 Action: service; Service: ${c_apacheService}; ServiceAction: stop; Flags: ignoreerrors
 Action: service; Service: ${c_mysqlService}; ServiceAction: stop; Flags: ignoreerrors
+Action: service; Service: ${c_mariadbService}; ServiceAction: stop; Flags: ignoreerrors
 Action: exit
 ;WAMPMYEXITEND
 
@@ -365,6 +405,32 @@ Action: resetservices;
 Action: readconfig;
 ;WAMPMYSQLSERVICEREMOVEEND
 
+[UseAlternateMariadbPort]
+;WAMPALTERNATEMARIADBPORTSTART
+Action: service; Service: ${c_apacheService}; ServiceAction: stop; Flags: ignoreerrors waituntilterminated
+Action: service; Service: ${c_mariadbService}; ServiceAction: stop; Flags: ignoreerrors waituntilterminated
+Action: run; FileName: "${c_phpExe}"; Parameters: "-c . switchMysqlPort.php %MysqlPort%";WorkingDir: "${c_installDir}/scripts"; Flags: waituntilterminated
+Action: service; Service: ${c_apacheService}; ServiceAction: startresume; Flags: ignoreerrors waituntilterminated
+Action: service; Service: ${c_mariadbService}; ServiceAction: startresume; Flags: ignoreerrors waituntilterminated
+Action: run; FileName: "${c_phpCli}"; Parameters: "refresh.php";WorkingDir: "${c_installDir}/scripts"; Flags: waituntilterminated
+Action: readconfig;
+;WAMPALTERNATEMARIADBPORTEND
+
+[MariaDBServiceInstall]
+;WAMPMARIADBSERVICEINSTALLSTART
+Action: run; FileName: "${c_mariadbExe}"; Parameters: "${c_mariadbServiceInstallParams}"; ShowCmd: hidden; Flags: ignoreerrors waituntilterminated
+Action: resetservices;
+Action: readconfig;
+;WAMPMARIADBSERVICEINSTALLEND
+
+[MariaDBServiceRemove]
+;WAMPMARIADBSERVICEREMOVESTART
+Action: service; Service: ${c_mariadbService}; ServiceAction: stop; Flags: ignoreerrors waituntilterminated
+Action: run; FileName: "${c_mariadbExe}"; Parameters: "${c_mariadbServiceRemoveParams}"; ShowCmd: hidden; Flags: waituntilterminated
+Action: resetservices;
+Action: readconfig;
+;WAMPMARIADBSERVICEREMOVEEND
+
 [submenu.tools]
 ;WAMPTOOLSSTART
 Type: Separator; Caption: "${w_wampTools}"
@@ -374,21 +440,28 @@ Type: item; Caption: "${w_testServices}"; Action: run; FileName: "${c_phpExe}"; 
 Type: item; Caption: "${w_compilerVersions}"; Action: run; FileName: "${c_phpExe}"; Parameters: "msg.php compilerversions";WorkingDir: "${c_installDir}/scripts"; Flags: waituntilterminated; Glyph: 9
 Type: item; Caption: "${w_vhostConfig}"; Action: run; FileName: "${c_phpExe}"; Parameters: "msg.php vhostconfig";WorkingDir: "${c_installDir}/scripts"; Flags: waituntilterminated; Glyph: 9
 Type: separator; Caption: "${w_portUsed}${c_UsedPort}"
-Type: item; Caption: "${w_testPort80}"; Action: run; FileName: "${c_phpExe}"; Parameters: "-c . testPort.php 80 ${c_apacheService}";WorkingDir: "$c_installDir/scripts"; Flags: waituntilterminated; Glyph: 9
+Type: item; Caption: "${w_testPort80}"; Action: run; FileName: "${c_phpExe}"; Parameters: "-c . testPort.php 80 ${c_apacheService}";WorkingDir: "${c_installDir}/scripts"; Flags: waituntilterminated; Glyph: 9
 Type: item; Caption: "${w_AlternatePort}"; Action: multi; Actions: UseAlternatePort; Glyph: 9
-;Type: item; Caption: "${w_testPortUsed}${c_UsedPort}"; Action: run; FileName: "${c_phpExe}"; Parameters: "-c . testPort.php ${c_UsedPort} ${c_apacheService}";WorkingDir: "$c_installDir/scripts"; Flags: waituntilterminated; Glyph: 9
+;Type: item; Caption: "${w_testPortUsed}${c_UsedPort}"; Action: run; FileName: "${c_phpExe}"; Parameters: "-c . testPort.php ${c_UsedPort} ${c_apacheService}";WorkingDir: "${c_installDir}/scripts"; Flags: waituntilterminated; Glyph: 9
 Type: separator; Caption: "${w_portUsedMysql}${c_UsedMysqlPort}"
-Type: item; Caption: "${w_testPortMysql}"; Action: run; FileName: "${c_phpExe}"; Parameters: "-c . testPort.php 3306 ${c_mysqlService}";WorkingDir: "$c_installDir/scripts"; Flags: waituntilterminated; Glyph: 9
-;Type: item; Caption: "${w_testPortMysqlUsed}${c_UsedMysqlPort}"; Action: run; FileName: "${c_phpExe}"; Parameters: "-c . testPort.php ${c_UsedMysqlPort} ${c_mysqlService}";WorkingDir: "$c_installDir/scripts"; Flags: waituntilterminated; Glyph: 9
+Type: item; Caption: "${w_testPortMysql}"; Action: run; FileName: "${c_phpExe}"; Parameters: "-c . testPort.php 3306 ${c_mysqlService}";WorkingDir: "${c_installDir}/scripts"; Flags: waituntilterminated; Glyph: 9
+;Type: item; Caption: "${w_testPortMysqlUsed}${c_UsedMysqlPort}"; Action: run; FileName: "${c_phpExe}"; Parameters: "-c . testPort.php ${c_UsedMysqlPort} ${c_mysqlService}";WorkingDir: "${c_installDir}/scripts"; Flags: waituntilterminated; Glyph: 9
 Type: item; Caption: "${w_AlternateMysqlPort}"; Action: multi; Actions: UseAlternateMysqlPort; Glyph: 9
-Type: separator; Caption: "Apache: ${c_apacheService} - MySQL: ${c_mysqlService}"
+Type: separator; Caption: "${w_portUsedMariadb}${c_UsedMariadbPort}"
+Type: item; Caption: "${w_testPortMariadb}"; Action: run; FileName: "${c_phpExe}"; Parameters: "-c . testPort.php 3306 ${c_mariadbService}";WorkingDir: "${c_installDir}/scripts"; Flags: waituntilterminated; Glyph: 9
+;Type: item; Caption: "${w_testPortMariadbUsed}${c_UsedMariadbPort}"; Action: run; FileName: "${c_phpExe}"; Parameters: "-c . testPort.php ${c_UsedMariadbPort} ${c_mariadbService}";WorkingDir: "${c_installDir}/scripts"; Flags: waituntilterminated; Glyph: 9
+Type: item; Caption: "${w_AlternateMariadbPort}"; Action: multi; Actions: UseAlternateMariadbPort; Glyph: 9
+Type: separator; Caption: "- Apache: ${c_apacheService} -"
+Type: separator; Caption: "- MySQL: ${c_mysqlService} -"
+Type: separator; Caption: "- MariaDB: ${c_mariadbService} -"
 Type: item; Caption: "${w_changeServices}"; Action: multi; Actions: changeservicesnames; Glyph: 9
 Type: separator; Caption: "${w_empty} logs"
-Type: item; Caption: "${w_empty} ${w_phpLog}"; Action: run; FileName: "${c_phpExe}"; parameters: "-c . msg.php refreshLogs ${c_installDir}/${logDir}php_error.log";WorkingDir: "$c_installDir/scripts"; Flags: waituntilterminated; Glyph: 9
-Type: item; Caption: "${w_empty} ${w_apacheErrorLog}"; Action: run; FileName: "${c_phpExe}"; parameters: "-c . msg.php refreshLogs ${c_installDir}/${logDir}apache_error.log";WorkingDir: "$c_installDir/scripts"; Flags: waituntilterminated; Glyph: 9
-Type: item; Caption: "${w_empty} ${w_apacheAccessLog}"; Action: run; FileName: "${c_phpExe}"; parameters: "-c . msg.php refreshLogs ${c_installDir}/${logDir}access.log";WorkingDir: "$c_installDir/scripts"; Flags: waituntilterminated; Glyph: 9
-Type: item; Caption: "${w_empty} ${w_mysqlLog}"; Action: run; FileName: "${c_phpExe}"; parameters: "-c . msg.php refreshLogs ${c_installDir}/${logDir}mysql.log";WorkingDir: "$c_installDir/scripts"; Flags: waituntilterminated; Glyph: 9
-Type: item; Caption: "${w_emptyAll} ${w_logFiles}"; Action: run; FileName: "${c_phpExe}"; parameters: "-c . msg.php refreshLogs ${c_installDir}/${logDir}php_error.log ${c_installDir}/${logDir}apache_error.log ${c_installDir}/${logDir}access.log ${c_installDir}/${logDir}mysql.log";WorkingDir: "$c_installDir/scripts"; Flags: waituntilterminated; Glyph: 9
+Type: item; Caption: "${w_empty} ${w_phpLog}"; Action: run; FileName: "${c_phpExe}"; parameters: "-c . msg.php refreshLogs ${c_installDir}/${logDir}php_error.log";WorkingDir: "${c_installDir}/scripts"; Flags: waituntilterminated; Glyph: 9
+Type: item; Caption: "${w_empty} ${w_apacheErrorLog}"; Action: run; FileName: "${c_phpExe}"; parameters: "-c . msg.php refreshLogs ${c_installDir}/${logDir}apache_error.log";WorkingDir: "${c_installDir}/scripts"; Flags: waituntilterminated; Glyph: 9
+Type: item; Caption: "${w_empty} ${w_apacheAccessLog}"; Action: run; FileName: "${c_phpExe}"; parameters: "-c . msg.php refreshLogs ${c_installDir}/${logDir}access.log";WorkingDir: "${c_installDir}/scripts"; Flags: waituntilterminated; Glyph: 9
+Type: item; Caption: "${w_empty} ${w_mysqlLog}"; Action: run; FileName: "${c_phpExe}"; parameters: "-c . msg.php refreshLogs ${c_installDir}/${logDir}mysql.log";WorkingDir: "${c_installDir}/scripts"; Flags: waituntilterminated; Glyph: 9
+Type: item; Caption: "${w_empty} ${w_mariadbLog}"; Action: run; FileName: "${c_phpExe}"; parameters: "-c . msg.php refreshLogs ${c_installDir}/${logDir}mariadb.log";WorkingDir: "${c_installDir}/scripts"; Flags: waituntilterminated; Glyph: 9
+Type: item; Caption: "${w_emptyAll} ${w_logFiles}"; Action: run; FileName: "${c_phpExe}"; parameters: "-c . msg.php refreshLogs ${c_installDir}/${logDir}php_error.log ${c_installDir}/${logDir}apache_error.log ${c_installDir}/${logDir}access.log ${c_installDir}/${logDir}mysql.log ${c_installDir}/${logDir}mariadb.log";WorkingDir: "${c_installDir}/scripts"; Flags: waituntilterminated; Glyph: 9
 ;WAMPTOOLSEND
 
 [DnscacheServiceRestart]
@@ -419,8 +492,10 @@ Action: service; Service: ${c_apacheService}; ServiceAction: stop; Flags: ignore
 Action: run; FileName: "${c_apacheExe}"; Parameters: "${c_apacheServiceRemoveParams}"; ShowCmd: hidden; Flags: waituntilterminated
 Action: service; Service: ${c_mysqlService}; ServiceAction: stop; Flags: ignoreerrors waituntilterminated
 Action: run; FileName: "${c_mysqlExe}"; Parameters: "${c_mysqlServiceRemoveParams}"; ShowCmd: hidden; Flags: waituntilterminated
+Action: service; Service: ${c_mariadbService}; ServiceAction: stop; Flags: ignoreerrors waituntilterminated
+Action: run; FileName: "${c_mariadbExe}"; Parameters: "${c_mariadbServiceRemoveParams}"; ShowCmd: hidden; Flags: waituntilterminated
 Action: closeservices;
-Action: run; FileName: "${c_phpCli}"; Parameters: "switchServicesNames.php %ApacheService% %MysqlService%";WorkingDir: "${c_installDir}/scripts"; Flags: waituntilterminated
+Action: run; FileName: "${c_phpCli}"; Parameters: "switchServicesNames.php %ApacheService% %MysqlService% %MariadbService%";WorkingDir: "${c_installDir}/scripts"; Flags: waituntilterminated
 Action: run; FileName: "${c_phpExe}"; Parameters: "msg.php changeServiceName";WorkingDir: "${c_installDir}/scripts"; Flags: waituntilterminated
 Action: exit;
 ;WAMPCHANGESERVICESEND

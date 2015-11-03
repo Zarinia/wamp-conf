@@ -3,6 +3,11 @@
 $configurationFile = '../wampmanager.conf';
 $templateFile = '../wampmanager.tpl';
 $wampserverIniFile = '../wampmanager.ini';
+// $binDir = '../bin/';
+// $apacheDir = 'apache/';
+// $mysqlDir = 'mysql/';
+// $mariadbDir = 'mariadb/';
+// $phpDir = 'php/';
 $langDir = '../lang/';
 $aliasDir = '../alias/';
 $modulesDir = 'modules/';
@@ -26,17 +31,25 @@ if(isset($wampConf['urlAddLocalhost']) && $wampConf['urlAddLocalhost'] != "off")
 
 //Ajout variables pour les ports
 $c_DefaultPort = "80";
+$c_AlternatePort = "8080";
 $c_UsedPort = isset($wampConf['apachePortUsed']) ? $wampConf['apachePortUsed'] : '';
 $c_DefaultMysqlPort = "3306";
-$c_UsedMysqlPort = isset($wampConf['mysqlPortUsed']) ? $wampConf['mysqlPortUsed'] : '';
+$c_AlternateMysqlPort = "3305";
+$c_UsedMysqlPort = isset($wampConf['mysqlPortUsed']) ? $wampConf['mysqlPortUsed'] : '';$c_DefaultMariadbPort = "3307";
+$c_AlternateMariadbPort = "3308";
+$c_UsedMariadbPort = isset($wampConf['mariadbPortUsed']) ? $wampConf['mariadbPortUsed'] : '';
 
 $c_apacheService = $wampConf['ServiceApache'];
 $c_mysqlService = $wampConf['ServiceMysql'];
+$c_mariadbService = $wampConf['ServiceMariadb'];
 
 $c_phpCliVersion = $wampConf['phpCliVersion'];
 $c_mysqlVersion = $wampConf['mysqlVersion'];
 $c_mysqlServiceInstallParams = $wampConf['mysqlServiceInstallParams'];
 $c_mysqlServiceRemoveParams = $wampConf['mysqlServiceRemoveParams'];
+$c_mariadbVersion = $wampConf['mariadbVersion'];
+$c_mariadbServiceInstallParams = $wampConf['mariadbServiceInstallParams'];
+$c_mariadbServiceRemoveParams = $wampConf['mariadbServiceRemoveParams'];
 $c_apacheServiceInstallParams = $wampConf['apacheServiceInstallParams'];
 $c_apacheServiceRemoveParams = $wampConf['apacheServiceRemoveParams'];
 $c_webgrind = "webGrind";
@@ -46,6 +59,7 @@ $c_webgrind = "webGrind";
 $c_apacheVersionDir = $wampConf['installDir'].'/bin/apache';
 $c_phpVersionDir = $wampConf['installDir'].'/bin/php';
 $c_mysqlVersionDir = $wampConf['installDir'].'/bin/mysql';
+$c_mariadbVersionDir = $wampConf['installDir'].'/bin/mariadb';
 $c_apacheConfFile = $c_apacheVersionDir.'/apache'.$wampConf['apacheVersion'].'/'.$wampConf['apacheConfDir'].'/'.$wampConf['apacheConfFile'];
 $c_apacheVhostConfFile = $c_apacheVersionDir.'/apache'.$wampConf['apacheVersion'].'/'.$wampConf['apacheConfDir'].'/extra/httpd-vhosts.conf';
 $c_apacheAutoIndexConfFile = $c_apacheVersionDir.'/apache'.$wampConf['apacheVersion'].'/'.$wampConf['apacheConfDir'].'/extra/httpd-autoindex.conf';
@@ -54,11 +68,15 @@ $c_phpConfFile = $c_apacheVersionDir.'/apache'.$wampConf['apacheVersion'].'/'.$w
 $c_phpCliConfFile = $c_phpVersionDir.'/php'.$c_phpCliVersion.'/'.$wampConf['phpConfFile'];
 $c_mysqlExe = $c_mysqlVersionDir.'/mysql'.$wampConf['mysqlVersion'].'/'.$wampConf['mysqlExeDir'].'/'.$wampConf['mysqlExeFile'];
 $c_mysqlConfFile = $c_mysqlVersionDir.'/mysql'.$wampConf['mysqlVersion'].'/'.$wampConf['mysqlConfDir'].'/'.$wampConf['mysqlConfFile'];
+$c_mariadbExe = $c_mariadbVersionDir.'/mariadb'.$wampConf['mariadbVersion'].'/'.$wampConf['mariadbExeDir'].'/'.$wampConf['mariadbExeFile'];
+$c_mariadbConfFile = $c_mariadbVersionDir.'/mariadb'.$wampConf['mariadbVersion'].'/'.$wampConf['mariadbConfDir'].'/'.$wampConf['mariadbConfFile'];
 $c_phpExe = $c_phpVersionDir.'/php'.$c_phpCliVersion.'/'.$wampConf['phpExeFile'];
 $c_phpCli = $c_phpVersionDir.'/php'.$c_phpCliVersion.'/'.$wampConf['phpCliFile'];
 $c_mysqlConsole = $c_mysqlVersionDir.'/mysql'.$c_mysqlVersion.'/'.$wampConf['mysqlExeDir'].'/mysql.exe';
+$c_mariadbConsole = $c_mariadbVersionDir.'/mariadb'.$c_mariadbVersion.'/'.$wampConf['mariadbExeDir'].'/mysql.exe';
 
 //Test du fichier hosts
+
 $c_hostsFile = getenv('WINDIR').'\system32\drivers\etc\hosts';
 $c_hostsFile_writable = true;
 if(file_exists($c_hostsFile)) {
@@ -77,6 +95,7 @@ else {
 	error_log("The file ".$c_hostsFile." does not exists");
 	$c_hostsFile_writable = false;
 }
+
 
 $phpExtDir = $c_phpVersionDir.'/php'.$wampConf['phpVersion'].'/ext/';
 $helpFile = $c_installDir.'/help/wamp5.chm';
@@ -162,18 +181,24 @@ $wamp_Param = array(
 	'urlAddLocalhost',
 	);
 
-// Adding parameters for Apache & MySQL
+// Adding parameters for Apache & MySQL & MariaDB
 $apache_Param = $apache_Param_value = array();
 $apache_Param[] = 'apacheUseOtherPort';
 $apache_Param_Value[] = 'off';
 $apache_Param[] = 'apachePortUsed';
-$apache_Param_Value[] = '80';
+$apache_Param_Value[] = $c_DefaultPort;
 
 $mysql_Param = $mysql_Param_value = array();
 $mysql_Param[] = 'mysqlUseOtherPort';
 $mysql_Param_Value[] = 'off';
 $mysql_Param[] = 'mysqlPortUsed';
-$mysql_Param_Value[] = '3306';
+$mysql_Param_Value[] = $c_DefaultMysqlPort;
+
+$mariadb_Param = $mariadb_Param_value = array();
+$mariadb_Param[] = 'mariadbUseOtherPort';
+$mariadb_Param_Value[] = 'off';
+$mariadb_Param[] = 'mariadbPortUsed';
+$mariadb_Param_Value[] = $c_DefaultMariadbPort;
 
 // Extensions can not be loaded by extension =
 // for example zend_extension

@@ -26,6 +26,7 @@ $w_aliasDirectories = 'Répertoires Alias';
 $w_services = 'Services';
 $w_apache = 'Apache';
 $w_mysql = 'MySQL';
+$w_mariadb = 'MariaDB';
 $w_startServices = 'Démarrer les services';
 $w_stopServices = 'Arrêter les services';
 $w_restartServices = 'Redémarrer les services';
@@ -36,6 +37,7 @@ $w_apacheErrorLog = 'Apache error log';
 $w_apacheAccessLog = 'Apache access log';
 $w_phpLog = 'PHP error log';
 $w_mysqlLog = 'MySQL log';
+$w_mariadbLog = 'MariaDB log';
 $w_addAlias = 'Créer un alias';
 $w_editAlias = 'Modifier l\'alias';
 $w_editHtaccess = 'Modifier .htaccess';
@@ -52,6 +54,7 @@ $w_testPort80 = 'Tester le Port 80';
 $w_installService = '&Installer le service';
 $w_removeService = '&Supprimer le Service';
 $w_mysqlConsole = 'Console MySQL';
+$w_mariadbConsole = 'Console MariaDB';
 
 $w_language = 'Langue';
 

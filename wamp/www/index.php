@@ -30,6 +30,7 @@ $phpVersion = $wampConf['phpVersion'];
 $apacheVersion = $wampConf['apacheVersion'];
 $doca_version = 'doca'.substr($apacheVersion,0,3);
 $mysqlVersion = $wampConf['mysqlVersion'];
+$mariadbVersion = $wampConf['mariadbVersion'];
 $wampserverVersion = $wampConf['wampserverVersion'];
 
 //On récupére la valeur de urlAddLocalhost
@@ -45,6 +46,8 @@ $port = !empty($wampConf['apachePortUsed']) ? $wampConf['apachePortUsed'] : "80"
 $UrlPort = $port !== "80" ? ":".$port : '';
 //on récupère la valeur de mysqlPortUsed
 $Mysqlport = !empty($wampConf['mysqlPortUsed']) ? $wampConf['mysqlPortUsed'] : "3306";
+//on récupère la valeur de mariadbPortUsed
+$Mariadbport = !empty($wampConf['mariadbPortUsed']) ? $wampConf['mariadbPortUsed'] : "3307";
 
 
 // répertoires à ignorer dans les projets
@@ -67,6 +70,8 @@ $langues = array(
 		'docp' => 'www.php.net/manual/en/',
 		'versm' => 'MySQL Version:',
 		'docm' => 'dev.mysql.com/doc/index.html',
+		'versmariadb' => 'MariaDB Version:',
+		'docmariadb' => 'mariadb.com/kb/en/mariadb/',
 		'phpExt' => 'Loaded Extensions : ',
 		'titrePage' => 'Tools',
 		'txtProjet' => 'Your Projects',
@@ -88,6 +93,7 @@ $langues = array(
 		'faq' => 'http://www.en.wampserver.com/faq.php',
 		'portUsed' => 'Port defined for Apache: ',
 		'mysqlportUsed' => 'Port defined for MySQL: ',
+		'mariadbportUsed' => 'Port defined for MariaDB: ',
 		'nolocalhost' => 'It\'s a bad idea to add localhost in the url of launching projects. It is best to define VirtualHost in<br />wamp/bin/apache/apache%s/conf/extra/httpd-vhosts.conf<br />file and not add localhost in the url.',
 	),
 	'fr' => array(
@@ -105,6 +111,8 @@ $langues = array(
 		'docp' => 'www.php.net/manual/fr/',
 		'versm' => 'Version de MySQL :',
 		'docm' => 'dev.mysql.com/doc/index.html',
+		'versmariadb' => 'Version de MariaDB :',
+		'docmariadb' => 'mariadb.com/kb/en/mariadb/',
 		'phpExt' => 'Extensions&nbsp;Chargées&nbsp;:',
 		'titrePage' => 'Outils',
 		'txtProjet' => 'Vos Projets',
@@ -126,6 +134,7 @@ $langues = array(
 		'faq' => 'http://www.wampserver.com/faq.php',
 		'portUsed' => 'Port défini pour Apache : ',
 		'mysqlportUsed' => 'Port défini pour MySQL : ',
+		'mariadbportUsed' => 'Port défini pour MariaDB : ',
 		'nolocalhost' => 'C\'est une mauvaise idée d\'ajouter localhost dans les url de lancement des projets. Il est préférable de définir des VirtualHost dans le fichier<br />wamp/bin/apache/apache%s/conf/extra/httpd-vhosts.conf<br />et de ne pas ajouter localhost dans les url.',
 	)
 );
@@ -550,11 +559,12 @@ $pageContents = <<< EOPAGE
 
     <div id="head">
 	    <div class="innerhead">
-		    <h1><abbr title="Windows">W</abbr><abbr title="Apache">A</abbr><abbr title="MySQL">M</abbr><abbr title="PHP">P</abbr></h1>
+		    <h1><abbr title="Windows">W</abbr><abbr title="Apache">A</abbr><abbr title="MySQL - MariaDB">M</abbr><abbr title="PHP">P</abbr></h1>
 		    <ul>
 			    <li>PHP 5</li>
 			    <li>Apache 2.4</li>
 			    <li>MySQL 5</li>
+			    <li>MariaDB 10</li>
 		    </ul>
         </div>
 		<ul class="utility">
@@ -573,9 +583,9 @@ $pageContents = <<< EOPAGE
 
 	        <dl class="content">
 		        <dt>{$langues[$langue]['versa']}</dt>
-		            <dd>${apacheVersion}&nbsp;&nbsp;-&nbsp;<a href='http://{$langues[$langue][$doca_version]}'>Documentation</a></dd>
+		            <dd>${apacheVersion}&nbsp;&nbsp;-&nbsp;<a href='http://{$langues[$langue][$doca_version]}' target='_blank'>Documentation</a></dd>
 		        <dt>{$langues[$langue]['versp']}</dt>
-		            <dd>${phpVersion}&nbsp;&nbsp;-&nbsp;<a href='http://{$langues[$langue]['docp']}'>Documentation</a></dd>
+		            <dd>${phpVersion}&nbsp;&nbsp;-&nbsp;<a href='http://{$langues[$langue]['docp']}' target='_blank'>Documentation</a></dd>
 		        <dt>{$langues[$langue]['server']}</dt>
 		            <dd>${server_software}&nbsp;-&nbsp;{$langues[$langue]['portUsed']}{$port}</dd>
 		        <dt>{$langues[$langue]['phpExt']}</dt>
@@ -585,7 +595,9 @@ $pageContents = <<< EOPAGE
 			            </ul>
 		            </dd>
 		        <dt>{$langues[$langue]['versm']}</dt>
-		            <dd>${mysqlVersion}&nbsp;-&nbsp;{$langues[$langue]['mysqlportUsed']}{$Mysqlport}&nbsp;-&nbsp; <a href='http://{$langues[$langue]['docm']}'>Documentation</a></dd>
+		            <dd>${mysqlVersion}&nbsp;-&nbsp;{$langues[$langue]['mysqlportUsed']}{$Mysqlport}&nbsp;-&nbsp; <a href='http://{$langues[$langue]['docm']}' target='_blank'>Documentation</a></dd>
+				<dt>{$langues[$langue]['versmariadb']}</dt>
+		            <dd>${mariadbVersion}&nbsp;-&nbsp;{$langues[$langue]['mariadbportUsed']}{$Mariadbport}&nbsp;-&nbsp; <a href='http://{$langues[$langue]['docmariadb']}' target='_blank'>Documentation</a></dd>
 	        </dl>
         </div>
     </div>

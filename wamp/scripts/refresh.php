@@ -45,20 +45,29 @@ if ($handle = opendir($langDir.$modulesDir))
 $w_AlternatePort = sprintf($w_UseAlternatePort, $c_UsedPort);
 if($c_UsedPort == $c_DefaultPort) {
 	$UrlPort = '';
-	$w_newPort = "8080";
+	$w_newPort = $c_AlternatePort;
 }
 else {
 	$UrlPort = ':'.$c_UsedPort;
-	$w_newPort = "80";
+	$w_newPort = $c_DefaultPort;
 }
 
 //Update string to use alternate MySQL port.
 $w_AlternateMysqlPort = sprintf($w_UseAlternatePort, $c_UsedMysqlPort);
 if($c_UsedMysqlPort == $c_DefaultMysqlPort) {
-	$w_newMysqlPort = "3307";
+	$w_newMysqlPort = $c_AlternateMysqlPort;
 }
 else {
-	$w_newMysqlPort = "3306";
+	$w_newMysqlPort = $c_DefaultMysqlPort;
+}
+
+//Update string to use alternate MariaDB port.
+$w_AlternateMariadbPort = sprintf($w_UseAlternatePort, $c_UsedMariadbPort);
+if($c_UsedMariadbPort == $c_DefaultMariadbPort) {
+	$w_newMariadbPort = $c_AlternateMariadbPort;
+}
+else {
+	$w_newMariadbPort = $c_DefaultMariadbPort;
 }
 
 // ************************
@@ -95,6 +104,24 @@ if(!empty($wampConf['mysqlUseOtherPort']))
 // Item Tools submenu Change the names of the services
 if(!empty($wampConf['ItemServicesNames'])) {
 	update_wampmanager_file("Type: separator; Caption: \"Apache: \${c_apacheService} - MySQL: \${c_mysqlService}\"",
+		$wampConf['ItemServicesNames'],
+		"on", "off",
+		$templateFile);
+	update_wampmanager_file("Type: item; Caption: \"\${w_changeServices}\"; Action: multi; Actions: changeservicesnames; Glyph: 9",
+		$wampConf['ItemServicesNames'],
+		"on", "off",
+		$templateFile);
+}
+// Item Tools submenu Check MariaDB port used (if not 3307)
+if(!empty($wampConf['mariadbUseOtherPort']))
+	update_wampmanager_file("Type: item; Caption: \"\${w_testPortMariadbUsed}",
+		$wampConf['mariadbUseOtherPort'],
+		"on", "off",
+		$templateFile);
+
+// Item Tools submenu Change the names of the services
+if(!empty($wampConf['ItemServicesNames'])) {
+	update_wampmanager_file("Type: separator; Caption: \"Apache: \${c_apacheService} - MariaDB: \${c_mariadbService}\"",
 		$wampConf['ItemServicesNames'],
 		"on", "off",
 		$templateFile);
@@ -600,6 +627,7 @@ foreach ($phpVersionList as $onePhp)
 Action: service; Service: '.$c_apacheService.'; ServiceAction: stop; Flags: ignoreerrors waituntilterminated
 Action: run; FileName: "'.$c_phpCli.'";Parameters: "switchPhpVersion.php '.$onePhpVersion.'";WorkingDir: "'.$c_installDir.'/scripts"; Flags: waituntilterminated
 Action: run; FileName: "'.$c_phpExe.'";Parameters: "-c . switchMysqlPort.php '.$c_UsedMysqlPort.'";WorkingDir: "'.$c_installDir.'/scripts"; Flags: waituntilterminated
+Action: run; FileName: "'.$c_phpExe.'";Parameters: "-c . switchMariadbPort.php '.$c_UsedMariadbPort.'";WorkingDir: "'.$c_installDir.'/scripts"; Flags: waituntilterminated
 Action: run; FileName: "'.$c_phpCli.'";Parameters: "refresh.php";WorkingDir: "'.$c_installDir.'/scripts"; Flags: waituntilterminated
 Action: run; FileName: "net"; Parameters: "start '.$c_apacheService.'"; ShowCmd: hidden; Flags: waituntilterminated
 Action: resetservices
@@ -778,6 +806,80 @@ Action: run; FileName: "'.$c_phpExe.'";Parameters: "msg.php 13 '.base64_encode($
 }
 /*$myreplace .= 'Type: separator;
 Type: item; Caption: "Get more..."; Action: run; FileName: "'.$c_navigator.'"; Parameters: "http://www.wampserver.com/addons_mysql.php";
+';
+*/
+$tpl = str_replace($myPattern,$myreplace.$myreplacemenu,$tpl);
+
+// ************************
+// versions de MariaDB
+$mariadbVersionList = listDir($c_mariadbVersionDir,'checkMariadbConf');
+
+$myPattern = ';WAMPMARIADBVERSIONSTART';
+$myreplace = $myPattern."
+";
+$myreplacemenu = '';
+foreach ($mariadbVersionList as $oneMariadb)
+{
+  $oneMariadbVersion = str_ireplace('mariadb','',$oneMariadb);
+  unset($mariadbConf);
+  include $c_mariadbVersionDir.'/mariadb'.$oneMariadbVersion.'/'.$wampBinConfFiles;
+
+	//[modif oto] - Check name of the group [wamp...] under '# The MariaDB server' in my.ini file
+	//    must be the name of the mariadb service.
+	$myIniFile = $c_mariadbVersionDir.'/mariadb'.$oneMariadbVersion.'/'.$mariadbConf['mariadbConfFile'];
+	$myIniContents = file_get_contents($myIniFile);
+
+	if(strpos($myIniContents, "[".$c_mariadbService."]") === false) {
+		$myIniContents = preg_replace("/^\[wamp.*\]$/m", "[".$c_mariadbService."]", $myIniContents, 1, $count);
+		if(!is_null($myIniContents) && $count == 1) {
+			$fp = fopen($myIniFile,'w');
+			fwrite($fp,$myIniContents);
+			fclose($fp);
+			$mariadbServer[$oneMariadbVersion] = 0;
+		}
+		else { //The MariaDB server has not the same name as mariadb service
+			$mariadbServer[$oneMariadbVersion] = -1;
+		}
+	}
+	else
+		$mariadbServer[$oneMariadbVersion] = 0;
+	unset($myIniContents);
+
+	if ($oneMariadbVersion === $wampConf['mariadbVersion'] && $mariadbServer[$oneMariadbVersion] == 0)
+  	$mariadbServer[$oneMariadbVersion] = 1;
+
+	if ($mariadbServer[$oneMariadbVersion] == 1) {
+    $myreplace .= 'Type: item; Caption: "'.$oneMariadbVersion.'"; Action: multi; Actions:switchMariadb'.$oneMariadbVersion.'; Glyph: 13
+';
+	}
+  elseif($mariadbServer[$oneMariadbVersion] == 0) {
+    $myreplace .= 'Type: item; Caption: "'.$oneMariadbVersion.'"; Action: multi; Actions:switchMariadb'.$oneMariadbVersion.'
+';
+  	$myreplacemenu .= '[switchMariadb'.$oneMariadbVersion.']
+Action: service; Service: '.$c_mariadbService.'; ServiceAction: stop; Flags: ignoreerrors waituntilterminated
+Action: run; FileName: "'.$c_mariadbExe.'"; Parameters: "'.$c_mariadbServiceRemoveParams.'"; ShowCmd: hidden; Flags: ignoreerrors waituntilterminated
+Action: closeservices;
+Action: run; FileName: "'.$c_phpCli.'";Parameters: "switchMariadbVersion.php '.$oneMariadbVersion.'";WorkingDir: "'.$c_installDir.'/scripts"; Flags: waituntilterminated
+Action: run; FileName: "'.$c_mariadbVersionDir.'/mariadb'.$oneMariadbVersion.'/'.$mariadbConf['mariadbExeDir'].'/'.$mariadbConf['mariadbExeFile'].'"; Parameters: "'.$mariadbConf['mariadbServiceInstallParams'].'"; ShowCmd: hidden; Flags: waituntilterminated
+Action: run; FileName: "'.$c_phpExe.'";Parameters: "-c . switchMariadbPort.php '.$c_UsedMariadbPort.'";WorkingDir: "'.$c_installDir.'/scripts"; Flags: waituntilterminated
+Action: run; FileName: "net"; Parameters: "start '.$c_mariadbService.'"; ShowCmd: hidden; Flags: waituntilterminated
+Action: run; FileName: "'.$c_phpCli.'";Parameters: "refresh.php";WorkingDir: "'.$c_installDir.'/scripts"; Flags: waituntilterminated
+Action: resetservices;
+Action: readconfig;
+
+';
+	}
+  elseif($mariadbServer[$oneMariadbVersion] == -1) {
+    $myreplace .= 'Type: item; Caption: "'.$oneMariadbVersion.'"; Action: multi; Actions:switchMariadb'.$oneMariadbVersion.'; Glyph: 19
+';
+  	$myreplacemenu .= '[switchMariadb'.$oneMariadbVersion.']
+Action: run; FileName: "'.$c_phpExe.'";Parameters: "msg.php 16 '.base64_encode($myIniFile).' '.base64_encode($c_mariadbService).'";WorkingDir: "'.$c_installDir.'/scripts"; Flags: waituntilterminated
+';
+	}
+
+}
+/*$myreplace .= 'Type: separator;
+Type: item; Caption: "Get more..."; Action: run; FileName: "'.$c_navigator.'"; Parameters: "http://www.wampserver.com/addons_mariadb.php";
 ';
 */
 $tpl = str_replace($myPattern,$myreplace.$myreplacemenu,$tpl);

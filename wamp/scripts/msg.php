@@ -3,7 +3,7 @@
 $msgId = $_SERVER['argv'][1];
 $nb_arg = $_SERVER['argc'] - 1;
 
-if(is_numeric($msgId) && $msgId > 0 && $msgId < 16) {
+if(is_numeric($msgId) && $msgId > 0 && $msgId < 17) {
 	$msgExtName = '';
 	if($nb_arg >= 2)
 		$msgExtName = base64_decode($_SERVER['argv'][2]);
@@ -45,6 +45,14 @@ if(is_numeric($msgId) && $msgId > 0 && $msgId < 16) {
  ",
  14 => "To have the VirtualHost, the line:\n\n#Include conf/extra/httpd-vhosts.conf\n\nmust be uncommented in httpd.conf file",
  15 => "The file:\n\n".$msgExtName."\n\ndoes not exists.",
+ 16 => "In ".$msgExtName." file,
+ MariaDB Server has not the same name as MariaDB service: ".$msgExplain."
+
+ The content of the file (about line 25) must be:
+
+ # The MariaDB server
+ [".$msgExplain."]
+ ",
 	);
 
 function message_add(&$array) {
@@ -66,7 +74,7 @@ elseif(is_string($msgId)) {
 		$services_OK = true;
 		$message['stateservices'] = "State of services:\n\n";
 		require 'config.inc.php';
-		$services = array($c_apacheService, $c_mysqlService, "dnscache");
+		$services = array($c_apacheService, $c_mysqlService, $c_mariadbService, "dnscache");
 		foreach($services as $value) {
 			$message['stateservices'] .= " The service '".$value."'";
 			$command = 'sc query '.$value.' | find "STATE"';
@@ -87,7 +95,7 @@ elseif(is_string($msgId)) {
 			}
 		}
 		if(!$services_OK) {
-			$message['stateservices'] .= "WampServer (Apache, PHP and MySQL) will not function properly if any service\n";
+			$message['stateservices'] .= "WampServer (Apache, PHP, MySQL and MariaDB) will not function properly if any service\n";
 			foreach($services as $value) {
 				$message['stateservices'] .= "'".$value."'\n";
 			}
@@ -106,6 +114,7 @@ elseif(is_string($msgId)) {
 		$phpApacheDll = array();
 		$phpErrorMsg = array();
 		$mysqlVersion = array();
+		$mariadbVersion = array();
 		$v32 = array();
 		$v64 = array();
 		$nb_v = 0;
@@ -115,6 +124,7 @@ elseif(is_string($msgId)) {
 		$apacheVersionList = listDir($c_apacheVersionDir,'checkApacheConf');
 		$phpVersionList = listDir($c_phpVersionDir,'checkPhpConf');
 		$mysqlVersionList = listDir($c_mysqlVersionDir,'checkMysqlConf');
+		$mariadbVersionList = listDir($c_mariadbVersionDir,'checkMariadbConf');
 
 		// Apache versions
 		foreach($apacheVersionList as $oneApache) {
@@ -180,6 +190,22 @@ elseif(is_string($msgId)) {
 			$nb_v++;
 			echo ".";
 		}
+		
+		// MariaDB versions
+		foreach($mariadbVersionList as $oneMariadb) {
+			$oneMariadbVersion = str_ireplace('mariadb','',$oneMariadb);
+    	$command = 'start /b /wait '.$c_mariadbVersionDir.'/mariadb'.$oneMariadbVersion.'/'.$wampConf['mariadbExeDir'].'/'.$wampConf['mariadbExeFile'].' -V';
+			$output = exec($command, $result);
+			$pos = strrpos($output,'Ver ');
+			$output = substr($output,$pos);
+			if(strpos($output, "x86 ") !== false)
+				$v32[] = $oneMariadb;
+			elseif(strpos($output, "x86_64") !== false)
+				$v64[] = $oneMariadb;
+			$mariadbVersion[$oneMariadbVersion] = $output;
+			$nb_v++;
+			echo ".";
+		}
 
     foreach($phpCompiler as $key=>$value) {
     	$message['compilerversions'] .= "PHP ".$key." ".$value."\n";
@@ -200,6 +226,10 @@ elseif(is_string($msgId)) {
 
     foreach($mysqlVersion as $key=>$value) {
     	$message['compilerversions'] .= "MySQL ".$value."\n";
+    }
+	
+	foreach($mariadbVersion as $key=>$value) {
+    	$message['compilerversions'] .= "MariaDB ".$value."\n";
     }
 
 		$message['compilerversions'] .= "\n\n";
@@ -303,6 +333,7 @@ elseif(is_string($msgId)) {
 		echo "*************** SERVICE NAMES HAVE BEEN CHANGED ***************\n";
 		echo "***************************************************************\n";
 		echo "\n  Apache -> ".$c_apacheService."     -     MySQL  -> ".$c_mysqlService."\n\n";
+		echo "\n  Apache -> ".$c_apacheService."     -     MariaDB  -> ".$c_mariadbService."\n\n";
 		echo "***************** WAMPSERVER WILL BE SHUTDOWN *****************\n\n";
 		echo "* YOU MUST RESTART WampServer  for the changes to take effect *\n";
 	}

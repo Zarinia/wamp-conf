@@ -34,6 +34,12 @@ if(strpos($wampConfFileContents, "[mysqloptions]") === false) {
 	$wampConfFileContents = preg_replace("/^(mysqlServiceRemoveParams .*?\r\n)/m","$1[mysqloptions]\r\n",$wampConfFileContents);
 	$options_add = true;
 }
+//Check if [mariadboptions] group exists
+if(strpos($wampConfFileContents, "[mariadboptions]") === false) {
+	//Create [mariadboptions] group
+	$wampConfFileContents = preg_replace("/^(mariadbServiceRemoveParams .*?\r\n)/m","$1[mariadboptions]\r\n",$wampConfFileContents);
+	$options_add = true;
+}
 
 if($options_add) {
 	$fpWampConf = fopen($configurationFile,"w");
@@ -141,13 +147,13 @@ if(strpos($myIniContents, "[".$c_mysqlService."]") === false) {
 if($check_default_engine_MYISAM) {
 	//Check default-storage-engine=MYISAM to avoid problem with novices and innoDB
 	if(strpos($myIniContents , "default-storage-engine") === false) {
-		$myIniContents = str_replace("[".$c_mysqlService."]\r\n", "[".$c_mysqlService."]\r\n"."# The default storage engine that will be used when create new tables\r\ndefault-storage-engine=MYISAM\r\n", $myIniContents);
+		$myIniContents = str_replace("[".$c_mysqlService."]\r\n", "[".$c_mysqlService."]\r\n"."# The default storage engine that will be used when create new tables\r\ndefault-storage-engine = MYISAM\r\n", $myIniContents);
 		$my_ini_modified = true;
 	}
 	else {
 		//Not commented and MYISAM
 		if(preg_match("/^(?![ \t]*#).*default-storage-engine.*[ \t]*=[ \t]*MYISAM\r?\n/m", $myIniContents, $matches) !== 1) {
-			$myIniContents = preg_replace("/^.*default-storage-engine.*\r?\n/m","default-storage-engine=MYISAM\r\n",$myIniContents);
+			$myIniContents = preg_replace("/^.*default-storage-engine.*\r?\n/m","default-storage-engine = MYISAM\r\n",$myIniContents);
 			$my_ini_modified = true;
 		}
 	}
@@ -170,6 +176,64 @@ if(isset($mysqlConf['lc-messages'])) {
 		foreach ($mysqlConfNew as $param => $value)
 			$iniFileContents = preg_replace('|^'.$param.'=.*|m',$param.'='.$value,$iniFileContents);
 		$fp = fopen($c_mysqlConfFile,'w');
+		fwrite($fp,$iniFileContents);
+		fclose($fp);
+	}
+}
+
+//Settings for MariaDB (port used and change port)
+for($i = 0 ; $i < count($mariadb_Param) ; $i++) {
+	if(!isset($wampConf[$mariadb_Param[$i]])) {
+	//Parameter does not exist
+	createWampConfParam($mariadb_Param[$i], $mariadb_Param_Value[$i], "[mariadboptions]", $configurationFile);
+	}
+}
+
+//Check some value in my.ini file
+$myIniContents = file_get_contents_dos($c_mariadbConfFile);
+$my_ini_modified = false;
+//Check name of the group [wamp...] under '# The MariaDB server' in my.ini file
+//must be the name of the mariadb service.
+if(strpos($myIniContents, "[".$c_mariadbService."]") === false) {
+	$myIniNewContents = preg_replace("/^\[wamp.*\].*\n/m", "[".$c_mariadbService."]\r\n", $myIniContents, 1, $count);
+	if(!is_null($myIniNewContents) && $count == 1) {
+		$myIniContents = $myIniNewContents;
+		$my_ini_modified = true;
+		unset($myIniNewContents);
+	}
+}
+if($check_default_engine_MYISAM) {
+	//Check default-storage-engine=MYISAM to avoid problem with novices and innoDB
+	if(strpos($myIniContents , "default-storage-engine") === false) {
+		$myIniContents = str_replace("[".$c_mariadbService."]\r\n", "[".$c_mariadbService."]\r\n"."# The default storage engine that will be used when create new tables\r\ndefault-storage-engine = MYISAM\r\n", $myIniContents);
+		$my_ini_modified = true;
+	}
+	else {
+		//Not commented and MYISAM
+		if(preg_match("/^(?![ \t]*#).*default-storage-engine.*[ \t]*=[ \t]*MYISAM\r?\n/m", $myIniContents, $matches) !== 1) {
+			$myIniContents = preg_replace("/^.*default-storage-engine.*\r?\n/m","default-storage-engine = MYISAM\r\n",$myIniContents);
+			$my_ini_modified = true;
+		}
+	}
+}
+
+if($my_ini_modified) {
+	$fp = fopen($c_mariadbConfFile,'w');
+	fwrite($fp,$myIniContents);
+	fclose($fp);
+}
+
+//Language error messages of MariaDB
+//Put MariaDB error messages in English if the language is not French.
+//Warnings masked because the my.ini file defines comments by #, which is obsolete (Should be ;)
+$mariadbConf = @parse_ini_file($c_mariadbConfFile);
+if(isset($mariadbConf['lc-messages'])) {
+	if($mariadbConf['lc-messages'] == 'fr_FR' && $wampConf['language'] != 'french') {
+		$mariadbConfNew['lc-messages'] = "en_US";
+		$iniFileContents = @file_get_contents($c_mariadbConfFile);
+		foreach ($mariadbConfNew as $param => $value)
+			$iniFileContents = preg_replace('|^'.$param.'=.*|m',$param.'='.$value,$iniFileContents);
+		$fp = fopen($c_mariadbConfFile,'w');
 		fwrite($fp,$iniFileContents);
 		fclose($fp);
 	}

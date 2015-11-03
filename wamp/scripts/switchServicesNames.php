@@ -22,12 +22,24 @@ if(!empty($_SERVER['argv'][2])) {
 else
 	$newMysql = "wampmysqld";
 
+if(!empty($_SERVER['argv'][3])) {
+	$numMariadb = intval(trim($_SERVER['argv'][3]));
+	if($numMariadb < 0 || $numMysql > 9999)
+		$numMariadb = 0;
+	$newMariadb = "wampmariadb".$numMariadb;
+}
+else
+	$newMariadb = "wampmariadb";
+
 $newServicesNames['ServiceApache'] = $newApache;
 $newServicesNames['ServiceMysql'] = $newMysql;
+$newServicesNames['ServicenewMariadb'] = $newMariadb;
 $newServicesNames['apacheServiceInstallParams'] = "-n ".$newApache." -k install";
 $newServicesNames['apacheServiceRemoveParams'] = "-n ".$newApache." -k uninstall";
 $newServicesNames['mysqlServiceInstallParams'] = "--install-manual ".$newMysql;
 $newServicesNames['mysqlServiceRemoveParams'] = "--remove ".$newMysql;
+$newServicesNames['mariadbServiceInstallParams'] = "--install-manual ".$newMariadb;
+$newServicesNames['mariadbServiceRemoveParams'] = "--remove ".$newMariadb;
 
 //Replace services names in wampmanager.conf
 wampIniSet($configurationFile, $newServicesNames);
@@ -43,6 +55,10 @@ $command = "start /b /wait SC \\\\. config ".$newApache." start= demand";
 
 //Install Mysql service
 $command = 'start /b /wait '.$c_mysqlExe.' '.$newServicesNames['mysqlServiceInstallParams'];
+`$command`;
+
+//Install Mariadb service
+$command = 'start /b /wait '.$c_mariadbExe.' '.$newServicesNames['mariadbServiceInstallParams'];
 `$command`;
 
 ?>

@@ -64,6 +64,15 @@ function checkMysqlConf($baseDir,$version)
 	return(1);
 }
 
+function checkMariadbConf($baseDir,$version)
+{
+	global $wampBinConfFiles;
+
+	if (!is_file($baseDir.'/'.$version.'/'.$wampBinConfFiles))
+		return (0);
+	return(1);
+}
+
 function linkPhpDllToApacheBin($php_version)
 {
 	require 'config.inc.php';
@@ -75,19 +84,19 @@ function linkPhpDllToApacheBin($php_version)
 		$target = $c_phpVersionDir.'/php'.$php_version.'/'.$dll;
 		$link = $c_apacheVersionDir.'/apache'.$wampConf['apacheVersion'].'/'.$wampConf['apacheExeDir'].'/'.$dll;
 		if(is_file($link) || is_link($link)) {
-			unlink($link);
+			@unlink($link);
 		}
 		if (is_file($target)) {
-			symlink($target, $link);
+			@symlink($target, $link);
 		}
 	}
 	//Create apache/apachex.y.z/bin/php.ini link to phpForApache.ini file of active version of PHP
 	$target = $c_phpVersionDir."/php".$php_version."/".$phpConfFileForApache;
 	$link = $c_apacheVersionDir."/apache".$wampConf['apacheVersion']."/".$wampConf['apacheExeDir']."/php.ini";
 	if(is_file($link) || is_link($link)) {
-		unlink($link);
+		@unlink($link);
 	}
-	symlink($target, $link);
+	@symlink($target, $link);
 }
 
 function switchPhpVersion($newPhpVersion)

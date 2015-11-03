@@ -27,6 +27,7 @@ $w_aliasDirectories = 'Directoare Alias';
 $w_services = 'Servicii';
 $w_apache = 'Apache';
 $w_mysql = 'MySQL';
+$w_mariadb = 'MariaDB';
 $w_startServices = 'Porneºte Toate Serviciile';
 $w_stopServices = 'Opreºte Toate Serviciile';
 $w_restartServices = 'Reporneºte Toate Serviciile';
@@ -37,6 +38,7 @@ $w_apacheErrorLog = 'Istoric Erori Apache';
 $w_apacheAccessLog = 'Istoric Acces Apache';
 $w_phpLog = 'Istoric Erori PHP';
 $w_mysqlLog = 'Istoric MySQL';
+$w_mariadbLog = 'Istoric MariaDB';
 $w_addAlias = 'Adaugã un alias';
 $w_editAlias = 'Modificã alias';
 $w_editHtaccess = 'Modificã .htaccess';
@@ -55,6 +57,7 @@ $w_testPort80 = 'Testeazã Portul 80';
 $w_installService = '&Instaleazã Serviciul';
 $w_removeService = 'Eliminã Se&rviciul';
 $w_mysqlConsole = 'Consolã MySQL';
+$w_mariadbConsole = 'Consolã MariaDB';
 
 $w_language = 'Limbã';
 
