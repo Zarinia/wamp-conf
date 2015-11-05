@@ -130,6 +130,7 @@ $cfg['Servers'][$i]['export_templates'] = 'pma_export_templates';
 /*
  * End of servers configuration
  */
+/*
 $evf = "event_scheduler.json";
 $cdate = date("Y-m-d");
 $vdate = "";
@@ -151,10 +152,11 @@ if(strlen($vdate) == 0 || $vdate != $cdate) {
 		}
 	}
 }
+*/
 
 //$cfg['AllowArbitraryServer'] = true; //activer la synchronisation a distance
 $cfg['DefaultConnectionCollation'] = 'utf8_general_ci';
-$cfg['ServerDefault'] = 1;
+$cfg['ServerDefault'] = stripos($_SERVER["HTTP_HOST"], 'mariadb') !== false ? 2 : 1;
 $cfg['ShowPhpInfo'] = true;
 //$cfg['ThemeDefault'] = 'metro';
 # Debug
