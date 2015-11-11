@@ -60,22 +60,26 @@ SSLEngine on
 `SSLProtocol all -SSLv2 -SSLv3`
 `SSLHonorCipherSuite on  # apache 2.1+`
 
-SSLCertificateFile conf/ssl/cert-0000000000-12983.cer
+`SSLCertificateFile conf/ssl/cert-0000000000-12983.cer
 SSLCertificateKeyFile conf/ssl/multisite.key
 SSLCertificateChainFile conf/ssl/chain-0000000000-12983.txt
-</VirtualHost>
+</VirtualHost>`
 
 `NameVirtualHost *:443`
 
-<VirtualHost *:443>
+`<VirtualHost *:443>
 DocumentRoot /home/site1/public_html
 ServerName gestion.site1.fr
 ServerAlias v8.site1.fr cyber.site1.fr
-</VirtualHost>
+</VirtualHost>`
 
-<VirtualHost *:443>
-DocumentRoot /home/site2/public_html
-ServerName gestcom.site2.fr
-ServerAlias commercial.site2.fr,prospect.site2.fr
-</VirtualHost>
+`<VirtualHost *:443>`
+
+`DocumentRoot /home/site2/public_html`
+
+`ServerName gestcom.site2.fr`
+
+`ServerAlias commercial.site2.fr,prospect.site2.fr`
+
+`</VirtualHost>`
 
