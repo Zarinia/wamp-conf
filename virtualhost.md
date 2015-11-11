@@ -73,9 +73,8 @@ SSLCertificateFile conf/ssl/cert-0000000000-12983.cer
 SSLCertificateKeyFile conf/ssl/multisite.key
 SSLCertificateChainFile conf/ssl/chain-0000000000-12983.txt
 </VirtualHost>
-```
 
-```
+
 NameVirtualHost *:443
 
 <VirtualHost *:443>
