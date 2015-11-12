@@ -491,10 +491,11 @@ while (($file = readdir($handle))!==false)
 	if (is_dir($file) && !in_array($file,$projectsListIgnore))
 	{
 		$projectContents .= '<li><a href="';
-		if($suppress_localhost)
+		/*if($suppress_localhost)
 			$projectContents .= 'http://'.$file.$UrlPort.'/"';
 		else
-			$projectContents .= 'http://localhost'.$UrlPort.'/'.$file.'/"';
+			$projectContents .= 'http://localhost'.$UrlPort.'/'.$file.'/"';*/
+		$projectContents .= ''.$file.'/"';
 		$projectContents .= '>'.$file.'</a></li>';
 	}
 }
