@@ -495,7 +495,7 @@ while (($file = readdir($handle))!==false)
 			$projectContents .= 'http://'.$file.$UrlPort.'/"';
 		else
 			$projectContents .= 'http://localhost'.$UrlPort.'/'.$file.'/"';*/
-		$projectContents .= ''.$file.'/"';
+		$projectContents .= (isset($_SERVER['REQUEST_SCHEME']) ? $_SERVER['REQUEST_SCHEME'] : 'http').'://'.(isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : $_SERVER['SERVER_ADDR']).(isset($_SERVER['SERVER_PORT']) && !in_array($_SERVER['SERVER_PORT'], array(80, 443)) ? ':'.$_SERVER['SERVER_PORT'] : '').'/'.$file.'/"';
 		$projectContents .= '>'.$file.'</a></li>';
 	}
 }
