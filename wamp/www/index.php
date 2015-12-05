@@ -657,7 +657,7 @@ $pageContents .= <<< EOPAGEC
 		<li><a href="http://www.alterway.fr" target="_blank">Alter Way</a></li>
 	</ul>
 
-<script type="text/javascript>
+<script type="text/javascript">
 var select = document.getElementById("themes");
 if (select.addEventListener) {
     /* Only for modern browser and IE > 9 */
