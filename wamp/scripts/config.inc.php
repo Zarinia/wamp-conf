@@ -3,11 +3,6 @@
 $configurationFile = '../wampmanager.conf';
 $templateFile = '../wampmanager.tpl';
 $wampserverIniFile = '../wampmanager.ini';
-// $binDir = '../bin/';
-// $apacheDir = 'apache/';
-// $mysqlDir = 'mysql/';
-// $mariadbDir = 'mariadb/';
-// $phpDir = 'php/';
 $langDir = '../lang/';
 $aliasDir = '../alias/';
 $modulesDir = 'modules/';
@@ -35,7 +30,8 @@ $c_AlternatePort = "8080";
 $c_UsedPort = isset($wampConf['apachePortUsed']) ? $wampConf['apachePortUsed'] : '';
 $c_DefaultMysqlPort = "3306";
 $c_AlternateMysqlPort = "3305";
-$c_UsedMysqlPort = isset($wampConf['mysqlPortUsed']) ? $wampConf['mysqlPortUsed'] : '';$c_DefaultMariadbPort = "3307";
+$c_UsedMysqlPort = isset($wampConf['mysqlPortUsed']) ? $wampConf['mysqlPortUsed'] : '';
+$c_DefaultMariadbPort = "3307";
 $c_AlternateMariadbPort = "3308";
 $c_UsedMariadbPort = isset($wampConf['mariadbPortUsed']) ? $wampConf['mariadbPortUsed'] : '';
 
@@ -95,7 +91,6 @@ else {
 	error_log("The file ".$c_hostsFile." does not exists");
 	$c_hostsFile_writable = false;
 }
-
 
 $phpExtDir = $c_phpVersionDir.'/php'.$wampConf['phpVersion'].'/ext/';
 $helpFile = $c_installDir.'/help/wamp5.chm';
@@ -181,6 +176,8 @@ $wamp_Param = array(
 	'urlAddLocalhost',
 	);
 
+/*
+remove from wamp 3
 // Adding parameters for Apache & MySQL & MariaDB
 $apache_Param = $apache_Param_value = array();
 $apache_Param[] = 'apacheUseOtherPort';
@@ -199,7 +196,7 @@ $mariadb_Param[] = 'mariadbUseOtherPort';
 $mariadb_Param_Value[] = 'off';
 $mariadb_Param[] = 'mariadbPortUsed';
 $mariadb_Param_Value[] = $c_DefaultMariadbPort;
-
+*/
 // Extensions can not be loaded by extension =
 // for example zend_extension
 $phpNotLoadExt = array(
@@ -208,6 +205,7 @@ $phpNotLoadExt = array(
 
 // Apache modules which should not be disabled
 $apacheModNotDisable = array(
+	'authz_core_module',
 	'php5_module',
 	'php7_module',
 	);

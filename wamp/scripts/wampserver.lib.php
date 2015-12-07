@@ -243,7 +243,7 @@ function check_virtualhost($check_files_only = false) {
 	$virtualHost['nb_Directory'] = $nb_Directory;
 	$virtualHost['nb_End_Directory'] = $nb_End_Directory;
 	//Check validity of port number
-	$port_ref = $Virtual_matches[1][0];
+	$port_ref = isset($Virtual_matches[1][0]) ? $Virtual_matches[1][0] : -1;
 	$virtualHost['virtual_port'] = array_merge($Virtual_matches[0]);
 	for($i = 0 ; $i < count($Virtual_matches[1]) ; $i++) {
 		$port = intval($Virtual_matches[1][$i]);

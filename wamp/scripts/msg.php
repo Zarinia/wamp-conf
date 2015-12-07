@@ -327,6 +327,32 @@ elseif(is_string($msgId)) {
 		}
 		echo $message['apachevhosts'];
 	}
+	elseif($msgId == "apachemodules") {
+		require_once 'config.inc.php';
+		$command = 'start /b /wait '.$c_apacheExe.'  -t -D DUMP_MODULES';
+		ob_start();
+		passthru($command);
+		$output = ob_get_contents();
+		ob_end_clean();
+		if(!empty($output)) {
+			$message['apachemodules'] = "Apache loaded modules\n";
+			$nb_static = preg_match_all("~^[ \t]*(.*) \(static\).*$~m",$output, $matches);
+			if($nb_static > 0) {
+				$message['apachemodules'] .= "Core:\n";
+				foreach($matches[1] as $value)
+					$message['apachemodules'] .= $value."\n";
+				}
+				$message['apachemodules'] .= "\n";
+			$nb_shared = preg_match_all("~^[ \t]*(.*) \(shared\).*$~m",$output, $matches);
+			if($nb_shared > 0) {
+				$message['apachemodules'] .= "Shared modules:\n";
+				foreach($matches[1] as $value)
+					$message['apachemodules'] .= $value."\n";
+				$message['apachemodules'] .= "\n";
+			}
+			echo $message['apachemodules'];
+		}
+	}
 	elseif($msgId == "changeServiceName") {
 		require_once 'config.inc.php';
 		echo "\n***************************************************************\n";

@@ -41,10 +41,17 @@ $w_enterServiceNameMariadb = "Enter an index number for the Mariadb service. It 
 $w_compilerVersions = 'Check Compiler VC, compatibility and ini files';
 $w_UseAlternatePort = 'Use a port other than %s';
 $w_vhostConfig = 'Show VirtualHost examined by Apache';
+$w_apacheLoadedModules = 'Show Apache loaded Modules';
 $w_empty = 'Empty';
 $w_emptyAll = 'Empty ALL';
 
 //miscellaneous
 $w_ext_spec = 'Special extensions';
 $w_phpparam_info = 'For information only';
+$w_ext_nodll = 'No dll file';
+$w_ext_noline = "No 'extension='";
+$w_mod_fixed = "Irreversible module";
+$w_no_module = 'No module file';
+$w_no_moduleload = "No 'LoadModule'";
+
 ?>
