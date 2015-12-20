@@ -1,14 +1,17 @@
 <?php
+//Update 3.0.1
+//Added mode 32 or 64 bit in Quick Admin
+//Support for Windows 10 and Edge
 //[modif oto] Sous menu Projets (My Projects) et/ou Virtuals Hosts
-// Dans ;WAMPMENULEFTSTART ligne ajoutée après localhost
+// Dans ;WAMPMENULEFTSTART ligne ajoutÃ©e aprÃ¨s localhost
 // ;WAMPPROJECTSUBMENU Pour les projets
 // ;WAMPVHOSTSUBMENU Pour les Virtual Hosts
-// Variables déclarées dans wampmanager.conf
-// "notepad.exe" remplacé par "${c_editor}"
+// Variables dÃ©clarÃ©es dans wampmanager.conf
+// "notepad.exe" remplacÃ© par "${c_editor}"
 // services wampapache et wampmysqld
-// wampapache remplacé par ${c_apacheService}
-// wampmysqld remplacé par ${c_mysqlService}
-// Attention : Les ajouts de variables susmentionnés nécessitent
+// wampapache remplacÃ© par ${c_apacheService}
+// wampmysqld remplacÃ© par ${c_mysqlService}
+// Attention : Les ajouts de variables susmentionnÃ©s nÃ©cessitent
 //  les modifications des fichiers wampserver.conf, wampmanager.tpl,
 //  config.inc.php, scripts/refresh et scripts/wampserver.lib.php
 
@@ -24,7 +27,7 @@ TrayIconAllRunning=16
 TrayIconSomeRunning=17
 TrayIconNoneRunning=18
 ID={wampserver}
-AboutHeader=WAMPSERVER
+AboutHeader=WAMPSERVER 2.5 (2.5.18) - 3.0 (3.0.1)
 AboutVersion=Version ${c_wampVersion}
 ;WAMPCONFIGEND
 
@@ -34,12 +37,16 @@ WampServer Version ${c_wampVersion}
 Created by Romain Bourdon (romain@romainbourdon.com)
 Maintainer / Upgrade / RoadMap by Herve Leclerc (herve.leclerc@alterway.fr)
 Modified (2.5 to 2.5.18) by Otomatic (otomatic@otomatic.net)
+Upgrade 2.5 to 3.0.0 by Otomatic (wampserver@otomatic.net)
 Multi styles for homepage by Jojaba
 MariaDB by Phlyper (phlyper@live.fr)
+Upgrade 2.5.18 to 3.0.1 by Phlyper (phlyper@live.fr)
 
+Installer by Inno Setup
 Sources are available at SourceForge
 
 http://www.wampserver.com
+http://forum.wampserver.com/index.php
 
 [Services]
 Name: ${c_apacheService}
@@ -68,7 +75,7 @@ Action: readconfig;
 Action: service; Service: ${c_apacheService}; ServiceAction: startresume; Flags: ignoreerrors
 Action: service; Service: ${c_mysqlService}; ServiceAction: startresume; Flags: ignoreerrors
 Action: service; Service: ${c_mariadbService}; ServiceAction: startresume; Flags: ignoreerrors
-;Action: run; FileName: "${c_navigator}"; Parameters: "http://localhost${UrlPort}/"; ShowCmd: normal; Flags: ignoreerrors
+;Action: run; FileName: "${c_navigator}"; Parameters: "${c_edge}http://localhost${UrlPort}/"; ShowCmd: normal; Flags: ignoreerrors
 
 ;WAMPSTARTUPACTIONEND
 
@@ -127,7 +134,7 @@ SeparatorsSeparatorStyle=caption
 ;WAMPMENURIGHTSTART
 Type: item; Caption: "${w_about}"; Action: about
 Type: item; Caption: "${w_refresh}"; Action: multi; Actions: wampreload
-Type: item; Caption: "${w_help}"; Action: run; FileName: "${c_navigator}"; Parameters: "http://www.wampserver.com/presentation.php"; Glyph: 5
+Type: item; Caption: "${w_help}"; Action: run; FileName: "${c_navigator}"; Parameters: "${c_edge}http://www.wampserver.com/presentation.php"; Glyph: 5
 Type: submenu; Caption: "${w_language}"; SubMenu: language; Glyph: 3
 Type: submenu; Caption: "${w_wampSettings}"; Submenu: submenu.settings; Glyph: 3
 Type: submenu; Caption: "${w_wampTools}"; Submenu: submenu.tools; Glyph: 3
@@ -153,8 +160,9 @@ Action: readconfig;
 
 [Menu.Left]
 ;WAMPMENULEFTSTART
-Type: separator; Caption: "Powered by Alter Way"
-Type: item; Caption: "${w_localhost}"; Action: run; FileName: "${c_navigator}"; Parameters: "http://localhost${UrlPort}/"; Glyph: 5
+Type: separator; Caption: "Powered by Alter Way (WampServer 2.5) - Otomatic (WampServer 3.0)"
+Type: item; Caption: "${w_localhost}"; Action: run; FileName: "${c_navigator}"; Parameters: "${c_edge}http://localhost${UrlPort}/"; Glyph: 5
+;Type: item; Caption: "${w_localhost}"; Action: run; FileName: "cmd.exe"; Parameters: "/c start /b Microsoft-Edge:http://localhost${UrlPort}/"; Glyph: 5
 ;WAMPVHOSTSUBMENU
 ;WAMPPROJECTSUBMENU
 
@@ -190,7 +198,7 @@ Type: item; Caption: "${w_apacheAccessLog}"; Glyph: 6; Action: run; FileName: "$
 Type: separator; Caption: "${w_portUsed}${c_UsedPort}"
 Type: item; Caption: "${w_testPort80}"; Action: run; FileName: "${c_phpExe}"; Parameters: "-c . testPort.php 80 ${c_apacheService}";WorkingDir: "${c_installDir}/scripts"; Flags: waituntilterminated; Glyph: 9
 Type: item; Caption: "${w_AlternatePort}"; Action: multi; Actions: UseAlternatePort; Glyph: 9
-;Type: item; Caption: "${w_testPortUsed}${c_UsedPort}"; Action: run; FileName: "${c_phpExe}"; Parameters: "-c . testPort.php ${c_UsedPort} ${c_apacheService}";WorkingDir: "${c_installDir}/scripts"; Flags: waituntilterminated; Glyph: 9
+Type: item; Caption: "${w_testPortUsed}${c_UsedPort}"; Action: run; FileName: "${c_phpExe}"; Parameters: "-c . testPort.php ${c_UsedPort} ${c_apacheService}";WorkingDir: "${c_installDir}/scripts"; Flags: waituntilterminated; Glyph: 9
 ;WAMPAPACHEMENUEND
 
 [apacheVersion]
@@ -218,6 +226,7 @@ Type: item; Caption: "${w_mysqlConsole}"; Action: run; FileName: "${c_mysqlConso
 Type: item; Caption: "my.ini"; Glyph: 6; Action: run; FileName: "${c_editor}"; parameters: "${c_mysqlConfFile}"
 Type: item; Caption: "${w_mysqlLog}"; Glyph: 6; Action: run; FileName: "${c_editor}"; parameters: "${c_installDir}/${logDir}mysql.log"
 Type: separator; Caption: "${w_portUsedMysql}${c_UsedMysqlPort}"
+Type: item; Caption: "${w_testPortMysql}"; Action: run; FileName: "${c_phpExe}"; Parameters: "-c . testPort.php ${c_UsedMysqlPort} ${c_mysqlService}";WorkingDir: "${c_installDir}/scripts"; Flags: waituntilterminated; Glyph: 9
 Type: item; Caption: "${w_AlternateMysqlPort}"; Action: multi; Actions: UseAlternateMysqlPort; Glyph: 9
 ;WAMPMYSQLMENUEND
 
@@ -233,6 +242,7 @@ Type: item; Caption: "${w_mariadbConsole}"; Action: run; FileName: "${c_mariadbC
 Type: item; Caption: "my.ini"; Glyph: 6; Action: run; FileName: "${c_editor}"; parameters: "${c_mariadbConfFile}"
 Type: item; Caption: "${w_mariadbLog}"; Glyph: 6; Action: run; FileName: "${c_editor}"; parameters: "${c_installDir}/${logDir}mariadb.log"
 Type: separator; Caption: "${w_portUsedMariadb}${c_UsedMariadbPort}"
+Type: item; Caption: "${w_testPortMariadb}"; Action: run; FileName: "${c_phpExe}"; Parameters: "-c . testPort.php ${c_UsedMariadbPort} ${c_mariadbService}";WorkingDir: "${c_installDir}/scripts"; Flags: waituntilterminated; Glyph: 9
 Type: item; Caption: "${w_AlternateMariadbPort}"; Action: multi; Actions: UseAlternateMariadbPort; Glyph: 9
 ;WAMPMARIADBMENUEND
 
@@ -347,7 +357,6 @@ Action: exit
 ;WAMPMYEXITEND
 
 [apache_mod]
-Type: separator; Caption: "${w_apacheModules}"
 ;WAMPAPACHE_MODSTART
 ;WAMPAPACHE_MODEND
 
@@ -439,17 +448,16 @@ Type: item; Caption: "${w_testConf}"; Action: run; FileName: "${c_apacheExe}"; P
 Type: item; Caption: "${w_testServices}"; Action: run; FileName: "${c_phpExe}"; Parameters: "msg.php stateservices";WorkingDir: "${c_installDir}/scripts"; Flags: waituntilterminated; Glyph: 9
 Type: item; Caption: "${w_compilerVersions}"; Action: run; FileName: "${c_phpExe}"; Parameters: "msg.php compilerversions";WorkingDir: "${c_installDir}/scripts"; Flags: waituntilterminated; Glyph: 9
 Type: item; Caption: "${w_vhostConfig}"; Action: run; FileName: "${c_phpExe}"; Parameters: "msg.php vhostconfig";WorkingDir: "${c_installDir}/scripts"; Flags: waituntilterminated; Glyph: 9
+Type: item; Caption: "${w_apacheLoadedModules}"; Action: run; FileName: "${c_phpExe}"; Parameters: "msg.php apachemodules";WorkingDir: "${c_installDir}/scripts"; Flags: waituntilterminated; Glyph: 9
 Type: separator; Caption: "${w_portUsed}${c_UsedPort}"
 Type: item; Caption: "${w_testPort80}"; Action: run; FileName: "${c_phpExe}"; Parameters: "-c . testPort.php 80 ${c_apacheService}";WorkingDir: "${c_installDir}/scripts"; Flags: waituntilterminated; Glyph: 9
 Type: item; Caption: "${w_AlternatePort}"; Action: multi; Actions: UseAlternatePort; Glyph: 9
-;Type: item; Caption: "${w_testPortUsed}${c_UsedPort}"; Action: run; FileName: "${c_phpExe}"; Parameters: "-c . testPort.php ${c_UsedPort} ${c_apacheService}";WorkingDir: "${c_installDir}/scripts"; Flags: waituntilterminated; Glyph: 9
+Type: item; Caption: "${w_testPortUsed}${c_UsedPort}"; Action: run; FileName: "${c_phpExe}"; Parameters: "-c . testPort.php ${c_UsedPort} ${c_apacheService}";WorkingDir: "${c_installDir}/scripts"; Flags: waituntilterminated; Glyph: 9
 Type: separator; Caption: "${w_portUsedMysql}${c_UsedMysqlPort}"
-Type: item; Caption: "${w_testPortMysql}"; Action: run; FileName: "${c_phpExe}"; Parameters: "-c . testPort.php 3306 ${c_mysqlService}";WorkingDir: "${c_installDir}/scripts"; Flags: waituntilterminated; Glyph: 9
-;Type: item; Caption: "${w_testPortMysqlUsed}${c_UsedMysqlPort}"; Action: run; FileName: "${c_phpExe}"; Parameters: "-c . testPort.php ${c_UsedMysqlPort} ${c_mysqlService}";WorkingDir: "${c_installDir}/scripts"; Flags: waituntilterminated; Glyph: 9
+Type: item; Caption: "${w_testPortMysqlUsed}${c_UsedMysqlPort}"; Action: run; FileName: "${c_phpExe}"; Parameters: "-c . testPort.php ${c_UsedMysqlPort} ${c_mysqlService}";WorkingDir: "${c_installDir}/scripts"; Flags: waituntilterminated; Glyph: 9
 Type: item; Caption: "${w_AlternateMysqlPort}"; Action: multi; Actions: UseAlternateMysqlPort; Glyph: 9
 Type: separator; Caption: "${w_portUsedMariadb}${c_UsedMariadbPort}"
-Type: item; Caption: "${w_testPortMariadb}"; Action: run; FileName: "${c_phpExe}"; Parameters: "-c . testPort.php 3306 ${c_mariadbService}";WorkingDir: "${c_installDir}/scripts"; Flags: waituntilterminated; Glyph: 9
-;Type: item; Caption: "${w_testPortMariadbUsed}${c_UsedMariadbPort}"; Action: run; FileName: "${c_phpExe}"; Parameters: "-c . testPort.php ${c_UsedMariadbPort} ${c_mariadbService}";WorkingDir: "${c_installDir}/scripts"; Flags: waituntilterminated; Glyph: 9
+Type: item; Caption: "${w_testPortMariadbUsed}${c_UsedMariadbPort}"; Action: run; FileName: "${c_phpExe}"; Parameters: "-c . testPort.php ${c_UsedMariadbPort} ${c_mariadbService}";WorkingDir: "${c_installDir}/scripts"; Flags: waituntilterminated; Glyph: 9
 Type: item; Caption: "${w_AlternateMariadbPort}"; Action: multi; Actions: UseAlternateMariadbPort; Glyph: 9
 Type: separator; Caption: "- Apache: ${c_apacheService} -"
 Type: separator; Caption: "- MySQL: ${c_mysqlService} -"

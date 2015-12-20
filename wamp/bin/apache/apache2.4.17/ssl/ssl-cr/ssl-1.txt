@@ -1,0 +1,35 @@
+# -------------------------------------- #
+#     Module SSL                         #
+# -------------------------------------- #
+
+LoadModule ssl_module                  modules/mod_ssl.so
+LoadModule socache_shmcb_module        modules/mod_socache_shmcb.so
+
+<IfModule ssl_module>
+#	SSLProtocol +ALL -SSLv3 -TLSv1
+	SSLProtocol +All -SSLv3
+#
+	SSLRandomSeed startup builtin
+	SSLRandomSeed connect builtin
+#
+	SSLHonorCipherOrder On
+#
+#	SSLCipherSuite HIGH:MEDIUM:!aNULL:!MD5
+#	SSLCipherSuite ALL:!aNULL:!ADH:!eNULL:!LOW:!EXP:RC4+RSA:+HIGH:+MEDIUM
+	SSLCipherSuite ECDHE-RSA-AES128-SHA256:AES128-GCM-SHA256:HIGH:!MD5:!aNULL:!EDH:!RC4
+	SSLCompression off
+#
+	SSLPassPhraseDialog             builtin
+#	SSLPassPhraseDialog             "exec:${Version_Apache}/conf/Certificat/passphrase.txt"
+#	
+	SSLSessionCache                 "shmcb:${Repertoire}/tmp/ssl_scache(512000)"
+	SSLSessionCacheTimeout          300
+#
+#	SSLUseStapling                  On
+#	SSLStaplingCache                "shmcb:f:/Wamp/logs/ssl_stapling(32768)"
+#	SSLStaplingStandardCacheTimeout 3600
+#	SSLStaplingErrorCacheTimeout    600
+#
+	SSLCompression off
+</IfModule>
+
