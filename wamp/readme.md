@@ -9,6 +9,7 @@ composed by
   - apache 2.4.9
   - apache 2.4.16
   - apache 2.4.17
+  - apache 2.4.18
 - MySQL
   - mysql 5.6.17
   - mysql 5.6.27
@@ -25,8 +26,10 @@ composed by
   - php 5.6.15
   - php 5.6.16
   - php 7.0.0
+  - php 7.0.1
 - Nginx
   - nginx 1.9.4
   - nginx 1.9.6
+  - nginx 1.9.7
 - SendMail
   - delphy
