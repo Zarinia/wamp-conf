@@ -1,6 +1,6 @@
 <?php
 //[modif oto]
-// Mise à jour dynamique ancienne version MariaDB utilisée
+// Mise Ã  jour dynamique ancienne version MariaDB utilisÃ©e
 
 require 'wampserver.lib.php';
 require 'config.inc.php';

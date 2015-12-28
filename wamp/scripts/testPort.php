@@ -2,11 +2,15 @@
 require 'config.inc.php';
 $only_process = false;
 if(!empty($_SERVER['argv'][2]) && $_SERVER['argv'][2] == $c_mysqlService) {
-	$port = isset($_SERVER['argv'][1]) ? $_SERVER['argv'][1] : '3306';
+	$port = isset($_SERVER['argv'][1]) ? $_SERVER['argv'][1] : $c_DefaultMysqlPort/*'3306'*/;
+	$only_process = true;
+}
+elseif(!empty($_SERVER['argv'][2]) && $_SERVER['argv'][2] == $c_mariadbService) {
+	$port = isset($_SERVER['argv'][1]) ? $_SERVER['argv'][1] : $c_DefaultMariadbPort/*'3307'*/;
 	$only_process = true;
 }
 else
-	$port = isset($_SERVER['argv'][1]) ? $_SERVER['argv'][1] : '80';
+	$port = isset($_SERVER['argv'][1]) ? $_SERVER['argv'][1] : $c_DefaultPort/*'80'*/;
 
 echo "***** Test which uses port ".$port." *****\n\n";
 echo "===== Tested by command netstat filtered on port ".$port." =====\n\n";

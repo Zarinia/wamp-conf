@@ -1,4 +1,7 @@
 <?php
+//Update 3.0.1
+//$c_wampMode 32 or 64 bit
+//Support for Edge
 
 $configurationFile = '../wampmanager.conf';
 $templateFile = '../wampmanager.tpl';
@@ -16,7 +19,28 @@ $wampConf = @parse_ini_file($configurationFile);
 //on renseigne les variables du template avec la conf locale
 $c_installDir = $wampConf['installDir'];
 $c_wampVersion = $wampConf['wampserverVersion'];
+$c_wampMode = $wampConf['wampserverMode'];
 $c_navigator = $wampConf['navigator'];
+//For Windows 10 and Edge it is not the same as for other browsers
+//It is not complete path to browser with parameter http://website/
+//but by 'cmd.exe /c "start /b Microsoft-Edge:http://website/"'
+$c_edge = "";
+if($c_navigator == "Edge") {
+	//Check if Windows 10
+	if(php_uname('r') < 10) {
+		error_log("Edge should be defined as default navigator only with Windows 10");
+		if(file_exists("c:/Program Files (x86)/Internet Explorer/iexplore.exe"))
+			$c_navigator = "c:/Program Files (x86)/Internet Explorer/iexplore.exe";
+		elseif(file_exists("c:/Program Files/Internet Explorer/iexplore.exe"))
+			$c_navigator = "c:/Program Files/Internet Explorer/iexplore.exe";
+		else
+			$c_navigateor = "iexplore.exe";
+	}
+	else {
+	$c_navigator = "cmd.exe";
+	$c_edge = "/c start /b Microsoft-Edge:";
+	}
+}
 $c_editor = $wampConf['editor'];
 
 //Variable suppressLocalhost based on urlAddLocalhost
@@ -72,7 +96,6 @@ $c_mysqlConsole = $c_mysqlVersionDir.'/mysql'.$c_mysqlVersion.'/'.$wampConf['mys
 $c_mariadbConsole = $c_mariadbVersionDir.'/mariadb'.$c_mariadbVersion.'/'.$wampConf['mariadbExeDir'].'/mysql.exe';
 
 //Test du fichier hosts
-
 $c_hostsFile = getenv('WINDIR').'\system32\drivers\etc\hosts';
 $c_hostsFile_writable = true;
 if(file_exists($c_hostsFile)) {
@@ -163,6 +186,8 @@ $phpParams = array (
 	'(XDebug) :  Profiler Enable Trigger' => 'xdebug.profiler_enable_trigger',
 	'(XDebug) :  Profiler' => 'xdebug.profiler_enable',
 	'(XDebug) :  Remote debug' => 'xdebug.remote_enable',
+	'mysql.default_port' => 'mysql.default_port', // mysql default port
+	'mysqli.default_port' => 'mysqli.default_port', // mysqli default port
 	);
 
 // Adding parameters to WampServer modifiable

@@ -1,10 +1,13 @@
 <?php
+//Change 3.0.1
+//function test_IPv6 updated for Apache 2.2
+//Improved function wampIniSet preg_replace for spaces or tab or not before =
 
 function wampIniSet($iniFile, $params)
 {
 	$iniFileContents = @file_get_contents($iniFile);
 	foreach ($params as $param => $value)
-	$iniFileContents = preg_replace('|'.$param.' = .*|',$param.' = '.'"'.$value.'"',$iniFileContents);
+	$iniFileContents = preg_replace('|^'.$param.'[ \t]*=.*|m',$param.' = '.'"'.$value.'"',$iniFileContents);
 	$fp = fopen($iniFile,'w');
 	fwrite($fp,$iniFileContents);
 	fclose($fp);
@@ -340,21 +343,25 @@ function check_autoindex() {
 function test_IPv6() {
 	if (extension_loaded('sockets')) {
 		//Create socket IPv6
-		$socket = socket_create(AF_INET6, SOCK_RAW, 1) ;
+		$socket = socket_create(AF_INET6, SOCK_STREAM, SOL_TCP);
 		if($socket === false) {
 			$errorcode = socket_last_error() ;
 			$errormsg = socket_strerror($errorcode);
 			//echo "<p>Error socket IPv6: ".$errormsg."</p>\n" ;
+			error_log("For information only: IPv6 not supported");
 			return false;
 		}
 		else {
 			//echo "<p>IPv6 supported</p>\n" ;
 			socket_close($socket);
+			error_log("For information only: IPv6 supported");
 			return true;
 		}
 	}
-	else echo "<p>Extension PHP sockets not loaded</p>\n" ;
-	return false;
+	else {
+		error_log("Extension PHP 'sockets' not loaded, cannot check support of IPv6");
+		return false;
+	}
 }
 
 ?>

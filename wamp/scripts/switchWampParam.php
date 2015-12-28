@@ -1,6 +1,6 @@
 <?php
-// [modif oto] - script ajouté pour gérer les nouveaux paramètres
-// de configuration ajoutés à wampmanager.conf
+// [modif oto] - script ajoutÃ© pour gÃ©rer les nouveaux paramÃ¨tres
+// de configuration ajoutÃ©s Ã  wampmanager.conf
 
 require ('wampserver.lib.php');
 

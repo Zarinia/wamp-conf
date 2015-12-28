@@ -1,5 +1,5 @@
 <?php
-// [modif oto] - script pour changer le port d'écoute de Wampserver
+// [modif oto] - script pour changer le port d'Ã©coute de Wampserver
 require 'config.inc.php';
 require 'wampserver.lib.php';
 

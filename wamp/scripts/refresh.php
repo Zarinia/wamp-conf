@@ -1,4 +1,9 @@
 <?php
+//Update 3.0.1
+//Replace $c_phpExe by $c_phpCli in call onlineOffline.php - Switch Apache Version
+//Check if section [wampmysqld] in my.ini is the name of mysql service
+//Check service names in mysql and apache wampserver.conf files
+//Support for Windows 10 and Edge
 
 require ('config.inc.php');
 require ('wampserver.lib.php');
@@ -53,8 +58,8 @@ if(!file_exists($c_phpVersionDir."/DO_NOT_DELETE_".$c_phpCliVersion.".txt")) {
 
 //Check if PhpMyAdmin version in wampmanager.conf is the one used
 $PhpMyAdminFileContents = @file_get_contents($aliasDir."phpmyadmin.conf");
-//Exemple: <Directory j:/wamp/apps/phpmyadmin4.3.2/>
-if(preg_match("#^[ \t]*<Directory.*phpmyadmin([0-9\.]*)/>\r?$#m",$PhpMyAdminFileContents, $matches) == 1) {
+//Exemple: <Directory "J:/wamp/apps/phpmyadmin4.5.2/">
+if(preg_match("#^[ \t]*<Directory.*phpmyadmin([0-9\.]*)/\"?>\r?$#m",$PhpMyAdminFileContents, $matches) == 1) {
 	if(version_compare($wampConf['phpmyadminVersion'], $matches[1]) != 0) {
 		$phpmyAdminVersion['phpmyadminVersion'] = $matches[1];
 		wampIniSet($configurationFile,$phpmyAdminVersion);
@@ -91,7 +96,7 @@ if ($handle = opendir($langDir.$modulesDir))
 	closedir($handle);
 }
 
-// on inclus les fichiers de langue de modules correspondant à la langue courante
+// on inclus les fichiers de langue de modules correspondant Ã  la langue courante
 if ($handle = opendir($langDir.$modulesDir))
 {
 	while (false !== ($file = readdir($handle)))
@@ -136,7 +141,7 @@ else {
 // we need to change some options, otherwise the variables are replaced by their content.
 // Option to launch Homepage at startup
 if(!empty($wampConf['HomepageAtStartup']))
-	update_wampmanager_file("Action: run; FileName: \"\${c_navigator}\"; Parameters: \"http://localhost\${UrlPort}/\"; ShowCmd: normal; Flags: ignoreerrors",
+	update_wampmanager_file("Action: run; FileName: \"\${c_navigator}\"; Parameters: \"${c_edge}http://localhost\${UrlPort}/\"; ShowCmd: normal; Flags: ignoreerrors",
 		$wampConf['HomepageAtStartup'],
 		"on", "off",
 		$templateFile);
@@ -272,7 +277,7 @@ foreach($myphpini as $line) {
   }
 }
 
-// on recupere la liste d'extensions presentes dans le répertoire ext
+// on recupere la liste d'extensions presentes dans le rÃ©pertoire ext
 if ($handle = opendir($phpExtDir))
 {
   while (false !== ($file = readdir($handle)))
@@ -502,7 +507,7 @@ foreach($myhttpd as $line)
   }
 }
 
-// on recupère la liste des modules présents dans le répertoire /modules/
+// on recupÃ¨re la liste des modules prÃ©sents dans le rÃ©pertoire /modules/
 $modDirContents = array();
 if ($handle = opendir($c_apacheConfFile = $c_apacheVersionDir.'/apache'.$wampConf['apacheVersion'].'/modules/'))
 {
@@ -514,7 +519,7 @@ if ($handle = opendir($c_apacheConfFile = $c_apacheVersionDir.'/apache'.$wampCon
   closedir($handle);
 }
 //[modif oto] - On croise les tableaux
-//Détection présence du module xxxxxx.so demandé par Loadmodule
+//DÃ©tection prÃ©sence du module xxxxxx.so demandÃ© par Loadmodule
 foreach ($mod as $modname=>$value)
 {
 	if(in_array($modname, $apacheModNotDisable)) {
@@ -524,7 +529,7 @@ foreach ($mod as $modname=>$value)
 	if(!in_array($mod_load[$modname], $modDirContents))
 		$mod[$modname] = -1 ;
 }
-//Détection de Loadmodule dans httpd.conf pour chaque module dans /modules/
+//DÃ©tection de Loadmodule dans httpd.conf pour chaque module dans /modules/
 foreach($modDirContents as $module)
 {
 	if(!in_array($module, $mod_load))
@@ -797,9 +802,30 @@ foreach ($apacheVersionList as $oneApache)
 		$apacheErrorMsg = $c_phpVersionDir.'/php'.$wampConf['phpVersion'].'/'.$phpConf['apache'][$apacheVersionTemp]['LoadModuleFile']." does not exists.".PHP_EOL.PHP_EOL."First switch on a version of PHP that contains ".$phpConf['apache'][$apacheVersionTemp]['LoadModuleFile']." file before you change to Apache version ".$oneApacheVersion.".";
   }
 
-  if (isset($apacheConf))
-    $apacheConf = NULL;
-  include $c_apacheVersionDir.'/apache'.$oneApacheVersion.'/'.$wampBinConfFiles;
+  //File wamp/bin/apache/apachex.y.z/wampserver.conf
+  //Update apache service name if it is modified.
+  $ApacheConfFile = $c_apacheVersionDir.'/apache'.$oneApacheVersion.'/'.$wampBinConfFiles;
+  $myApacheContents = file_get_contents($ApacheConfFile);
+	if(substr_count($myApacheContents, " ".$c_apacheService." ") < 2) {
+		$pattern = array(
+			"/^.*apacheServiceInstallParams.*\n/m",
+			"/^.*apacheServiceRemoveParams.*\n/m");
+		$replace = array(
+			"\$apacheConf['apacheServiceInstallParams'] = '-n ".$c_apacheService." -k install';\n",
+			"\$apacheConf['apacheServiceRemoveParams'] = '-n ".$c_apacheService." -k uninstall';\n");
+		$myApacheContents = preg_replace($pattern,$replace,$myApacheContents, 1, $count);
+		if(!is_null($myApacheContents) && $count > 0) {
+			$fp = fopen($ApacheConfFile,'w');
+			fwrite($fp,$myApacheContents);
+			fclose($fp);
+		}
+	}
+
+  unset($apacheConf);
+  include $ApacheConfFile;
+  //if (isset($apacheConf))
+  //  $apacheConf = NULL;
+  //include $c_apacheVersionDir.'/apache'.$oneApacheVersion.'/'.$wampBinConfFiles;
 
   if ($oneApacheVersion === $wampConf['apacheVersion'])
     $apacheGlyph = '; Glyph: 13';
@@ -818,7 +844,7 @@ Action: run; FileName: "'.$c_phpCli.'";Parameters: "switchPhpVersion.php '.$wamp
 Action: run; FileName: "'.$c_apacheVersionDir.'/apache'.$oneApacheVersion.'/'.$apacheConf['apacheExeDir'].'/'.$apacheConf['apacheExeFile'].'"; Parameters: "'.$apacheConf['apacheServiceInstallParams'].'"; ShowCmd: hidden; Flags: waituntilterminated
 Action: run; Filename: "sc"; Parameters: "\\\\. config '.$c_apacheService.' start= demand"; ShowCmd: hidden; Flags: waituntilterminated
 Action: run; FileName: "'.$c_phpExe.'";Parameters: "-c . switchWampPort.php '.$c_UsedPort.'";WorkingDir: "'.$c_installDir.'/scripts"; Flags: waituntilterminated
-Action: run; FileName: "'.$c_phpExe.'";Parameters: "-c . onlineOffline.php '.$c_OnOffLine.'";WorkingDir: "'.$c_installDir.'/scripts"; Flags: waituntilterminated
+Action: run; FileName: "'.$c_phpCli.'";Parameters: "onlineOffline.php '.$c_OnOffLine.'";WorkingDir: "'.$c_installDir.'/scripts"; Flags: waituntilterminated
 Action: run; FileName: "net"; Parameters: "start '.$c_apacheService.'"; ShowCmd: hidden; Flags: waituntilterminated
 Action: run; FileName: "'.$c_phpCli.'";Parameters: "refresh.php";WorkingDir: "'.$c_installDir.'/scripts"; Flags: waituntilterminated
 Action: resetservices
@@ -849,8 +875,28 @@ $myreplacemenu = '';
 foreach ($mysqlVersionList as $oneMysql)
 {
   $oneMysqlVersion = str_ireplace('mysql','',$oneMysql);
+  //File wamp/bin/mysql/mysqlx.y.z/wampserver.conf
+  //Check service name if it is modified
+  $myConfFile = $c_mysqlVersionDir.'/mysql'.$oneMysqlVersion.'/'.$wampBinConfFiles;
+  $mySqlConfContents = file_get_contents($myConfFile);
+	if(substr_count($mySqlConfContents, " ".$c_mysqlService."'") < 2) {
+		$pattern = array(
+			"/^.*mysqlServiceInstallParams.*\n/m",
+			"/^.*mysqlServiceRemoveParams.*\n/m");
+		$replace = array(
+			"\$mysqlConf['mysqlServiceInstallParams'] = '--install-manual ".$c_mysqlService."';\n",
+			"\$mysqlConf['mysqlServiceRemoveParams'] = '--remove ".$c_mysqlService."';\n");
+		$mySqlConfContents = preg_replace($pattern,$replace,$mySqlConfContents, 1, $count);
+		if(!is_null($mySqlConfContents) && $count > 0) {
+			$fp = fopen($myConfFile,'w');
+			fwrite($fp,$mySqlConfContents);
+			fclose($fp);
+		}
+	}
   unset($mysqlConf);
-  include $c_mysqlVersionDir.'/mysql'.$oneMysqlVersion.'/'.$wampBinConfFiles;
+  include $myConfFile;
+  //unset($mysqlConf);
+  //include $c_mysqlVersionDir.'/mysql'.$oneMysqlVersion.'/'.$wampBinConfFiles;
 
 	//[modif oto] - Check name of the group [wamp...] under '# The MySQL server' in my.ini file
 	//    must be the name of the mysql service.
@@ -858,7 +904,7 @@ foreach ($mysqlVersionList as $oneMysql)
 	$myIniContents = file_get_contents($myIniFile);
 
 	if(strpos($myIniContents, "[".$c_mysqlService."]") === false) {
-		$myIniContents = preg_replace("/^\[wamp.*\]$/m", "[".$c_mysqlService."]", $myIniContents, 1, $count);
+		$myIniContents = preg_replace("/^\[wamp.*\].*\n/m", "[".$c_mysqlService."]\r\n", $myIniContents, 1, $count);
 		if(!is_null($myIniContents) && $count == 1) {
 			$fp = fopen($myIniFile,'w');
 			fwrite($fp,$myIniContents);
@@ -1037,9 +1083,9 @@ if(strpos($tpl,";WAMPPROJECTSUBMENU") !== false && isset($wampConf['ProjectSubMe
 		{ //[modif oto] Support de suppressLocalhost dans wampmanager.conf
 			$myreplacesubmenuProjects .= 'Type: item; Caption: "'.$projectContents[$i].'"; Action: run; FileName: "'.$c_navigator.'"; Parameters: "';
 			if($c_suppressLocalhost)
-				 $myreplacesubmenuProjects .= 'http://'.$projectContents[$i].$UrlPort.'/"';
+				 $myreplacesubmenuProjects .= $c_edge.'http://'.$projectContents[$i].$UrlPort.'/"';
 			else
-				$myreplacesubmenuProjects .= 'http://localhost'.$UrlPort.'/'.$projectContents[$i].'/"';
+				$myreplacesubmenuProjects .= $c_edge.'http://localhost'.$UrlPort.'/'.$projectContents[$i].'/"';
 			$myreplacesubmenuProjects .= '; Glyph: 5
 ';
 		}
@@ -1245,7 +1291,7 @@ if(strpos($tpl,";WAMPSETTINGSSTART") !== false) {
 	    else
 	      $params_for_wampconf[$value] = '-1';
 	  }
-	  else {//Paramètre n'existe pas dans wampserver.conf
+	  else {//ParamÃ¨tre n'existe pas dans wampserver.conf
 	    $params_for_wampconf[$value] = -1;
 	    $wampConfParams[$value] = $value;
 	  }

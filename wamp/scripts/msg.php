@@ -1,4 +1,6 @@
 <?php
+//Update 3.0.1
+//strtolower compare for php.ini loaded
 
 $msgId = $_SERVER['argv'][1];
 $nb_arg = $_SERVER['argc'] - 1;
@@ -255,7 +257,7 @@ elseif(is_string($msgId)) {
 
 		preg_match('/^Loaded Configuration File => (.*)$/m', $output, $matches);
 		$matches[1] = str_replace("\\","/",$matches[1]);
-		if($matches[1] != $c_phpCliConfFile)
+		if(strtolower($matches[1]) != strtolower($c_phpCliConfFile))
 			$message['inifiles'] .= "*** ERROR *** The PHP configuration loaded file is:\n\t".$matches[1]."\nshould be for PHP CLI\n\t".$c_phpCliConfFile."\n";
 		preg_match('/^Scan this dir for additional .ini files => (.*)$/m', $output, $matches);
 		if($matches[1] != "(none)")

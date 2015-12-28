@@ -39,9 +39,10 @@ if($goodPort) {
 		fwrite($myIni,$mariaDbIniFileContents);
 		fclose($myIni);
 
-		$phpIni = fopen($c_phpConfFile ,"w");
-		fwrite($phpIni,$phpIniFileContents);
-		fclose($phpIni);
+		# not change default mysql.defaullt_port and mysqli.default_port for mariadb
+		// $phpIni = fopen($c_phpConfFile ,"w");
+		// fwrite($phpIni,$phpIniFileContents);
+		// fclose($phpIni);
 
 		$myIniConf['mariadbPortUsed'] = $portToUse;
 		if($portToUse == $c_DefaultMariadbPort)

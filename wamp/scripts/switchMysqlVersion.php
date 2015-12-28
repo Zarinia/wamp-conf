@@ -1,6 +1,6 @@
 <?php
 //[modif oto]
-// Mise à jour dynamique ancienne version MySQL utilisée
+// Mise Ã  jour dynamique ancienne version MySQL utilisÃ©e
 
 require 'wampserver.lib.php';
 require 'config.inc.php';
