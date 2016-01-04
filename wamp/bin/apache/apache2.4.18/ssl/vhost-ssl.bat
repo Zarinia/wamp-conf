@@ -6,7 +6,7 @@ set hostname=%1
 set hostname=server
 )
 
-set opensslcnf=c:\wamp\bin\apache\apache2.4.17\conf\openssl.cnf
+set opensslcnf=c:\wamp\bin\apache\apache2.4.18\conf\openssl.cnf
 set path_openssl=C:\wamp\bin\OpenSSL-Win32\bin
 
 REM default password "azerty"
@@ -33,4 +33,4 @@ copy %hostname%.key %hostname%.key.backup
 
 dir %hostname%.*
 
-:: copy %hostname%.* c:\wamp\bin\apache\apache2.4.17\conf\ssl
+:: copy %hostname%.* c:\wamp\bin\apache\apache2.4.18\conf\ssl

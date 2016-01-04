@@ -175,7 +175,7 @@ Type: submenu; Caption: "MariaDB"; SubMenu: mariadbMenu; Glyph: 3
 Type: separator; Caption: "Debug"
 ;Type: item; Caption: "Client XDebug"; Glyph: 6; Action: run; FileName: "${c_installDir}/tools/xdc/xdc.exe"
 Type: item; Caption: "${c_webgrind}"; Action: run; FileName: "${c_navigator}"; Parameters: "http://localhost${UrlPort}/webgrind/"; Glyph: 5
-Type: separator; Caption: "Quick Admin"
+Type: separator; Caption: "${c_wampMode} - Quick Admin"
 ;Type: servicesubmenu; Caption: "${w_apache}"; Service: ${c_apacheService}; SubMenu: apache
 ;Type: servicesubmenu; Caption: "${w_mysql}"; Service: ${c_mysqlService}; SubMenu: MySql
 ;Type: servicesubmenu; Caption: "${w_mariadb}"; Service: ${c_mariadbService}; SubMenu: MariaDb
