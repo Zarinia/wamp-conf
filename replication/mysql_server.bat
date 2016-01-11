@@ -21,14 +21,14 @@ sc delete xamppmysqlslave
 
 
 
-:: for running mysql server
+:: for run mysql server
 mysqld
 :: for shutdown mysql server
 mysqladmin -u root shutdown
 
 :: -------------------------------------------------------------
 
-:: for running 4 master services
+:: for run 4 master services
 start "Mysql Server localhost 3316" E:\xampp\mysql_master\bin\mysqld.exe --defaults-file=E:\xampp\mysql_master\my_3316.ini
 start "Mysql Server localhost 3317" E:\xampp\mysql_master\bin\mysqld.exe --defaults-file=E:\xampp\mysql_master\my_3317.ini
 start "Mysql Server localhost 3318" E:\xampp\mysql_master\bin\mysqld.exe --defaults-file=E:\xampp\mysql_master\my_3318.ini
