@@ -77,4 +77,6 @@
 127.0.0.70 grav-admin.io grav-admin.tn
 127.0.0.70 cakesearch.io cakesearch.tn proxy.cakesearch.io proxy.cakesearch.tn marker.cakesearch.io marker.cakesearch.tn app.cakesearch.io app.cakesearch.tn
 127.0.0.70 vdh.io vdh.tn
+127.0.0.1 wamp.io wamp.tn
+127.0.0.1 xampp.io xampp.tn
 
