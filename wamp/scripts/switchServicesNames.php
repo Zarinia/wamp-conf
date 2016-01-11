@@ -50,7 +50,7 @@ $command = 'start /b /wait '.$c_apacheExe.' '.$newServicesNames['apacheServiceIn
 `$command`;
 
 //Apache service to manual start
-$command = "start /b /wait SC \\\\. config ".$newApache." start= demand";
+$command = "start /b /wait SC \\\\. config ".$newServicesNames['ServiceApache']." start=demand";
 `$command`;
 
 //Install Mysql service
