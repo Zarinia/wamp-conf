@@ -1,5 +1,5 @@
 # Wamp 2.5.18 32bits - Windows 8.1 Pro x64
-## Upgrade from Wamp 2.5.18 to Wamp 3.0.0 32bits
+## Upgrade from Wamp 2.5.18 to Wamp 3.0.4 32bits
 
 current wamp version installed
 
@@ -15,21 +15,37 @@ composed by
   - mysql 5.6.27
 - MariaDB
   - mariadb 10.0.21
+  - mariadb 10.0.22
+  - mariadb 10.0.23
 - Php
   - php 5.3.29
   - php 5.4.45
   - php 5.5.12
   - php 5.5.28
   - php 5.5.30
+  - php 5.5.31
+  - php 5.5.32
+  - php 5.5.33
   - php 5.6.12
   - php 5.6.14
   - php 5.6.15
   - php 5.6.16
+  - php 5.6.17
+  - php 5.6.18
+  - php 5.6.19
   - php 7.0.0
   - php 7.0.1
+  - php 7.0.2
+  - php 7.0.3
+  - php 7.0.4
 - Nginx
   - nginx 1.9.4
   - nginx 1.9.6
   - nginx 1.9.7
+  - nginx 1.9.8
+  - nginx 1.9.9
+  - nginx 1.9.10
+  - nginx 1.9.11
+  - nginx 1.9.12
 - SendMail
   - delphy
