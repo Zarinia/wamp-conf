@@ -2,6 +2,8 @@
 //Update 3.0.1
 //Added mode 32 or 64 bit in Quick Admin
 //Support for Windows 10 and Edge
+//Update 3.0.4
+//Richt-Click Refresh include rebuild symlinks
 //[modif oto] Sous menu Projets (My Projects) et/ou Virtuals Hosts
 // Dans ;WAMPMENULEFTSTART ligne ajoutée après localhost
 // ;WAMPPROJECTSUBMENU Pour les projets
@@ -27,7 +29,7 @@ TrayIconAllRunning=16
 TrayIconSomeRunning=17
 TrayIconNoneRunning=18
 ID={wampserver}
-AboutHeader=WAMPSERVER 2.5 (2.5.18) - 3.0 (3.0.1)
+AboutHeader=WAMPSERVER 2.5 (2.5.18) - 3.0 (3.0.4)
 AboutVersion=Version ${c_wampVersion}
 ;WAMPCONFIGEND
 
@@ -40,13 +42,16 @@ Modified (2.5 to 2.5.18) by Otomatic (otomatic@otomatic.net)
 Upgrade 2.5 to 3.0.0 by Otomatic (wampserver@otomatic.net)
 Multi styles for homepage by Jojaba
 MariaDB by Phlyper (phlyper@live.fr)
-Upgrade 2.5.18 to 3.0.1 by Phlyper (phlyper@live.fr)
+Upgrade 2.5.18 to 3.0.4 by Phlyper (phlyper@live.fr)
 
 Installer by Inno Setup
 Sources are available at SourceForge
 
 http://www.wampserver.com
 http://forum.wampserver.com/index.php
+______________________ Versions used ______________________
+Apache ${c_apacheVersion} - PHP ${c_phpVersion} - MySQL ${c_mysqlVersion} - MariaDb ${c_mariadbVersion}
+PHP ${c_phpCliVersion} for CLI (Command-Line Interface)
 
 [Services]
 Name: ${c_apacheService}
@@ -102,7 +107,7 @@ BarCaptionAlignment=bottom
 BarCaptionCaption=WAMPSERVER ${c_wampVersion}
 BarCaptionDepth=1
 BarCaptionDirection=downtoup
-BarCaptionFont=Tahoma,16,clWhite,bold italic
+BarCaptionFont=Tahoma,14,clWhite,bold italic
 BarCaptionHighlightColor=clNone
 BarCaptionOffsetY=0
 BarCaptionShadowColor=clNone
@@ -141,10 +146,13 @@ Type: submenu; Caption: "${w_wampTools}"; Submenu: submenu.tools; Glyph: 3
 Type: item; Caption: "${w_exit}"; Action: multi; Actions: myexit;
 ;WAMPMENURIGHTEND
 
-
 [wampreload]
 ;WAMPRELOADSTART
-Action: run; FileName: "${c_phpCli}"; Parameters: "refresh.php"; WorkingDir: "${c_installDir}/scripts"; Flags: waituntilterminated
+Action: service; Service: ${c_apacheService}; ServiceAction: stop; Flags: ignoreerrors waituntilterminated
+Action: closeservices; Flags: ignoreerrors
+Action: run; FileName: "${c_phpCli}";Parameters: "refreshSymlink.php ${c_phpVersion}"; WorkingDir: "${c_installDir}/scripts"; Flags: waituntilterminated
+Action: run; FileName: "net"; Parameters: "start ${c_apacheService}"; ShowCmd: hidden; Flags: waituntilterminated
+Action: run; FileName: "${c_phpCli}";Parameters: "refresh.php"; WorkingDir: "${c_installDir}/scripts"; Flags: waituntilterminated
 Action: resetservices
 Action: readconfig;
 ;WAMPRELOADEND
@@ -166,7 +174,7 @@ Type: item; Caption: "${w_localhost}"; Action: run; FileName: "${c_navigator}"; 
 ;WAMPVHOSTSUBMENU
 ;WAMPPROJECTSUBMENU
 
-Type: item; Caption: "${w_phpmyadmin}"; Action: run; FileName: "${c_navigator}"; Parameters: "http://localhost${UrlPort}/phpmyadmin/"; Glyph: 5
+Type: item; Caption: "${w_phpmyadmin}"; Action: run; FileName: "${c_navigator}"; Parameters: "${c_edge}http://localhost${UrlPort}/phpmyadmin/"; Glyph: 5
 Type: item; Caption: "${w_wwwDirectory}"; Action: shellexecute; FileName: "${wwwDir}"; Glyph: 2
 Type: submenu; Caption: "Apache"; SubMenu: apacheMenu; Glyph: 3
 Type: submenu; Caption: "PHP"; SubMenu: phpMenu; Glyph: 3
@@ -454,10 +462,10 @@ Type: item; Caption: "${w_testPort80}"; Action: run; FileName: "${c_phpExe}"; Pa
 Type: item; Caption: "${w_AlternatePort}"; Action: multi; Actions: UseAlternatePort; Glyph: 9
 Type: item; Caption: "${w_testPortUsed}${c_UsedPort}"; Action: run; FileName: "${c_phpExe}"; Parameters: "-c . testPort.php ${c_UsedPort} ${c_apacheService}";WorkingDir: "${c_installDir}/scripts"; Flags: waituntilterminated; Glyph: 9
 Type: separator; Caption: "${w_portUsedMysql}${c_UsedMysqlPort}"
-Type: item; Caption: "${w_testPortMysqlUsed}${c_UsedMysqlPort}"; Action: run; FileName: "${c_phpExe}"; Parameters: "-c . testPort.php ${c_UsedMysqlPort} ${c_mysqlService}";WorkingDir: "${c_installDir}/scripts"; Flags: waituntilterminated; Glyph: 9
+;Type: item; Caption: "${w_testPortMysqlUsed}${c_UsedMysqlPort}"; Action: run; FileName: "${c_phpExe}"; Parameters: "-c . testPort.php ${c_UsedMysqlPort} ${c_mysqlService}";WorkingDir: "${c_installDir}/scripts"; Flags: waituntilterminated; Glyph: 9
 Type: item; Caption: "${w_AlternateMysqlPort}"; Action: multi; Actions: UseAlternateMysqlPort; Glyph: 9
 Type: separator; Caption: "${w_portUsedMariadb}${c_UsedMariadbPort}"
-Type: item; Caption: "${w_testPortMariadbUsed}${c_UsedMariadbPort}"; Action: run; FileName: "${c_phpExe}"; Parameters: "-c . testPort.php ${c_UsedMariadbPort} ${c_mariadbService}";WorkingDir: "${c_installDir}/scripts"; Flags: waituntilterminated; Glyph: 9
+;Type: item; Caption: "${w_testPortMariadbUsed}${c_UsedMariadbPort}"; Action: run; FileName: "${c_phpExe}"; Parameters: "-c . testPort.php ${c_UsedMariadbPort} ${c_mariadbService}";WorkingDir: "${c_installDir}/scripts"; Flags: waituntilterminated; Glyph: 9
 Type: item; Caption: "${w_AlternateMariadbPort}"; Action: multi; Actions: UseAlternateMariadbPort; Glyph: 9
 Type: separator; Caption: "- Apache: ${c_apacheService} -"
 Type: separator; Caption: "- MySQL: ${c_mysqlService} -"
