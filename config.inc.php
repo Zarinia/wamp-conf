@@ -4,25 +4,25 @@
  * phpMyAdmin sample configuration, you can use it as base for
  * manual configuration. For easier setup you can use setup/
  *
- * All directives are explained in Documentation.html and on phpMyAdmin
- * wiki <http://wiki.phpmyadmin.net>.
+ * All directives are explained in documentation in the doc/ folder
+ * or at <http://docs.phpmyadmin.net/>.
  *
- * @package phpMyAdmin
+ * @package PhpMyAdmin
  */
 
-/*
+/**
  * This is needed for cookie based authentication to encrypt password in
  * cookie
  */
 $cfg['blowfish_secret'] = 'wamp'; /* YOU MUST FILL IN THIS FOR COOKIE AUTH! */
 
-/*
+/**
  * Servers configuration
  */
 $i = 0;
 
-/*
- * First server : MySQL
+/**
+ * First server
  */
 $i++;
 /* Authentication type */
@@ -39,6 +39,12 @@ $cfg['Servers'][$i]['compress'] = false;
 $cfg['Servers'][$i]['extension'] = 'mysqli';
 $cfg['Servers'][$i]['AllowNoPassword'] = false;
 
+// Hidden databases in PhpMyAdmin left panel
+// $cfg['Servers'][$i]['hide_db'] = '(information_schema|mysql|performance_schema|sys)';
+
+// Suppress Warning about pmadb tables
+// $cfg['PmaNoRelation_DisableWarning'] = true;
+
 /*
  * phpMyAdmin configuration storage settings.
  */
@@ -51,36 +57,36 @@ $cfg['Servers'][$i]['controlpass'] = '';
 
 /* Storage database and tables */
 $cfg['Servers'][$i]['pmadb'] = 'phpmyadmin';
-$cfg['Servers'][$i]['bookmarktable'] = 'pma_bookmark';
-$cfg['Servers'][$i]['relation'] = 'pma_relation';
-$cfg['Servers'][$i]['table_info'] = 'pma_table_info';
-$cfg['Servers'][$i]['table_coords'] = 'pma_table_coords';
-$cfg['Servers'][$i]['pdf_pages'] = 'pma_pdf_pages';
-$cfg['Servers'][$i]['column_info'] = 'pma_column_info';
-$cfg['Servers'][$i]['history'] = 'pma_history';
-$cfg['Servers'][$i]['table_uiprefs'] = 'pma_table_uiprefs';
-$cfg['Servers'][$i]['tracking'] = 'pma_tracking';
-$cfg['Servers'][$i]['userconfig'] = 'pma_userconfig';
-$cfg['Servers'][$i]['recent'] = 'pma_recent';
-$cfg['Servers'][$i]['favorite'] = 'pma_favorite';
-$cfg['Servers'][$i]['users'] = 'pma_users';
-$cfg['Servers'][$i]['usergroups'] = 'pma_usergroups';
-$cfg['Servers'][$i]['navigationhiding'] = 'pma_navigationhiding';
-$cfg['Servers'][$i]['savedsearches'] = 'pma_savedsearches';
-$cfg['Servers'][$i]['central_columns'] = 'pma_central_columns';
-$cfg['Servers'][$i]['designer_settings'] = 'pma_designer_settings';
-$cfg['Servers'][$i]['export_templates'] = 'pma_export_templates';
+$cfg['Servers'][$i]['bookmarktable'] = 'pma__bookmark';
+$cfg['Servers'][$i]['relation'] = 'pma__relation';
+$cfg['Servers'][$i]['table_info'] = 'pma__table_info';
+$cfg['Servers'][$i]['table_coords'] = 'pma__table_coords';
+$cfg['Servers'][$i]['pdf_pages'] = 'pma__pdf_pages';
+$cfg['Servers'][$i]['column_info'] = 'pma__column_info';
+$cfg['Servers'][$i]['history'] = 'pma__history';
+$cfg['Servers'][$i]['table_uiprefs'] = 'pma__table_uiprefs';
+$cfg['Servers'][$i]['tracking'] = 'pma__tracking';
+$cfg['Servers'][$i]['userconfig'] = 'pma__userconfig';
+$cfg['Servers'][$i]['recent'] = 'pma__recent';
+$cfg['Servers'][$i]['favorite'] = 'pma__favorite';
+$cfg['Servers'][$i]['users'] = 'pma__users';
+$cfg['Servers'][$i]['usergroups'] = 'pma__usergroups';
+$cfg['Servers'][$i]['navigationhiding'] = 'pma__navigationhiding';
+$cfg['Servers'][$i]['savedsearches'] = 'pma__savedsearches';
+$cfg['Servers'][$i]['central_columns'] = 'pma__central_columns';
+$cfg['Servers'][$i]['designer_settings'] = 'pma__designer_settings';
+$cfg['Servers'][$i]['export_templates'] = 'pma__export_templates';
 /* Contrib / Swekey authentication */
 // $cfg['Servers'][$i]['auth_swekey_config'] = '/etc/swekey-pma.conf';
 
-// -----------------------------------------------
-/*
- * Second server : MariaDB
+/**
+ * Second server
  */
 $i++;
 /* Authentication type */
 $cfg['Servers'][$i]['auth_type'] = 'cookie';
 // $cfg['Servers'][$i]['user']          = 'phlyper';      // MySQL user
+
 // $cfg['Servers'][$i]['password']      = 'azerty';          // MySQL password (only needed)
 /* Server parameters */
 $cfg['Servers'][$i]['verbose'] = 'localhost MariaDB port 3307';
@@ -92,6 +98,12 @@ $cfg['Servers'][$i]['compress'] = false;
 $cfg['Servers'][$i]['extension'] = 'mysqli';
 $cfg['Servers'][$i]['AllowNoPassword'] = false;
 
+// Hidden databases in PhpMyAdmin left panel
+// $cfg['Servers'][$i]['hide_db'] = '(information_schema|mysql|performance_schema|sys)';
+
+// Suppress Warning about pmadb tables
+// $cfg['PmaNoRelation_DisableWarning'] = true;
+
 /*
  * phpMyAdmin configuration storage settings.
  */
@@ -104,57 +116,32 @@ $cfg['Servers'][$i]['controlpass'] = '';
 
 /* Storage database and tables */
 $cfg['Servers'][$i]['pmadb'] = 'phpmyadmin';
-$cfg['Servers'][$i]['bookmarktable'] = 'pma_bookmark';
-$cfg['Servers'][$i]['relation'] = 'pma_relation';
-$cfg['Servers'][$i]['table_info'] = 'pma_table_info';
-$cfg['Servers'][$i]['table_coords'] = 'pma_table_coords';
-$cfg['Servers'][$i]['pdf_pages'] = 'pma_pdf_pages';
-$cfg['Servers'][$i]['column_info'] = 'pma_column_info';
-$cfg['Servers'][$i]['history'] = 'pma_history';
-$cfg['Servers'][$i]['table_uiprefs'] = 'pma_table_uiprefs';
-$cfg['Servers'][$i]['tracking'] = 'pma_tracking';
-$cfg['Servers'][$i]['userconfig'] = 'pma_userconfig';
-$cfg['Servers'][$i]['recent'] = 'pma_recent';
-$cfg['Servers'][$i]['favorite'] = 'pma_favorite';
-$cfg['Servers'][$i]['users'] = 'pma_users';
-$cfg['Servers'][$i]['usergroups'] = 'pma_usergroups';
-$cfg['Servers'][$i]['navigationhiding'] = 'pma_navigationhiding';
-$cfg['Servers'][$i]['savedsearches'] = 'pma_savedsearches';
-$cfg['Servers'][$i]['central_columns'] = 'pma_central_columns';
-$cfg['Servers'][$i]['designer_settings'] = 'pma_designer_settings';
-$cfg['Servers'][$i]['export_templates'] = 'pma_export_templates';
+$cfg['Servers'][$i]['bookmarktable'] = 'pma__bookmark';
+$cfg['Servers'][$i]['relation'] = 'pma__relation';
+$cfg['Servers'][$i]['table_info'] = 'pma__table_info';
+$cfg['Servers'][$i]['table_coords'] = 'pma__table_coords';
+$cfg['Servers'][$i]['pdf_pages'] = 'pma__pdf_pages';
+$cfg['Servers'][$i]['column_info'] = 'pma__column_info';
+$cfg['Servers'][$i]['history'] = 'pma__history';
+$cfg['Servers'][$i]['table_uiprefs'] = 'pma__table_uiprefs';
+$cfg['Servers'][$i]['tracking'] = 'pma__tracking';
+$cfg['Servers'][$i]['userconfig'] = 'pma__userconfig';
+$cfg['Servers'][$i]['recent'] = 'pma__recent';
+$cfg['Servers'][$i]['favorite'] = 'pma__favorite';
+$cfg['Servers'][$i]['users'] = 'pma__users';
+$cfg['Servers'][$i]['usergroups'] = 'pma__usergroups';
+$cfg['Servers'][$i]['navigationhiding'] = 'pma__navigationhiding';
+$cfg['Servers'][$i]['savedsearches'] = 'pma__savedsearches';
+$cfg['Servers'][$i]['central_columns'] = 'pma__central_columns';
+$cfg['Servers'][$i]['designer_settings'] = 'pma__designer_settings';
+$cfg['Servers'][$i]['export_templates'] = 'pma__export_templates';
 /* Contrib / Swekey authentication */
 // $cfg['Servers'][$i]['auth_swekey_config'] = '/etc/swekey-pma.conf';
 
-
-/*
+/**
  * End of servers configuration
  */
-/*
-$evf = "event_scheduler.json";
-$cdate = date("Y-m-d");
-$vdate = "";
-if(file_exists($evf)) {
-	$vdate = file_get_contents($evf);
-}
-if(strlen($vdate) == 0 || $vdate != $cdate) {
-	for($k = 1; $k <= $i; $k++) {
-		if($dbl = mysqli_connect($cfg['Servers'][$k]['host'], $cfg['Servers'][$k]['controluser'], $cfg['Servers'][$k]['controlpass'], "", $cfg['Servers'][$k]['port'])) {
-			if($dbq = mysqli_query($dbl, "SHOW VARIABLES LIKE 'event_scheduler'")) {
-				$dba = mysqli_fetch_assoc($dbq);
-				if($dba['Value'] === 0 || $dba['Value'] === "OFF") {
-					mysqli_query($dbl, "SET GLOBAL event_scheduler = 1");
-				}
-				file_put_contents($evf, $cdate);
-				mysqli_free_result($dba);
-			}
-			mysqli_close($dbl);
-		}
-	}
-}
-*/
 
-//$cfg['AllowArbitraryServer'] = true; //activer la synchronisation a distance
 $cfg['DefaultConnectionCollation'] = 'utf8_general_ci';
 $cfg['ServerDefault'] = stripos($_SERVER["HTTP_HOST"], 'mariadb') !== false ? 2 : 1;
 $cfg['ShowPhpInfo'] = true;
@@ -163,25 +150,24 @@ $cfg['ShowPhpInfo'] = true;
 #$cfg['DBG']['sql'] = true;
 #$cfg['DBG']['demo'] = true;
 #$cfg['Error_Handler']['display'] = true;
-
-# Lien sur la documentation francophone
+# Lien vers la documentation francophone
 $cfg['MySQLManualBase'] = 'http://dev.mysql.com/doc/refman/5.0/fr/';
+$cfg['MySQLManualBase'] = 'http://dev.mysql.com/doc/refman/5.6/en/';
 
-
- /*
+/**
   * Type:	integer [number of seconds]
   * Default value:	1440
   * Define how long a login cookie is valid. Please note that php configuration option session.gc_maxlifetime might limit session validity and if the session is lost, the login cookie is also invalidated. So it is a good idea to set session.gc_maxlifetime at least to the same value of $cfg['LoginCookieValidity'].
   */
 $cfg['LoginCookieValidity'] = 5000;
- 
-/*
+
+/**
  * The maximum number of recently used tables shown in the left navigation frame.
  * Set this to 0 (zero) to disable the listing of recent tables. 
  */
-//$cfg['LeftRecentTable'] = 10;
-
-/*
+// $cfg['LeftRecentTable'] = 10;
+ 
+/**
  * Directories for saving/loading files from server
  */
 $cfg['UploadDir'] = '';
@@ -190,8 +176,9 @@ $cfg['SaveDir'] = '';
 /**
  * Whether to display icons or text or both icons and text in table row
  * action segment. Value can be either of 'icons', 'text' or 'both'.
+ * default = 'both'
  */
-//$cfg['RowActionType'] = 'both';
+// $cfg['RowActionType'] = 'icons';
 
 /**
  * Defines whether a user should be displayed a "show all (records)"
@@ -203,26 +190,21 @@ $cfg['ShowAll'] = true;
 /**
  * Number of rows displayed when browsing a result set. If the result
  * set contains more rows, "Previous" and "Next".
- * default = 30
+ * Possible values: 25, 50, 100, 250, 500
+ * default = 25
  */
-//$cfg['MaxRows'] = 50;
+$cfg['MaxRows'] = 50;
 
 /**
- * Use graphically less intense menu tabs
- * default = false
- */
-// $cfg['LightTabs'] = true;
-
-/**
- * disallow editing of binary fields
+ * Disallow editing of binary fields
  * valid values are:
- *   false  allow editing
- *   'blob' allow editing except for BLOB fields
+ *   false    allow editing
+ *   'blob'   allow editing except for BLOB fields
  *   'noblob' disallow editing except for BLOB fields
- *   'all'  disallow editing
- * default = blob
+ *   'all'    disallow editing
+ * default = 'blob'
  */
-// $cfg['ProtectBinary'] = 'false';
+// $cfg['ProtectBinary'] = false;
 
 /**
  * Default language to use, if not browser-defined or user-defined
@@ -230,14 +212,9 @@ $cfg['ShowAll'] = true;
  * uncomment the desired line:
  * default = 'en'
  */
-//$cfg['DefaultLang'] = 'en';
+// $cfg['DefaultLang'] = 'en';
+// $cfg['DefaultLang'] = 'de';
 $cfg['DefaultLang'] = 'fr';
-
-/**
- * default display direction (horizontal|vertical|horizontalflipped)
- */
-// $cfg['DefaultDisplay'] = 'vertical';
-
 
 /**
  * How many columns should be used for table display of a database?
@@ -257,24 +234,26 @@ $cfg['QueryHistoryDB'] = true;
 
 /**
  * When using DB-based query history, how many entries should be kept?
- *
  * default = 25
  */
 // $cfg['QueryHistoryMax'] = 100;
 
-/*
- * You can find more configuration options in Documentation.html
- * or here: http://wiki.phpmyadmin.net/pma/Config
- */
- 
- /**
- * Should error reporting be enabled for JavaScript errors
+/**
+ * Whether or not to query the user before sending the error report to
+ * the phpMyAdmin team when a JavaScript error occurs
  *
- * default = 'ask' 
+ * Available options
+ * ('ask' | 'always' | 'never')
+ * default = 'ask'
  */
-//$cfg['SendErrorReports'] = 'ask';
+//$cfg['SendErrorReports'] = 'always';
 
-/*
+/**
  * You can find more configuration options in the documentation
  * in the doc/ folder or at <http://docs.phpmyadmin.net/>.
  */
+
+$cfg['ExecTimeLimit'] = 0;
+$cfg['PersistentConnections'] = true;
+
+?>
