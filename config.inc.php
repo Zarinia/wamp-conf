@@ -22,7 +22,7 @@ $cfg['blowfish_secret'] = 'wamp'; /* YOU MUST FILL IN THIS FOR COOKIE AUTH! */
 $i = 0;
 
 /**
- * First server
+ * First server : MySQL
  */
 $i++;
 /* Authentication type */
@@ -80,7 +80,7 @@ $cfg['Servers'][$i]['export_templates'] = 'pma__export_templates';
 // $cfg['Servers'][$i]['auth_swekey_config'] = '/etc/swekey-pma.conf';
 
 /**
- * Second server
+ * Second server : MariaDB
  */
 $i++;
 /* Authentication type */
