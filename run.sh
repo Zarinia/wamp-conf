@@ -40,9 +40,6 @@ sudo apt-get install proftpd
 sudo apt-get install openjdk-7-jdk
 sudo apt-get install htop
 
-# grub customizer -- grub order boot
-sudo add-apt-repository ppa:danielrichter2007/grub-customizer && sudo apt-get update && sudo apt-get install grub-customizer
-
 #
 sudo a2enmod rewrite
 sudo php5enmod mcrypt
@@ -50,6 +47,9 @@ sudo php5enmod xdebug
 sudo service apache2 restart
 sudo ln -s /usr/share/phpmyadmin /var/www/phpmyadmin
 sudo ln -s /usr/share/adminer /var/www/adminer
+
+# grub customizer -- grub order boot
+sudo add-apt-repository ppa:danielrichter2007/grub-customizer && sudo apt-get update && sudo apt-get install grub-customizer
 
 # webalizer https://doc.ubuntu-fr.org/webalizer
 mkdir ~/webalizer
