@@ -159,7 +159,8 @@ $cfg['MySQLManualBase'] = 'http://dev.mysql.com/doc/refman/5.6/en/';
   * Default value:	1440
   * Define how long a login cookie is valid. Please note that php configuration option session.gc_maxlifetime might limit session validity and if the session is lost, the login cookie is also invalidated. So it is a good idea to set session.gc_maxlifetime at least to the same value of $cfg['LoginCookieValidity'].
   */
-$cfg['LoginCookieValidity'] = 5000;
+ini_set('session.gc_maxlifetime', 14400);
+$cfg['LoginCookieValidity'] = 14400;
 
 /**
  * The maximum number of recently used tables shown in the left navigation frame.
