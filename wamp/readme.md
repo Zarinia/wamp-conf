@@ -10,9 +10,11 @@ composed by
   - apache 2.4.16
   - apache 2.4.17
   - apache 2.4.18
+  - apache 2.4.20
 - MySQL
   - mysql 5.6.17
   - mysql 5.6.27
+  - mysql 5.7.11
 - MariaDB
   - mariadb 10.0.21
   - mariadb 10.0.22
@@ -26,6 +28,10 @@ composed by
   - php 5.5.31
   - php 5.5.32
   - php 5.5.33
+  - php 5.5.34
+  - php 5.5.35
+  - php 5.5.36
+  - php 5.5.37
   - php 5.6.12
   - php 5.6.14
   - php 5.6.15
@@ -33,11 +39,19 @@ composed by
   - php 5.6.17
   - php 5.6.18
   - php 5.6.19
+  - php 5.6.20
+  - php 5.6.21
+  - php 5.6.22
+  - php 5.6.23
   - php 7.0.0
   - php 7.0.1
   - php 7.0.2
   - php 7.0.3
   - php 7.0.4
+  - php 7.0.5
+  - php 7.0.6
+  - php 7.0.7
+  - php 7.0.8
 - Nginx
   - nginx 1.9.4
   - nginx 1.9.6
@@ -47,5 +61,7 @@ composed by
   - nginx 1.9.10
   - nginx 1.9.11
   - nginx 1.9.12
+  - nginx 1.10.0
+  - nginx 1.11.1
 - SendMail
   - delphy
