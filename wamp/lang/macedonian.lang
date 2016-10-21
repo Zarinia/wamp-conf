@@ -1,0 +1,59 @@
+<?php
+
+$w_allServicesRunning = 'Сите сервиси работат';
+$w_oneServiceRunning = '%n од %t сервиси работат';
+$w_allServicesStopped = 'Ниту еден од %t сервиси не работи';
+
+$w_serverOffline = 'Локален сервер';
+$w_serverOnline = 'серверот е Вклучен';
+
+$w_about = '&За...';
+$w_helpFile = 'Датотека за помош';
+$w_help = 'Помош';
+$w_forum = 'форум';
+$w_exit = 'Излез';
+$w_version = 'Верзија';
+$w_service = 'Администрација на сервиси';
+
+$w_localhost = 'Localhost';
+$w_phpmyadmin = 'phpMyAdmin';
+$w_sqlitemanager = 'SQLiteManager';
+$w_wwwDirectory = 'www директориум';
+$w_logFiles = 'Log датотеки';
+$w_configFiles = 'Config датотеки';
+$w_apacheModules = 'Apache модули';
+$w_phpSettings = 'PHP нагодувања';
+$w_aliasDirectories = 'Alias директориуми';
+$w_services = 'Сервиси';
+$w_apache = 'Apache';
+$w_mysql = 'MySQL';
+$w_startServices = 'Вклучување на Сите Сервиси';
+$w_stopServices = 'Исклучување на Сите Сервиси';
+$w_restartServices = 'Рестартирање на Сите Сервиси';
+$w_putOnline = 'Вклучи';
+$w_putOffline = 'Исклучи';
+
+$w_apacheErrorLog = 'Apache error датотека';
+$w_apacheAccessLog = 'Apache access датотека';
+$w_phpLog = 'PHP error датотека';
+$w_mysqlLog = 'MySQL датотека';
+$w_addAlias = 'Додадете alias';
+$w_editAlias = 'Изменете alias';
+$w_editHtaccess = 'Изменете го .htaccess';
+$w_deleteAlias = 'Потиснување на(исклучување) alias';
+$w_refresh = 'Освежување';
+$w_phpExtensions = 'PHP додатоци';
+$w_addExtension = 'Додадете додаток';
+
+$w_startResume = '&Почни/Продолжи работа на сервис';
+$w_pauseService = '&Запри работа на сервис(привремено)';
+$w_stopService = 'З&апри работа на сервис';
+$w_restartService = '&Рестартирање на сервис';
+$w_testPort80 = 'Тестирање на порта 80';
+$w_installService = '&Инсталирај како сервис';
+$w_removeService = '&Отстрани сервис';
+$w_mysqlConsole = 'MySQL конзола';
+
+$w_language = 'Јазик';
+
+?>

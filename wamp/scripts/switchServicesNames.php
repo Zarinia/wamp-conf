@@ -1,5 +1,7 @@
 <?php
 // [modif oto] - script pour changer le nom des services
+//3.0.6 Script to change services names
+
 require 'config.inc.php';
 require 'wampserver.lib.php';
 
@@ -12,7 +14,7 @@ if(!empty($_SERVER['argv'][1])) {
 }
 else
 	$newApache = "wampapache";
-	
+
 if(!empty($_SERVER['argv'][2])) {
 	$numMysql = intval(trim($_SERVER['argv'][2]));
 	if($numMysql < 0 || $numMysql > 9999)
@@ -24,7 +26,7 @@ else
 
 if(!empty($_SERVER['argv'][3])) {
 	$numMariadb = intval(trim($_SERVER['argv'][3]));
-	if($numMariadb < 0 || $numMysql > 9999)
+	if($numMariadb < 0 || $numMariadb > 9999)
 		$numMariadb = 0;
 	$newMariadb = "wampmariadb".$numMariadb;
 }
@@ -50,7 +52,7 @@ $command = 'start /b /wait '.$c_apacheExe.' '.$newServicesNames['apacheServiceIn
 `$command`;
 
 //Apache service to manual start
-$command = "start /b /wait SC \\\\. config ".$newServicesNames['ServiceApache']." start=demand";
+$command = "start /b /wait SC \\\\. config ".$newApache." start= demand";
 `$command`;
 
 //Install Mysql service

@@ -1,8 +1,9 @@
 <?php
+//3.0.6
 
-$w_allServicesRunning = 'Tous les services sont lancÃ©s';
-$w_oneServiceRunning = '%n service sur %t est lancÃ©';
-$w_allServicesStopped = 'Les %t services sont Ã©teints';
+$w_allServicesRunning = 'Tous les services sont lancés';
+$w_oneServiceRunning = '%n service sur %t est lancé';
+$w_allServicesStopped = 'Les %t services sont éteints';
 
 $w_serverOffline = 'Serveur local';
 $w_serverOnline = 'serveur en ligne';
@@ -10,6 +11,7 @@ $w_serverOnline = 'serveur en ligne';
 $w_about = '&A propos de...';
 $w_helpFile = 'Fichier d\'aide';
 $w_help = 'Aide';
+$w_forum = 'Forum';
 $w_exit = 'Fermer';
 $w_version = 'Version';
 $w_service = 'Administration du service';
@@ -17,19 +19,21 @@ $w_service = 'Administration du service';
 $w_localhost = 'Localhost';
 $w_phpmyadmin = 'phpMyAdmin';
 $w_sqlitemanager = 'SQLiteManager';
-$w_wwwDirectory = 'RÃ©pertoire www';
+$w_wwwDirectory = 'Répertoire www';
 $w_logFiles = 'Fichiers de log';
 $w_configFiles = 'Fichiers de configuration';
 $w_apacheModules = 'Modules Apache';
 $w_phpSettings = 'Configuration PHP';
-$w_aliasDirectories = 'RÃ©pertoires Alias';
+$w_aliasDirectories = 'Répertoires Alias';
 $w_services = 'Services';
 $w_apache = 'Apache';
 $w_mysql = 'MySQL';
+$w_mysqlSettings = 'Configuration MySQL';
 $w_mariadb = 'MariaDB';
-$w_startServices = 'DÃ©marrer les services';
-$w_stopServices = 'ArrÃªter les services';
-$w_restartServices = 'RedÃ©marrer les services';
+$w_mariadbSettings = 'Configuration MariaDB';
+$w_startServices = 'Démarrer les services';
+$w_stopServices = 'Arrêter les services';
+$w_restartServices = 'Redémarrer les services';
 $w_putOnline = 'Passer en ligne';
 $w_putOffline = 'Passer hors ligne';
 
@@ -38,18 +42,18 @@ $w_apacheAccessLog = 'Apache access log';
 $w_phpLog = 'PHP error log';
 $w_mysqlLog = 'MySQL log';
 $w_mariadbLog = 'MariaDB log';
-$w_addAlias = 'CrÃ©er un alias';
+$w_addAlias = 'Créer un alias';
 $w_editAlias = 'Modifier l\'alias';
 $w_editHtaccess = 'Modifier .htaccess';
 $w_deleteAlias = 'Supprimer l\'alias';
-$w_refresh = 'RafraÃ®chir';
+$w_refresh = 'Rafraîchir';
 $w_phpExtensions = 'Extensions PHP';
 $w_addExtension = 'Ajouter une extension';
 
-$w_startResume = '&DÃ©marrer le service';
+$w_startResume = '&Démarrer le service';
 $w_pauseService = '&Mettre le service en pause';
 $w_stopService = 'A&rreter le service';
-$w_restartService = 'RedÃ©marrer le service';
+$w_restartService = 'Redémarrer le service';
 $w_testPort80 = 'Tester le Port 80';
 $w_installService = '&Installer le service';
 $w_removeService = '&Supprimer le Service';

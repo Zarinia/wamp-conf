@@ -1,15 +1,20 @@
 <?php
 
-// Page créé par Shepard [Fabian Pijcke] <Shepard8@laposte.net>
+// Page created by Shepard [Fabian Pijcke] <Shepard8@laposte.net>
 // Arno Esterhuizen <arno.esterhuizen@gmail.com>
-// et Romain Bourdon <rromain@romainbourdon.com>
-// et Hervé Leclerc <herve.leclerc@alterway.fr>
-//
-// Mise à jour par Herve Leclerc herve.leclerc@alterway.fr
-// Icônes par Mark James <http://www.famfamfam.com/lab/icons/silk/>
-//------
-//[modif oto] Modifications Dominique Ottello (Otomatic)
-
+// and Romain Bourdon <rromain@romainbourdon.com>
+// and Hervé Leclerc <herve.leclerc@alterway.fr>
+// Icons by Mark James <http://www.famfamfam.com/lab/icons/silk/>
+// Version 2.5 -> 3.0.0 by Dominique Ottello aka Otomatic
+// Update 3.0.1
+// Version plus 32 or 64 bit
+// External language files in wamp/www/wamplangues/
+// Update 3.0.5
+// Check duplicate ServerName
+// Support of VitualHost by IP
+// Update 3.0.6
+// Check duplicate ServerName
+// Support of VitualHost by IP
 
 //Par défaut la valeur est "../"
 //$server_dir = "WAMPROOT/";
@@ -34,12 +39,10 @@ $mariadbVersion = $wampConf['mariadbVersion'];
 $wampserverVersion = $wampConf['wampserverVersion'];
 
 //On récupére la valeur de urlAddLocalhost
-$suppress_localhost = true;
-if(!empty($wampConf['urlAddLocalhost']) && $wampConf['urlAddLocalhost'] !== "off")
-	$suppress_localhost = false;
+$suppress_localhost = ($wampConf['urlAddLocalhost'] == 'off' ? true : false);
 
 //On récupère la valeur de VirtualHostMenu
-$VirtualHostMenu = !empty($wampConf['VirtualHostSubMenu']) ? $wampConf['VirtualHostSubMenu'] : "off";
+$VirtualHostMenu = $wampConf['VirtualHostSubMenu'];
 
 //on récupère la valeur de apachePortUsed
 $port = !empty($wampConf['apachePortUsed']) ? $wampConf['apachePortUsed'] : "80";
@@ -52,92 +55,6 @@ $Mariadbport = !empty($wampConf['mariadbPortUsed']) ? $wampConf['mariadbPortUsed
 
 // répertoires à ignorer dans les projets
 $projectsListIgnore = array ('.','..','wampthemes','wamplangues');
-/*
-// textes
-$langues = array(
-	'en' => array(
-		'langue' => 'English',
-		'locale' => 'english',
-		'autreLangue' => 'Version Française',
-		'autreLangueLien' => 'fr',
-		'titreHtml' => 'WAMPSERVER Homepage',
-		'titreConf' => 'Server Configuration',
-		'versa' => 'Apache Version:',
-		'doca2.2' => 'httpd.apache.org/docs/2.2/en/',
-		'doca2.4' => 'httpd.apache.org/docs/2.4/en/',
-		'versp' => 'PHP Version:',
-		'server' => 'Server Software:',
-		'docp' => 'www.php.net/manual/en/',
-		'versm' => 'MySQL Version:',
-		'docm' => 'dev.mysql.com/doc/index.html',
-		'versmariadb' => 'MariaDB Version:',
-		'docmariadb' => 'mariadb.com/kb/en/mariadb/',
-		'phpExt' => 'Loaded Extensions : ',
-		'titrePage' => 'Tools',
-		'txtProjet' => 'Your Projects',
-		'txtNoProjet' => 'No projects yet.<br />To create a new one, just create a directory in \'www\'.',
-		'txtAlias' => 'Your Aliases',
-		'txtNoAlias' => 'No Alias yet.<br />To create a new one, use the WAMPSERVER menu.',
-		'txtVhost' => 'Your VirtualHost',
-		'txtServerName' => 'The ServerName %s has syntax error in file %s',
-		'txtVhostNotClean' => 'The %s file has not been cleaned. There remain VirtualHost examples like: dummy-host.example.com',
-		'txtNoVhost' => 'No VirtualHost yet. Add one for each project in the file: wamp/bin/apache/apache%s/conf/extra/httpd-vhosts.conf',
-		'txtNoIncVhost' => 'Uncomment or add <i>Include conf/extra/httpd-vhosts.conf</i> in file wamp/bin/apache/apache%s/conf/httpd.conf',
-		'txtNoVhostFile' => 'The file: %s does not exists',
-		'txtNoPath' => 'The path %s for %s does not exist (File %s)',
-		'txtNotWritable' => 'The file: %s is not writable',
-		'txtNbNotEqual' => 'The number of %s does not match the number of %s in %s file',
-		'txtAddVhost' => 'Add a Virtual Host',
-		'txtPortNumber' => 'Port number for %s has not correct value or is not the same in file %s',
-		'txtCorrected' => 'Some VirtualHosts errors can be corrected.',
-		'faq' => 'http://www.en.wampserver.com/faq.php',
-		'portUsed' => 'Port defined for Apache: ',
-		'mysqlportUsed' => 'Port defined for MySQL: ',
-		'mariadbportUsed' => 'Port defined for MariaDB: ',
-		'nolocalhost' => 'It\'s a bad idea to add localhost in the url of launching projects. It is best to define VirtualHost in<br />wamp/bin/apache/apache%s/conf/extra/httpd-vhosts.conf<br />file and not add localhost in the url.',
-	),
-	'fr' => array(
-		'langue' => 'Français',
-		'locale' => 'french',
-		'autreLangue' => 'English Version',
-		'autreLangueLien' => 'en',
-		'titreHtml' => 'Accueil WAMPSERVER',
-		'titreConf' => 'Configuration Serveur',
-		'versa' => 'Version Apache :',
-		'doca2.2' => 'httpd.apache.org/docs/2.2/fr/',
-		'doca2.4' => 'httpd.apache.org/docs/2.4/fr/',
-		'versp' => 'Version de PHP :',
-		'server' => 'Server Software :',
-		'docp' => 'www.php.net/manual/fr/',
-		'versm' => 'Version de MySQL :',
-		'docm' => 'dev.mysql.com/doc/index.html',
-		'versmariadb' => 'Version de MariaDB :',
-		'docmariadb' => 'mariadb.com/kb/en/mariadb/',
-		'phpExt' => 'Extensions&nbsp;Chargées&nbsp;:',
-		'titrePage' => 'Outils',
-		'txtProjet' => 'Vos Projets',
-		'txtServerName' => 'Le ServerName %s comporte des erreurs de syntaxe dans le fichier %s',
-		'txtVhostNotClean' => 'Le fichier %s n\'a pas été nettoyé. Il reste des exemples de VirtualHost comme : dummy-host.example.com',
-		'txtNoProjet' => 'Aucun projet.<br /> Pour en ajouter un nouveau, créez simplement un répertoire dans \'www\'.',
-		'txtAlias' => 'Vos Alias',
-		'txtNoAlias' => 'Aucun alias.<br /> Pour en ajouter un nouveau, utilisez le menu de WAMPSERVER.',
-		'txtVhost' => 'Vos VirtualHost',
-		'txtNoVhost' => 'Aucun VirtualHost. Ajouter-en un par projet dans le fichier : wamp/bin/apache/apache%s/conf/extra/httpd-vhosts.conf',
-		'txtNoIncVhost' => 'Décommentez ou ajouter <i>Include conf/extra/httpd-vhosts.conf</i> dans le fichier wamp/bin/apache/apache%s/conf/httpd.conf',
-		'txtNoVhostFile' => 'Le fichier : %s n\'existe pas',
-		'txtNoPath' => 'Le chemin %s pour %s n\'existe pas (Fichier %s)',
-		'txtNotWritable' => 'Le fichier : %s est en lecture seule',
-		'txtNbNotEqual' => 'Le nombre %s ne correspond pas au nombre de %s dans le fichier %s',
-		'txtAddVhost' => 'Ajouter un Virtual Host',
-		'txtCorrected' => 'Certaines erreurs VirtualHosts pourront être corrigées.',
-		'txtPortNumber' => 'Le numéro de port pour %s n\'est pas correct ou ne sont pas identiques dans le fichier %s',
-		'faq' => 'http://www.wampserver.com/faq.php',
-		'portUsed' => 'Port défini pour Apache : ',
-		'mysqlportUsed' => 'Port défini pour MySQL : ',
-		'mariadbportUsed' => 'Port défini pour MariaDB : ',
-		'nolocalhost' => 'C\'est une mauvaise idée d\'ajouter localhost dans les url de lancement des projets. Il est préférable de définir des VirtualHost dans le fichier<br />wamp/bin/apache/apache%s/conf/extra/httpd-vhosts.conf<br />et de ne pas ajouter localhost dans les url.',
-	)
-);*/
 
 // images
 $pngFolder = <<< EOFILE
@@ -264,18 +181,15 @@ rkJggg==
 EOFILE;
 
 // Recherche des différents thèmes disponibles
-$styleswitcher = '';
-if (strpos($_SERVER["HTTP_USER_AGENT"], "MSIE 7") === false && strpos($_SERVER["HTTP_USER_AGENT"], "MSIE 8") === false) {
-    $styleswitcher = '<select id="themes">'."\n";
-    $themes = glob('wampthemes/*', GLOB_ONLYDIR);
-    foreach ($themes as $theme) {
-        if (file_exists($theme.'/style.css')) {
-            $theme = str_replace('wampthemes/', '', $theme);
-            $styleswitcher .= '<option name="'.$theme.'" id="'.$theme.'">'.$theme.'</option>'."\n";
-        }
+$styleswitcher = '<select id="themes">'."\n";
+$themes = glob('wampthemes/*', GLOB_ONLYDIR);
+foreach ($themes as $theme) {
+    if (file_exists($theme.'/style.css')) {
+        $theme = str_replace('wampthemes/', '', $theme);
+        $styleswitcher .= '<option name="'.$theme.'" id="'.$theme.'">'.$theme.'</option>'."\n";
     }
-    $styleswitcher .= '</select>'."\n";
 }
+$styleswitcher .= '</select>'."\n";
 
 //affichage du phpinfo
 if (isset($_GET['phpinfo']))
@@ -324,31 +238,8 @@ if (isset($_GET['img']))
     }
 }
 
-
-
-// Définition de la langue des textes
-
-/*if (isset ($_GET['lang']))
-{
-  $langue = htmlspecialchars($_GET['lang'],ENT_QUOTES);
-  if ($langue != 'en' && $langue != 'fr' ) {
-		$langue = 'en';
-  }
-}
-elseif (isset ($_SERVER['HTTP_ACCEPT_LANGUAGE']) AND preg_match("/^fr/", $_SERVER['HTTP_ACCEPT_LANGUAGE']))
-{
-	$langue = 'fr';
-}
-else
-{
-	$langue = 'en';
-}*/
-
 // Language
-if (isset($wampConf['language']))
-	$langue = $wampConf['language'];
-else
-  $langue = $wampConf['defaultLanguage'];
+$langue = isset($wampConf['language']) ? $wampConf['language'] : $wampConf['defaultLanguage'];
 
 if (isset($_GET['lang']))
   $langue = htmlspecialchars($_GET['lang'],ENT_QUOTES);
@@ -368,10 +259,12 @@ foreach ($i_langues as $i_langue) {
 }
 $langueswitcher .= '</select></form>';
 
-if(file_exists('wamplangues/index_'.$langue.'.php'))
+include('wamplangues/index_english.php');
+if(file_exists('wamplangues/index_'.$langue.'.php')) {
+	$langue_temp = $langues;
 	include('wamplangues/index_'.$langue.'.php');
-else
-	include('wamplangues/index_english.php');
+	$langues = array_merge($langue_temp, $langues);
+}
 
 //initialisation
 $aliasContents = '';
@@ -398,6 +291,7 @@ if (empty($aliasContents))
 $addVhost = "<li><a href='add_vhost.php?lang=".$langue."'>".$langues['txtAddVhost']."</a></li>";
 if($VirtualHostMenu == "on") {
 	$vhostError = false;
+	$vhostErrorCorrected = true;
 	$error_message = array();
     $allToolsClass = "four-columns";
 	$virtualHost = check_virtualhost();
@@ -425,11 +319,25 @@ if($VirtualHostMenu == "on") {
 				foreach($virtualHost['ServerName'] as $key => $value) {
 					if($virtualHost['ServerNameValid'][$value] === false) {
 						$vhostError = true;
+						$vhostErrorCorrected = false;
 						$vhostsContents .= '<li>'.$value.' - <i style="color:red;">syntax error</i></li>';
 						$error_message[] = sprintf($langues['txtServerName'],"<span style='color:black;'>".$value."</span>",$virtualHost['vhosts_file']);
 					}
 					elseif($virtualHost['ServerNameValid'][$value] === true) {
-						$vhostsContents .= '<li><a href="http://'.$value.$UrlPort.'">'.$value.'</a></li>';
+						if($virtualHost['ServerNameIp'][$value] !== false) {
+							$vh_ip = $virtualHost['ServerNameIp'][$value];
+							if($virtualHost['ServerNameIpValid'][$value] !== false) {
+								$vhostsContents .= '<li><a href="http://'.$vh_ip.$UrlPort.'">'.$vh_ip.'</a> <i>('.$value.')</i></li>';
+							}
+							else {
+								$vhostError = true;
+								$vhostErrorCorrected = false;
+								$vhostsContents .= '<li>'.$vh_ip.' for '.$value.' - <i style="color:red;">IP not valid</i></li>';
+								$error_message[] = sprintf($langues['txtServerNameIp'],"<span style='color:black;'>".$vh_ip."</span>","<span style='color:black;'>".$value."</span>",$virtualHost['vhosts_file']);
+							}
+						}
+						else
+							$vhostsContents .= '<li><a href="http://'.$value.$UrlPort.'">'.$value.'</a></li>';
 					}
 					else {
 						$vhostError = true;
@@ -439,11 +347,13 @@ if($VirtualHostMenu == "on") {
 				//Check number of <Directory and </Directory equals to number of ServerName
 				if($nb_Directory < $nb_Server || $nb_End_Directory != $nb_Directory) {
 					$vhostError = true;
+					$vhostErrorCorrected = false;
 					$error_message[] = sprintf($langues['txtNbNotEqual'],"&lt;Directory or &lt;/Directory&gt;","ServerName",$virtualHost['vhosts_file']);
 				}
 				//Check number of DocumentRoot equals to number of ServerName
 				if($nb_Document != $nb_Server) {
 					$vhostError = true;
+					$vhostErrorCorrected = false;
 					$error_message[] = sprintf($langues['txtNbNotEqual'],"DocumentRoot","ServerName",$virtualHost['vhosts_file']);
 				}
 				//Check validity of DocumentRoot
@@ -452,6 +362,7 @@ if($VirtualHostMenu == "on") {
 						if($virtualHost['documentPathValid'][$value] === false) {
 							$documentPathError = $value;
 							$vhostError = true;
+							$vhostErrorCorrected = false;
 							$error_message[] = sprintf($langues['txtNoPath'],"<span style='color:black;'>".$value."</span>", "DocumentRoot", $virtualHost['vhosts_file']);
 							break;
 						}
@@ -463,28 +374,50 @@ if($VirtualHostMenu == "on") {
 						if($virtualHost['directoryPathValid'][$value] === false) {
 							$documentPathError = $value;
 							$vhostError = true;
+							$vhostErrorCorrected = false;
 							$error_message[] = sprintf($langues['txtNoPath'],"<span style='color:black;'>".$value."</span>", "&lt;Directory ...", $virtualHost['vhosts_file']);
 							break;
 						}
 					}
 				}
 				//Check number of <VirtualHost equals or > to number of ServerName
-				if($nb_Server != $nb_Virtual) {
+				if($nb_Server != $nb_Virtual && $wampConf['NotCheckDuplicate'] == 'off') {
 					$port_number = false;
 					$vhostError = true;
+					$vhostErrorCorrected = false;
 					$error_message[] = sprintf($langues['txtNbNotEqual'],"&lt;VirtualHost","ServerName",$virtualHost['vhosts_file']);
 				}
 				//Check number of port definition of <VirtualHost *:xx> equals to number of ServerName
-				if($virtualHost['nb_Virtual_Port'] != $nb_Virtual) {
+				if($virtualHost['nb_Virtual_Port'] != $nb_Virtual && $wampConf['NotCheckDuplicate'] == 'off') {
 					$port_number = false;
 					$vhostError = true;
+					$vhostErrorCorrected = false;
 					$error_message[] = sprintf($langues['txtNbNotEqual'],"port definition of &lt;VirtualHost *:xx&gt;","ServerName",$virtualHost['vhosts_file']);
 				}
 				//Check validity of port number
 				if($port_number && $virtualHost['port_number'] === false) {
 					$port_number = false;
 					$vhostError = true;
+					$vhostErrorCorrected = false;
 					$error_message[] = sprintf($langues['txtPortNumber'],"&lt;VirtualHost *:port&gt;",$virtualHost['vhosts_file']);
+				}
+				//Check if duplicate ServerName
+				if($virtualHost['nb_duplicate'] > 0) {
+					$DuplicateNames = '';
+					foreach($virtualHost['duplicate'] as $NameValue)
+						$DuplicateNames .= " ".$NameValue;
+					$vhostError = true;
+					$vhostErrorCorrected = false;
+					$error_message[] = "Duplicate ServerName <span style='color:blue;'>".$DuplicateNames."</span> into ".$virtualHost['vhosts_file'];
+				}
+				//Check if duplicate Server IP
+				if($virtualHost['nb_duplicateIp'] > 0) {
+					$DuplicateNames = '';
+					foreach($virtualHost['duplicateIp'] as $NameValue)
+						$DuplicateNames .= " ".$NameValue;
+					$vhostError = true;
+					$vhostErrorCorrected = false;
+					$error_message[] = "Duplicate IP <span style='color:blue;'>".$DuplicateNames."</span> into ".$virtualHost['vhosts_file'];
 				}
 			}
 		}
@@ -505,14 +438,15 @@ if($VirtualHostMenu == "on") {
 			$error_content .= $value."<br />";
 		}
 		$error_content .= "</p>\n";
-		$addVhost = "<li><a href='add_vhost.php?lang=".$langue."'>".$langues['txtAddVhost']."</a> <span style='font-size:0.72em;color:red;'>".$langues['txtCorrected']."</span></li>";
+		if($vhostErrorCorrected)
+			$addVhost = "<li><a href='add_vhost.php?lang=".$langue."'>".$langues['txtAddVhost']."</a> <span style='font-size:0.72em;color:red;'>".$langues['txtCorrected']."</span></li>";
 	}
 }
 else {
     $allToolsClass = "three-columns";
 }
 
-//Fin modif oto - Récupération ServerName
+//Fin Récupération ServerName
 
 // récupération des projets
 $handle=opendir(".");
@@ -561,6 +495,7 @@ $c_phpCliConf = strtolower($c_phpVersionDir.'/php'.$wampConf['phpVersion'].'/'.$
 
 if($phpini != strtolower($c_phpConfFile) && $phpini != $c_phpConfFileOri) {
 	$error_content .= "<p style='color:red;'>*** ERROR *** The PHP configuration loaded file is: ".$phpini." - should be: ".$c_phpConfFile." or ".$c_phpConfFileOri;
+	$error_content .= "<br>You must perform: <span style='color:green;'>Right-click icon Wampmanager -> Refresh</span><br>";
 	if($phpini == $c_phpCliConf || $phpini == $c_phpCliConfFile)
 		$error_content .= " - This file is only for PHP in Command Line - Maybe you've added 'PHPIniDir' in the 'httpd.conf' file. Delete or comment this line.";
 	$error_content .= "</p>";
@@ -691,6 +626,7 @@ $pageContents .= <<<EOPAGEC
 		<li><a href="http://forum.wampserver.com/list.php?1" target="_blank">Forum WampServer</a></li>
 		<li><a href="http://www.wampserver.com/en/donations.php" target="_blank">Donate</a></li>
 		<li><a href="http://www.alterway.fr" target="_blank">Alter Way</a></li>
+		<li><a href="{$langues['forumLink']}">{$langues['forum']}</a></li>
 	</ul>
 
 <script type="text/javascript">

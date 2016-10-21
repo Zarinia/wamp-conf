@@ -1,7 +1,5 @@
 <?php
-
-//v1.0.1 by Romain Bourdon
-
+//3.0.6
 require 'config.inc.php';
 
 echo '
@@ -20,11 +18,11 @@ echo '
 
 
 Enter your alias.
-For example, 
+For example,
 
 \'test\'
 
-would create an alias for the url 
+would create an alias for the url
 
 http://localhost/test/
 
@@ -33,18 +31,14 @@ $newAliasDir = trim(fgets(STDIN));
 $newAliasDir = trim($newAliasDir,'/\'');
 
 
-if (is_file($aliasDir.$newAliasDir.'.conf'))
-{
+if (is_file($aliasDir.$newAliasDir.'.conf')) {
     echo '
 
 Alias already exists. Press Enter to exit...';
     trim(fgets(STDIN));
     exit();
 }
-
-
-if ($newAliasDir == '')
-{
+if (empty($newAliasDir)) {
     echo '
 
 Alias not created. Press Enter to exit...';

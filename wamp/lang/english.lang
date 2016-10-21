@@ -1,4 +1,5 @@
 <?php
+//3.0.6
 
 $w_allServicesRunning = 'All services running';
 $w_oneServiceRunning = '%n of %t services running';
@@ -10,6 +11,7 @@ $w_serverOnline = 'server Online';
 $w_about = '&About...';
 $w_helpFile = 'Help File';
 $w_help = 'Help';
+$w_forum = 'Forum';
 $w_exit = 'Exit';
 $w_version = 'Version';
 $w_service = 'Service administration';
@@ -26,7 +28,9 @@ $w_aliasDirectories = 'Alias directories';
 $w_services = 'Services';
 $w_apache = 'Apache';
 $w_mysql = 'MySQL';
+$w_mysqlSettings = 'MySQL settings';
 $w_mariadb = 'MariaDB';
+$w_mariadbSettings = 'MariaDB settings';
 $w_startServices = 'Start All Services';
 $w_stopServices = 'Stop All Services';
 $w_restartServices = 'Restart All Services';
@@ -54,7 +58,7 @@ $w_testPort80 = 'Test Port 80';
 $w_installService = '&Install Service';
 $w_removeService = '&Remove Service';
 $w_mysqlConsole = 'MySQL console';
-$w_mariadbConsole = 'Console MariaDB';
+$w_mariadbConsole = 'MariaDB console';
 
 $w_language = 'Language';
 

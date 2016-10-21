@@ -22,6 +22,7 @@ $langues = array(
 	'txtNoAlias' => 'No Alias yet.<br />To create a new one, use the WAMPSERVER menu.',
 	'txtVhost' => 'Your VirtualHost',
 	'txtServerName' => 'The ServerName %s has syntax error in file %s',
+	'txtServerNameIp' => 'IP %s for Servername %s is not valid in file %s',
 	'txtVhostNotClean' => 'The %s file has not been cleaned. There remain VirtualHost examples like: dummy-host.example.com',
 	'txtNoVhost' => 'No VirtualHost yet. Add one for each project in the file: wamp/bin/apache/apache%s/conf/extra/httpd-vhosts.conf',
 	'txtNoIncVhost' => 'Uncomment or add <i>Include conf/extra/httpd-vhosts.conf</i> in file wamp/bin/apache/apache%s/conf/httpd.conf',

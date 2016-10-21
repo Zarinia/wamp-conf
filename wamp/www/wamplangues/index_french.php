@@ -18,6 +18,7 @@ $langues = array(
 	'titrePage' => 'Outils',
 	'txtProjet' => 'Vos Projets',
 	'txtServerName' => 'Le ServerName %s comporte des erreurs de syntaxe dans le fichier %s',
+	'txtServerNameIp' => 'L\'IP %s du Servername %s n\'est pas valide dans le fichier %s',
 	'txtVhostNotClean' => 'Le fichier %s n\'a pas été nettoyé. Il reste des exemples de VirtualHost comme : dummy-host.example.com',
 	'txtNoProjet' => 'Aucun projet.<br /> Pour en ajouter un nouveau, créez simplement un répertoire dans \'www\'.',
 	'txtAlias' => 'Vos Alias',

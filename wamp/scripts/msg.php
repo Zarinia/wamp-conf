@@ -1,6 +1,11 @@
 <?php
 //Update 3.0.1
 //strtolower compare for php.ini loaded
+//Update 3.0.4
+//Possibility to copy some results into clipboard
+//Update 3.0.5
+//Add DNS check order
+//Check if Apache VirtualHost are defined into hosts file
 
 $msgId = $_SERVER['argv'][1];
 $nb_arg = $_SERVER['argc'] - 1;
@@ -72,6 +77,7 @@ array_walk($message, 'message_add');
 echo $message[$msgId];
 }
 elseif(is_string($msgId)) {
+	$complete_result = '';
 	if($msgId == "stateservices") {
 		$services_OK = true;
 		$message['stateservices'] = "State of services:\n\n";
@@ -106,6 +112,47 @@ elseif(is_string($msgId)) {
 		else
 			$message['stateservices'] .= "\t\t\tall services are started - it is OK\n";
 	echo $message['stateservices'];
+	$complete_result = $message['stateservices'];
+	}
+	elseif($msgId == "dnsorder") {
+	//Check values of DNS priorities
+	$message['dnscheckorder'] = "*** Checking the DNS search order ***\n";
+	$command = 'reg query HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\ServiceProvider';
+	$output = `$command`;
+	$dns = array(
+		'DnsPriority'=>'none',
+		'HostsPriority'=>'none',
+		'LocalPriority'=>'none',
+		'NetbtPriority'=>'none',
+		);
+	$dnsdec = array(
+		'DnsPriority'=>'none',
+		'HostsPriority'=>'none',
+		'LocalPriority'=>'none',
+		'NetbtPriority'=>'none',
+		);
+	foreach($dns as $key=>$value) {
+		if(preg_match("/^[ \t]*".$key."[ \t]*REG_DWORD[ \t]*0x([0-9a-fA-F]*)$/m", $output, $matches) > 0 ) {
+			$dns[$key] = $matches[1];
+			$dnsdec[$key] = intval(hexdec($matches[1]));
+		}
+	}
+	if(in_array('none',$dns)
+		|| ((int)$dnsdec['HostsPriority'] <= (int)$dnsdec['LocalPriority'])
+		|| ((int)$dnsdec['DnsPriority'] <= (int)$dnsdec['HostsPriority'])
+		|| ((int)$dnsdec['NetbtPriority'] <= (int)$dnsdec['DnsPriority'])
+		) {
+		$message['dnscheckorder'] .= "\n**** Values of registry keys for\nHKLM\SYSTEM\CurrentControlSet\Services\Tcpip\ServiceProvider\nare not in correct order\n";
+		asort($dnsdec);
+		foreach($dnsdec as $key=>$value) {
+			$message['dnscheckorder'] .= $key." REG_DWORD 0x".$dns[$key]."(".$value.")\n";  
+		}
+		$message['dnscheckorder'] .= "\nOriginal value must be:\nLocalPriority 0x1f3 (499) (Local DNS cache)\nHostsPriority 0x1f4 (500) (Hosts file)\nDnsPriority 0x7d0 (2000) (DNS servers)\nNetbtPriority 0x7d1 (2001) (NetBIOS)\n";
+	  $complete_result = $message['dnscheckorder'];
+	}
+	else
+		$message['dnscheckorder'] .= "\nValues of registry keys for\nHKLM\SYSTEM\CurrentControlSet\Services\Tcpip\ServiceProvider\nare in correct order\n\n";
+	echo $message['dnscheckorder'];
 	}
 	elseif($msgId == "compilerversions") {
 		echo "It may take a while ...";
@@ -269,6 +316,7 @@ elseif(is_string($msgId)) {
 			$message['compilerversions'] .= "\n----- Verify what php.ini file is loaded for PHP CLI -----\n\n".$message['inifiles'];
 
 		echo "\n\n".$message['compilerversions'];
+		$complete_result = $message['compilerversions'];
 	}
 	elseif($msgId == "vhostconfig") {
 		$message['apachevhosts'] = "VirtualHost configuration:\n\n";
@@ -304,8 +352,10 @@ elseif(is_string($msgId)) {
 					$nb_vhost = preg_match_all("~^.*port ([0-9]{2,5}).*namevhost (.*) \(.*\)$~m",$output, $matches);
 					if($nb_vhost > 0 ) {
 						$virtual_host = true;
+						$virtualNames = array();
 						for($i = 0 ; $i < $nb_vhost ; $i++) {
 							$message['apachevhosts'] .= ($matches[1][$i] != '80' ? "On port ".$matches[1][$i]." " : '')."Virtual Host: ".$matches[2][$i]."\n";
+							$virtualName[] = $matches[2][$i];
 						}
 					}
 					if(!$default_server && !$virtual_host) {
@@ -316,6 +366,7 @@ elseif(is_string($msgId)) {
 								$default_localhost = true;
 						}
 					}
+					
 					if(!$default_localhost)
 						$message['apachevhosts'] .= "*** WARNING: The name of the default server must be 'localhost'\n\n";
 					if(!$default_server)
@@ -324,10 +375,18 @@ elseif(is_string($msgId)) {
 						$message['apachevhosts'] .= "*** WARNING: No VirtualHost defined\n\n";
 					if(!$default_server || !$virtual_host)
 						$message['apachevhosts'] .= "\n================== COMPLETE RESULT ==================\n".$output;
+					else { // Check if each Apache VirtualHost name is in hosts file
+						$myHostsContents = file_get_contents($c_hostsFile);
+						for($i = 0 ; $i < $nb_vhost ; $i++) {
+							if(stripos($myHostsContents, $virtualName[$i]) === false) 
+								$message['apachevhosts'] .= "*** WARNING: Apache VirtualHost '".$virtualName[$i]."'\n*** is not defined in ".$c_hostsFile." file\n\n";
+						}
+					}
 				}
 			}
 		}
 		echo $message['apachevhosts'];
+		$complete_result = $message['apachevhosts'];
 	}
 	elseif($msgId == "apachemodules") {
 		require_once 'config.inc.php';
@@ -353,6 +412,7 @@ elseif(is_string($msgId)) {
 				$message['apachemodules'] .= "\n";
 			}
 			echo $message['apachemodules'];
+			$complete_result = $message['apachemodules'];
 		}
 	}
 	elseif($msgId == "changeServiceName") {
@@ -384,7 +444,22 @@ elseif(is_string($msgId)) {
 		}
 		exit;
 	}
-
+	if(!empty($complete_result)) {
+		echo "\n--- Do you want to copy the results into Clipboard?
+--- Type 'y' to confirm - Press ENTER to continue... ";
+    $confirm = trim(fgetc(STDIN));
+		$confirm = strtolower(trim($confirm ,'\''));
+		if ($confirm == 'y') {
+			$fp = fopen("temp.txt",'w');
+			fwrite($fp,$complete_result);
+			fclose($fp);
+			$command = 'type temp.txt | clip';
+			`$command`;
+			$command = 'del temp.txt';
+			`$command`;
+		}
+		exit(0);
+ 	}
 	echo "\nPress ENTER to continue...";
 }
 

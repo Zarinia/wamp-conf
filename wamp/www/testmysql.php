@@ -11,8 +11,7 @@ echo '<br/>';
 $mysqli = new mysqli('127.0.0.1', 'root', '', '', 3306);
 
 if ($mysqli->connect_error) {
-    die('Connect Error (' . $mysqli->connect_errno . ') '
-            . $mysqli->connect_error);
+    die('Connect Error (' . $mysqli->connect_errno . ') ' . $mysqli->connect_error);
 }
 echo 'Connection OK';
 $mysqli->close();
@@ -23,8 +22,7 @@ echo '<br/>';
 $mysqli = new mysqli('127.0.0.1', 'root', '', '', 3307);
 
 if ($mysqli->connect_error) {
-    die('Connect Error (' . $mysqli->connect_errno . ') '
-            . $mysqli->connect_error);
+    die('Connect Error (' . $mysqli->connect_errno . ') ' . $mysqli->connect_error);
 }
 echo 'Connection OK';
 $mysqli->close();

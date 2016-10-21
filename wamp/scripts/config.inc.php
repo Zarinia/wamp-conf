@@ -2,6 +2,16 @@
 //Update 3.0.1
 //$c_wampMode 32 or 64 bit
 //Support for Edge
+//Update 3.0.5
+//Add 57 for PHP 7.0.6 symlinks
+//Array $phpParamsNotOnOff for PHP parameters that cannot be switched On or Off
+//Add Wamp parameters NotCheckDuplicate VhostAllLocalIp
+//Support for VirtualHost by IP
+//Update 3.0.6
+//Add Wamp parameters NotCheckVirtualHost
+//Possibility to change PHP parameter not on or off
+//Alias sub-menu
+//MySQL parameters
 
 $configurationFile = '../wampmanager.conf';
 $templateFile = '../wampmanager.tpl';
@@ -44,9 +54,7 @@ if($c_navigator == "Edge") {
 $c_editor = $wampConf['editor'];
 
 //Variable suppressLocalhost based on urlAddLocalhost
-$c_suppressLocalhost = true;
-if(isset($wampConf['urlAddLocalhost']) && $wampConf['urlAddLocalhost'] != "off")
-	$c_suppressLocalhost = false;
+$c_suppressLocalhost = isset($wampConf['urlAddLocalhost']) && $wampConf['urlAddLocalhost'] != "off" ? false : true;
 
 //Ajout variables pour les ports
 $c_DefaultPort = "80";
@@ -63,6 +71,8 @@ $c_apacheService = $wampConf['ServiceApache'];
 $c_mysqlService = $wampConf['ServiceMysql'];
 $c_mariadbService = $wampConf['ServiceMariadb'];
 
+$c_apacheVersion = $wampConf['apacheVersion'];
+$c_phpVersion = $wampConf['phpVersion'];
 $c_phpCliVersion = $wampConf['phpCliVersion'];
 $c_mysqlVersion = $wampConf['mysqlVersion'];
 $c_mysqlServiceInstallParams = $wampConf['mysqlServiceInstallParams'];
@@ -95,7 +105,7 @@ $c_phpCli = $c_phpVersionDir.'/php'.$c_phpCliVersion.'/'.$wampConf['phpCliFile']
 $c_mysqlConsole = $c_mysqlVersionDir.'/mysql'.$c_mysqlVersion.'/'.$wampConf['mysqlExeDir'].'/mysql.exe';
 $c_mariadbConsole = $c_mariadbVersionDir.'/mariadb'.$c_mariadbVersion.'/'.$wampConf['mariadbExeDir'].'/mysql.exe';
 
-//Test du fichier hosts
+//Check hosts file
 $c_hostsFile = getenv('WINDIR').'\system32\drivers\etc\hosts';
 $c_hostsFile_writable = true;
 if(file_exists($c_hostsFile)) {
@@ -120,9 +130,9 @@ $helpFile = $c_installDir.'/help/wamp5.chm';
 $wwwDir = $c_installDir.'/www';
 
 //dll to create symbolic links from php to apache/bin
-// 55 & 56 for PHP 7
+// // Versions of ICU are 38, 40, 42, 44, 46, 48 to 57
 $icu = array(
-	'number' => array('56', '55', '54', '53', '52', '51', '50', '49'),
+	'number' => array('57', '56', '55', '54', '53', '52', '51', '50', '49', '48', '46', '44', '42', '40', '38'),
 	'name' => array('icudt', 'icuin', 'icuio', 'icule', 'iculx', 'icutest', 'icutu', 'icuuc'),
 	);
 $php_icu_dll = array();
@@ -135,6 +145,7 @@ foreach($icu['number'] as $icu_number) {
 $phpDllToCopy = array_merge(
 	$php_icu_dll,
 	array (
+	'libmysql.dll',
 	'libeay32.dll',
 	'libsasl.dll',
 	'libpq.dll',
@@ -147,6 +158,7 @@ $phpDllToCopy = array_merge(
 	)
 );
 
+//xdebug parameters must be the latest and have (xDebug)
 $phpParams = array (
 	'allow url fopen'=>'allow_url_fopen',
 	'allow url include' => 'allow_url_include',
@@ -163,10 +175,13 @@ $phpParams = array (
 	'ignore repeated errors'=>'ignore_repeated_errors',
 	'ignore repeated source'=>'ignore_repeated_source',
 	'implicit flush'=>'implicit_flush',
+	'intl.default_locale' => 'intl.default_locale',
 	'log errors' => 'log_errors',
 	'magic quotes gpc'=>'magic_quotes_gpc',
 	'magic quotes runtime'=>'magic_quotes_runtime',
 	'magic quotes sybase'=>'magic_quotes_sybase',
+	'max_execution_time'=>'max_execution_time',
+	'max_input_time'=>'max_input_time',
 	'memory_limit'=>'memory_limit',
 	'output_buffering' => 'output_buffering',
 	'post_max_size'=>'post_max_size',
@@ -186,23 +201,152 @@ $phpParams = array (
 	'(XDebug) :  Profiler Enable Trigger' => 'xdebug.profiler_enable_trigger',
 	'(XDebug) :  Profiler' => 'xdebug.profiler_enable',
 	'(XDebug) :  Remote debug' => 'xdebug.remote_enable',
+    '(XDebug) :  Overload Var Dump' => 'xdebug.overload_var_dump',
 	'mysql.default_port' => 'mysql.default_port', // mysql default port
 	'mysqli.default_port' => 'mysqli.default_port', // mysqli default port
 	);
 
+//PHP parameters with values not On or Off cannot be switched on or off
+//Can be changed if 'change' = true && 'title' && 'values'
+//Parameter name must be also into $phpParams array
+//To manualy enter value, 'Choose' must be the last 'values' and 'title' must be 'Size' or 'Seconds'
+//Warning : specific treatment for date.timezone - Don't modify.
+$phpParamsNotOnOff = array(
+	'date.timezone' => array(
+		'change' => true,
+		'title' => 'Timezone',
+		'quoted' => true,
+		'values' => array('Africa', 'America', 'Antarctica', 'Arctic', 'Asia', 'Atlantic', 'Australia', 'Europe', 'Indian', 'Pacific'),
+		),
+	'default_charset' => array('change' => false),
+	'memory_limit' => array(
+		'change' => true,
+		'title' => 'Size',
+		'quoted' => false,
+		'values' => array('16M', '32M', '64M', '128M', '256M', '512M', '1G', 'Choose'),
+		),
+	'output_buffering' => array('change' => false),
+	'max_execution_time' => array(
+		'change' => true,
+		'title' => 'Seconds',
+		'quoted' => false,
+		'values' => array('20', '30', '60', '120', '180', '240', '300', 'Choose'),
+		),
+	'max_input_time' => array(
+		'change' => true,
+		'title' => 'Seconds',
+		'quoted' => false,
+		'values' => array('20', '30', '60', '120', '180', '240', '300', 'Choose'),
+		),
+	'post_max_size' => array(
+		'change' => true,
+		'title' => 'Size',
+		'quoted' => false,
+		'values' => array('2M', '4M', '8M', '16M','32M', '64M', '128M', '256M', 'Choose'),
+		),
+	'upload_max_filesize' => array(
+		'change' => true,
+		'title' => 'Size',
+		'quoted' => false,
+		'values' => array('2M', '4M', '8M', '16M','32M', '64M', '128M', '256M', 'Choose'),
+		),
+	'xdebug.overload_var_dump' => array('change' => false),
+);
+//Parameters to be changed into php.ini CLI the same way as for php.ini
+$phpCLIparams = array(
+	'date.timezone',
+);
+
+//MySQL parameters
+$mysqlParams = array (
+	'basedir'=>'basedir',
+	'datadir'=>'datadir',
+	'key_buffer_size'=>'key_buffer_size',
+	'lc-messages'=>'lc-messages',
+	'log_error_verbosity'=>'log_error_verbosity',
+	'max_allowed_packet'=>'max_allowed_packet',
+	'innodb_lock_wait_timeout'=>'innodb_lock_wait_timeout',
+	'sql-mode'=>'sql-mode',
+	'sort_buffer_size'=>'sort_buffer_size',
+	'skip-grant-tables'=>'skip-grant-tables',
+);
+//MySQL parameters with values not On or Off cannot be switched on or off
+//Can be changed if 'change' = true && 'title' && 'values'
+//Parameter name must be also into $mysqlParams array
+//To manualy enter value, 'Choose' must be the last 'values' and 'title' must be 'Size' or 'Seconds' or 'Number'
+$mysqlParamsNotOnOff = array(
+	'basedir' => array(
+		'change' => false,
+		'msg' => "\nThis setting should not be changed, otherwise you risk losing your existing databases.\n",
+		),
+	'datadir' => array(
+		'change' => false,
+		'msg' => "\nThis setting should not be changed, otherwise you risk losing your existing databases.\n",
+		),
+	'key_buffer_size' => array(
+		'change' => true,
+		'title' => 'Size',
+		'quoted' => false,
+		'values' => array('16M', '32M', '64M', 'Choose'),
+		),
+	'lc-messages' => array(
+		'change' => false,
+		'msg' => "\nTo set the Error Message Language see:\n\nhttp://dev.mysql.com/doc/refman/5.7/en/error-message-language.html\n",
+		),
+	'log_error_verbosity' => array(
+		'change' => true,
+		'title' => 'Number',
+		'quoted' => false,
+		'values' => array('1', '2', '3'),
+		'text' => array('1' => 'Errors only', '2' => 'Errors and warnings', '3' => 'Errors, warnings, and notes'),
+		),
+	'max_allowed_packet' => array(
+		'change' => true,
+		'title' => 'Size',
+		'quoted' => false,
+		'values' => array('16M', '32M', '64M', 'Choose'),
+		),
+	'innodb_lock_wait_timeout' => array(
+		'change' => true,
+		'title' => 'Seconds',
+		'quoted' => false,
+		'values' => array('20', '30', '50', '120', 'Choose'),
+		),
+	'sql-mode' => array(
+		'change' => true,
+		'title' => 'Special',
+		'quoted' => 'true',
+		),
+	'sort_buffer_size' => array(
+		'change' => true,
+		'title' => 'Size',
+		'quoted' => false,
+		'values' => array('2M', '4M', '16M', 'Choose'),
+		),
+	'skip-grant-tables' => array(
+		'change' => false,
+		'msg' => "\n\nWARNING!! WARNING!!\nThis option causes the server to start without using the privilege system at all, WHICH GIVES ANYONE WITH ACCESS TO THE SERVER UNRESTRICTED ACCESS TO ALL DATABASES.\nThis option also causes the server to suppress during its startup sequence the loading of user-defined functions (UDFs), scheduled events, and plugins that were installed.\n\nYou should leave this option 'uncommented' ONLY for the time required to perform certain operations such as the replacement of a lost password for 'root'.\n",
+		),
+);
+
 // Adding parameters to WampServer modifiable
 // by "Settings" sub-menu on right-click Wampmanager icon
+// Needs $w_settings['parameter'] in wamp\lang\modules\settings_english.php
 $wamp_Param = array(
 	'VirtualHostSubMenu',
+	'AliasSubmenu',
 	'ProjectSubMenu',
+	'NotCheckVirtualHost',
+	'NotCheckDuplicate',
+	'VhostAllLocalIp',
 	'HomepageAtStartup',
 	'MenuItemOnline',
 	'ItemServicesNames',
 	'urlAddLocalhost',
 	);
 
-/*
-remove from wamp 3
+
+# start ==> remove from wamp 3
 // Adding parameters for Apache & MySQL & MariaDB
 $apache_Param = $apache_Param_value = array();
 $apache_Param[] = 'apacheUseOtherPort';
@@ -221,7 +365,8 @@ $mariadb_Param[] = 'mariadbUseOtherPort';
 $mariadb_Param_Value[] = 'off';
 $mariadb_Param[] = 'mariadbPortUsed';
 $mariadb_Param_Value[] = $c_DefaultMariadbPort;
-*/
+# end ==> remove from wamp 3
+
 // Extensions can not be loaded by extension =
 // for example zend_extension
 $phpNotLoadExt = array(

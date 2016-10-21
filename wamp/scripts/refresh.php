@@ -4,6 +4,9 @@
 //Check if section [wampmysqld] in my.ini is the name of mysql service
 //Check service names in mysql and apache wampserver.conf files
 //Support for Windows 10 and Edge
+//Update 3.0.4
+//String language cannot content "Offline" or "Online" only
+//Exclude wamplangues from projects dir
 
 require ('config.inc.php');
 require ('wampserver.lib.php');
@@ -79,33 +82,34 @@ if (isset($wampConf['language']))
 else
   $lang = $wampConf['defaultLanguage'];
 
-// on inclus le fichier correspondant si existant
+// Load language file if exists
 require($langDir.$wampConf['defaultLanguage'].'.lang');
 if (is_file($langDir.$lang.'.lang'))
 	require($langDir.$lang.'.lang');
 
-
-// on inclus les fichiers de langue de modules par defaut
-if ($handle = opendir($langDir.$modulesDir))
-{
-	while (false !== ($file = readdir($handle)))
-	{
+// Load modules default language files
+if ($handle = opendir($langDir.$modulesDir)) {
+	while (false !== ($file = readdir($handle))) {
 		if ($file != "." && $file != ".." && preg_match('|_'.$wampConf['defaultLanguage'].'|',$file))
 			include($langDir.$modulesDir.$file);
 	}
 	closedir($handle);
 }
 
-// on inclus les fichiers de langue de modules correspondant à la langue courante
-if ($handle = opendir($langDir.$modulesDir))
-{
-	while (false !== ($file = readdir($handle)))
-	{
+// Load modules current language files if exists
+if ($handle = opendir($langDir.$modulesDir)) {
+	while (false !== ($file = readdir($handle))) {
 		if ($file != "." && $file != ".." && preg_match('|_'.$lang.'|',$file))
 			include($langDir.$modulesDir.$file);
 	}
 	closedir($handle);
 }
+
+//Check if language file does not content Offline or Online
+if (strtolower($w_serverOffline) == "offline")
+  $w_serverOffline .= ' ';
+if (strtolower($w_serverOnline) == "online")
+  $w_serverOnline .= ' ';
 
 //Update string to use alternate port.
 $w_AlternatePort = sprintf($w_UseAlternatePort, $c_UsedPort);
@@ -145,6 +149,7 @@ if(!empty($wampConf['HomepageAtStartup']))
 		$wampConf['HomepageAtStartup'],
 		"on", "off",
 		$templateFile);
+$RunAtStart = ($wampConf['HomepageAtStartup'] == 'on' ? '' : ';');
 
 // Item menu Online / Offline
 if(!empty($wampConf['MenuItemOnline']))
@@ -152,6 +157,7 @@ if(!empty($wampConf['MenuItemOnline']))
 		$wampConf['MenuItemOnline'],
 		"on", "off",
 		$templateFile);
+$ItemPutOnline = ($wampConf['MenuItemOnline'] == 'on' ? '' : ';');
 
 // Item submenu Apache Check port used (if not 80)
 if(!empty($wampConf['apacheUseOtherPort']))
@@ -159,6 +165,7 @@ if(!empty($wampConf['apacheUseOtherPort']))
 		$wampConf['apacheUseOtherPort'],
 		"on", "off",
 		$templateFile);
+$ApaTestPortUsed = ($wampConf['apacheUseOtherPort'] == 'on' ? '' : ';');
 
 // Item Tools submenu Check MySQL port used (if not 3306)
 if(!empty($wampConf['mysqlUseOtherPort']))
@@ -166,6 +173,7 @@ if(!empty($wampConf['mysqlUseOtherPort']))
 		$wampConf['mysqlUseOtherPort'],
 		"on", "off",
 		$templateFile);
+$MysqlTestPortUsed = ($wampConf['mysqlUseOtherPort'] == 'on' ? '' : ';');
 
 // Item Tools submenu Change the names of the services
 if(!empty($wampConf['ItemServicesNames'])) {
@@ -178,6 +186,12 @@ if(!empty($wampConf['ItemServicesNames'])) {
 		"on", "off",
 		$templateFile);
 }
+$ItemChangeServiceNames = ($wampConf['ItemServicesNames'] == 'on' ? '' : ';');
+//Check some values about Apache VirtualHost
+$virtualHost = check_virtualhost(true);
+//Option to show Edit httpd-vhosts.conf
+$EditVhostConf  = (($virtualHost['include_vhosts'] === false || $virtualHost['vhosts_exist'] === false) ? ';' : '');
+
 // Item Tools submenu Check MariaDB port used (if not 3307)
 if(!empty($wampConf['mariadbUseOtherPort']))
 	update_wampmanager_file("Type: item; Caption: \"\${w_testPortMariadbUsed}",
@@ -197,11 +211,16 @@ if(!empty($wampConf['ItemServicesNames'])) {
 		$templateFile);
 }
 
-// on inclus le fichier de template
+//Warnings at the end if needed
+$WarningsAtEnd = false;
+$WarningText = ';WAMPMENULEFTEND
+';
+
+// Template file
 require($templateFile);
 
 // ************************
-// on gere le mode online /offline
+// management of online / offline mode
 $c_OnOffLine = 'off';
 if ($wampConf['status'] == 'online')
 {
@@ -213,7 +232,7 @@ if ($wampConf['status'] == 'online')
 }
 
 // ************************
-// chargement du menu des langues disponibles
+// load menu with the available languages
 if ($handle = opendir($langDir))
 {
 	while (false !== ($file = readdir($handle)))
@@ -464,7 +483,7 @@ Action: run; FileName: "net"; Parameters: "start '.$c_apacheService.'"; ShowCmd:
 Action: resetservices
 Action: readconfig;
 ';
-  elseif ($params_for_wampini[$paramname] == 0)  //[modif oto] - It does not act for non-existent settings in php.ini
+  elseif ($params_for_wampini[$paramname] == 0)  //It does not act for non-existent settings in php.ini
   	$phpConfText .= '['.$phpParams[$paramname].']
 Action: service; Service: '.$c_apacheService.'; ServiceAction: stop; Flags: waituntilterminated
 Action: run; FileName: "'.$c_phpCli.'";Parameters: "switchPhpParam.php '.$phpParams[$paramname].' on";WorkingDir: "'.$c_installDir.'/scripts"; Flags: waituntilterminated
@@ -518,7 +537,7 @@ if ($handle = opendir($c_apacheConfFile = $c_apacheVersionDir.'/apache'.$wampCon
   }
   closedir($handle);
 }
-//[modif oto] - On croise les tableaux
+//On croise les tableaux
 //Détection présence du module xxxxxx.so demandé par Loadmodule
 foreach ($mod as $modname=>$value)
 {
@@ -898,7 +917,7 @@ foreach ($mysqlVersionList as $oneMysql)
   //unset($mysqlConf);
   //include $c_mysqlVersionDir.'/mysql'.$oneMysqlVersion.'/'.$wampBinConfFiles;
 
-	//[modif oto] - Check name of the group [wamp...] under '# The MySQL server' in my.ini file
+	//Check name of the group [wamp...] under '# The MySQL server' in my.ini file
 	//    must be the name of the mysql service.
 	$myIniFile = $c_mysqlVersionDir.'/mysql'.$oneMysqlVersion.'/'.$mysqlConf['mysqlConfFile'];
 	$myIniContents = file_get_contents($myIniFile);
@@ -1032,7 +1051,7 @@ Type: item; Caption: "Get more..."; Action: run; FileName: "'.$c_navigator.'"; P
 */
 $tpl = str_replace($myPattern,$myreplace.$myreplacemenu,$tpl);
 
-//[modif oto] - Submenu Projects
+//Submenu Projects
 if(strpos($tpl,";WAMPPROJECTSUBMENU") !== false && isset($wampConf['ProjectSubMenu']) && $wampConf['ProjectSubMenu'] == "on")
 {
 	//Add item for submenu
@@ -1062,7 +1081,7 @@ if(strpos($tpl,";WAMPPROJECTSUBMENU") !== false && isset($wampConf['ProjectSubMe
 ";
 	// Place projects into submenu Hosts
 	// Folder to ignore in projects
-	$projectsListIgnore = array ('.','..','wampthemes');
+	$projectsListIgnore = $projectsListIgnore = array ('.','..','wampthemes','wamplangues');
 	// List projects
 	$myDir = $wwwDir;
 	if(substr($myDir,-1) != "/")
@@ -1080,7 +1099,7 @@ if(strpos($tpl,";WAMPPROJECTSUBMENU") !== false && isset($wampConf['ProjectSubMe
 	if (count($projectContents) > 0)
 	{
 		for($i = 0 ; $i < count($projectContents) ; $i++)
-		{ //[modif oto] Support de suppressLocalhost dans wampmanager.conf
+		{ //Support de suppressLocalhost dans wampmanager.conf
 			$myreplacesubmenuProjects .= 'Type: item; Caption: "'.$projectContents[$i].'"; Action: run; FileName: "'.$c_navigator.'"; Parameters: "';
 			if($c_suppressLocalhost)
 				 $myreplacesubmenuProjects .= $c_edge.'http://'.$projectContents[$i].$UrlPort.'/"';
@@ -1093,7 +1112,7 @@ if(strpos($tpl,";WAMPPROJECTSUBMENU") !== false && isset($wampConf['ProjectSubMe
 	$tpl = str_replace($myPattern,$myreplace.$myreplacesubmenuProjects,$tpl);
 }
 
-//[modif oto] - Submenu Virtual Hosts
+//Submenu Virtual Hosts
 if(strpos($tpl,";WAMPVHOSTSUBMENU") !== false && isset($wampConf['VirtualHostSubMenu']) && $wampConf['VirtualHostSubMenu'] == "on")
 {
 	//Add item for submenu
@@ -1168,6 +1187,7 @@ Action: run; FileName: "'.$c_phpExe.'";Parameters: "msg.php 15 '.base64_encode($
 ';
 				}
 				//Check validity of DocumentRoot
+				$documentPathError = '';
 				if($virtualHost['document'] === false) {
 					foreach($virtualHost['documentPath'] as $value) {
 						if($virtualHost['documentPathValid'][$value] === false) {
@@ -1181,6 +1201,7 @@ Action: run; FileName: "'.$c_phpExe.'";Parameters: "msg.php 15 '.base64_encode($
 ';
 				}
 				//Check validity of Directory Path
+				$directoryPathError = '';
 				if($virtualHost['directory'] === false) {
 					foreach($virtualHost['directoryPath'] as $value) {
 						if($virtualHost['directoryPathValid'][$value] === false) {
@@ -1195,7 +1216,7 @@ Action: run; FileName: "'.$c_phpExe.'";Parameters: "msg.php 15 '.base64_encode($
 				}
 
 				//Check number of <VirtualHost equals or > to number of ServerName
-				if($nb_Server != $nb_Virtual) {
+				if($nb_Server != $nb_Virtual && $wampConf['NotCheckDuplicate'] == 'off') {
 					$value = "ServerName_Virtual";
 					$server_name[$value] = -3;
 					$port_number = false;
@@ -1219,6 +1240,16 @@ Action: run; FileName: "'.$c_phpExe.'";Parameters: "msg.php 15 '.base64_encode($
 					$myreplacesubmenuVhosts .= 'Type: item; Caption: "'.$value.'"; Action: multi; Actions: server_'.$value.'; Glyph: 23
 ';
 				}
+				//Check if duplicate ServerName
+				if($virtualHost['nb_duplicate'] > 0) {
+					$DuplicateNames = '';
+					$value = "Duplicate_ServerName";
+					$server_name[$value] = -10;
+					foreach($virtualHost['duplicate'] as $NameValue)
+						$DuplicateNames .= "\r\n\t".$NameValue;
+					$myreplacesubmenuVhosts .= 'Type: item; Caption: "'.$value.'"; Action: multi; Actions: server_'.$value.'; Glyph: 23
+';
+				}
 
 				foreach($virtualHost['ServerName'] as $key => $value) {
 					if($virtualHost['ServerNameValid'][$value] === false) {
@@ -1227,9 +1258,24 @@ Action: run; FileName: "'.$c_phpExe.'";Parameters: "msg.php 15 '.base64_encode($
 						$server_name[$value] = -1;
 					}
 					elseif($virtualHost['ServerNameValid'][$value] === true) {
-						$myreplacesubmenuVhosts .= 'Type: item; Caption: "'.$value.'"; Action: run; FileName: "'.$c_navigator.'"; Parameters: "http://'.$value.$UrlPort.'/"; Glyph: 5
+						if($virtualHost['ServerNameIp'][$value] !== false) {
+							$vh_ip = $virtualHost['ServerNameIp'][$value];
+							if($virtualHost['ServerNameIpValid'][$value] !== false) {
+								$myreplacesubmenuVhosts .= 'Type: item; Caption: "'.$vh_ip.' ('.$value.')"; Action: run; FileName: "'.$c_navigator.'"; Parameters: "'.$c_edge.'http://'.$vh_ip.$UrlPort.'/"; Glyph: 5
 ';
-						$server_name[$value] = 1;
+								$server_name[$value] = 1;
+							}
+							else {
+								$myreplacesubmenuVhosts .= 'Type: item; Caption: "'.$vh_ip.' ('.$value.')"; Action: multi; Actions: server_'.$value.'; Glyph: 20
+';
+								$server_name[$value] = -11;
+							}
+						}
+						else {
+							$myreplacesubmenuVhosts .= 'Type: item; Caption: "'.$value.'"; Action: run; FileName: "'.$c_navigator.'"; Parameters: "'.$c_edge.'http://'.$value.$UrlPort.'/"; Glyph: 5
+';
+							$server_name[$value] = 1;
+						}
 					}
 					else {
 						$myreplacesubmenuVhosts .= 'Type: item; Caption: "'.$value.'"; Action: multi; Actions: server_'.$value.'; Glyph: 20
@@ -1263,6 +1309,10 @@ Action: run; FileName: "'.$c_phpExe.'";Parameters: "msg.php 9 '.base64_encode($n
 								$message = "In the httpd-vhosts.conf file:\r\n\r\nThe DocumentRoot path\r\n\r\n\t".$documentPathError."\r\n\r\ndoes not exits\r\n";
 							elseif($server_name[$name] == -9)
 								$message = "In the httpd-vhosts.conf file:\r\n\r\nThe Directory path\r\n\r\n\t".$directoryPathError."\r\n\r\ndoes not exits\r\n";
+							elseif($server_name[$name] == -10)
+								$message = "In the httpd-vhosts.conf file:\r\n\r\nThere is duplicate ServerName\r\n".$DuplicateNames."\r\n";
+							elseif($server_name[$name] == -11)
+								$message = "In the httpd-vhosts.conf file:\r\n\r\nThe IP used for the VirtualHost is not valid local IP\r\n";
 
     					$myreplacesubmenuVhosts .= '[server_'.$name.']
 Action: run; FileName: "'.$c_phpExe.'";Parameters: "msg.php 11 '.base64_encode($message).'";WorkingDir: "'.$c_installDir.'/scripts"; Flags: waituntilterminated

@@ -1,4 +1,5 @@
 <?php
+//3.0.6
 $langues = array(
 	'langue' => 'English',
 	'locale' => 'english',
@@ -13,9 +14,12 @@ $langues = array(
 	'NoVirtualHost' => 'There is no VirtualHost defined in <code>%s</code><br>It should at least have the VirtualHost for localhost.',
 	'NoFirst' => 'The first VirtualHost must be <code>localhost</code> in <code>%s</code> file',
 	'ServerNameInvalid' => 'The ServerName <code>%s</code> is invalid.',
-	'VirtualHostName' => 'Name of the <code>Virtual Host</code> No diacritical characters (éçëñ) - No space - No underscore(_)',
-	'VirtualHostFolder' => 'Complete absolute <code>path</code> of the VirtualHost <code>folder</code> <i>Examples: C:/wamp/www/projet/ or E:/www/site1/</i>',
+	'LocalIpInvalid' => 'The local IP <code>%s</code> is invalid.',
+	'VirtualHostName' => 'Name of the <code>Virtual Host</code> No diacritical characters (éçëñ) - No space - No underscore(_) ',
+	'VirtualHostFolder' => 'Complete absolute <code>path</code> of the VirtualHost <code>folder</code> <i>Examples: C:/wamp/www/projet/ or E:/www/site1/</i> ',
+	'VirtualHostIP' => '<code class="option">If</code> you want to use VirtualHost by IP: <code class="option">local IP</code> 127.x.y.z ',
 	'VirtualAlreadyExist' => 'The ServerName <code>%s</code> already exists',
+	'VirtualIpAlreadyUsed' => 'The local IP <code>%s</code> already exists',
 	'VirtualHostExists' => 'VirtualHost already defined:',
 	'Start' => 'Start the creation of the VirtualHost (May take a while...)',
 	'GreenErrors' => 'The green framed errors can be corrected automatically.',
@@ -23,6 +27,10 @@ $langues = array(
 	'NoModify' => 'Impossible to modify <code>httpd-vhosts.conf</code> or <code>hosts</code> files',
 	'VirtualCreated' => 'The files have been modified. Virtual host <code>%s</code> was created',
 	'CommandMessage' => 'Messages from the console to update DNS:',
-	'However' => 'You may add another VirtualHost by validate "Add a VirtualHost".<br>However, for these new VirtualHost are taken into account by Apache, you must run item<br><code>Restart DNS</code><br>from Right-Click Tools menu of Wampmanager icon. <i>(This can unfortunately not be done automatically)</i>'
+	'However' => 'You may add another VirtualHost by validate "Add a VirtualHost".<br>However, for these new VirtualHost are taken into account by Apache, you must run item<br><code>Restart DNS</code><br>from Right-Click Tools menu of Wampmanager icon. <i>(This can unfortunately not be done automatically)</i>',
+	'suppForm' => 'Suppress VirtualHost form',
+	'suppVhost' => 'Suppress VirtualHost',
+	'Required' => 'Required',
+	'Optional' => 'Optional',
 	);
 ?>

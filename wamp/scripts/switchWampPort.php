@@ -1,5 +1,7 @@
 <?php
 // [modif oto] - script pour changer le port d'écoute de Wampserver
+// 3.0.5 Support VirtualHost by IP
+
 require 'config.inc.php';
 require 'wampserver.lib.php';
 
@@ -14,11 +16,11 @@ if($goodPort) {
 	//Change port into httpd.conf
 	$httpdFileContents = @file_get_contents($c_apacheConfFile ) or die ("httpd.conf file not found");
 	$findTxtRegex = array(
-	'/^(Listen 0.0.0.0).*$/m',
-	'/^(Listen \[::0\]).*$/m',
-	'/^(ServerName localhost).*$/m',
+	'/^(Listen 0.0.0.0:).*$/m',
+	'/^(Listen \[::0\]:).*$/m',
+	'/^(ServerName localhost:).*$/m',
 	);
-	$httpdFileContents = preg_replace($findTxtRegex,"$1:".$portToUse, $httpdFileContents);
+	$httpdFileContents = preg_replace($findTxtRegex,"${1}".$portToUse, $httpdFileContents);
 
 	$fphttpd = fopen($c_apacheConfFile ,"w");
 	fwrite($fphttpd,$httpdFileContents);
@@ -31,12 +33,12 @@ if($goodPort) {
 		$c_vhostConfFile = $virtualHost['vhosts_file'];
 		$myVhostsContents = file_get_contents($c_vhostConfFile) or die ("httpd-vhosts.conf file not found");
 		$findTxtRegex = $replaceTxtRegex = array();
-		$findTxtRegex[] = '/^([ \t]*<VirtualHost).*$/m';
-		$replaceTxtRegex[] = '$1 *:'.$portToUse.'>';
+		$findTxtRegex[] = '/^([ \t]*<VirtualHost[ \t]+.+:).*$/m';
+		$replaceTxtRegex[] = '${1}'.$portToUse.'>';
 		if(version_compare($wampConf['apacheVersion'], '2.4.0', '<')) {
 			//Second element only for Apache 2.2
 			$findTxtRegex[] = '/^([ \t]*NameVirtualHost).*$/m';
-			$replaceTxtRegex[] = '$1 *:'.$portToUse;
+			$replaceTxtRegex[] = '${1} *:'.$portToUse;
 		}
 	
 		$myVhostsContents = preg_replace($findTxtRegex,$replaceTxtRegex, $myVhostsContents);

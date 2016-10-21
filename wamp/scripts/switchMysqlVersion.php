@@ -1,9 +1,10 @@
 <?php
 //[modif oto]
 // Mise à jour dynamique ancienne version MySQL utilisée
+//3.0.6
 
-require 'wampserver.lib.php';
 require 'config.inc.php';
+require 'wampserver.lib.php';
 
 $newMysqlVersion = $_SERVER['argv'][1];
 

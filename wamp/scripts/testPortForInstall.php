@@ -1,4 +1,5 @@
 <?php
+
 $fp = @fsockopen("127.0.0.1", 80, $errno, $errstr, 1);
    $out = "GET / HTTP/1.1\r\n";
    $out .= "Host: 127.0.0.1\r\n";
@@ -9,15 +10,15 @@ if ($fp)
 
 ';
    fwrite($fp, $out);
-   while (!feof($fp)) 
+   while (!feof($fp))
    {
         $line = fgets($fp, 128);
-        if (ereg('Server: ',$line))
+        if (preg_match('/Server: /',$line))
         {
             echo $line;
             $gotInfo = 1;
         }
-    
+
     }
     fclose($fp);
     if ($gotInfo != 1)
@@ -38,4 +39,4 @@ Press Enter to continue...';
 }
 
 
-?> 
+?>

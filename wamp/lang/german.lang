@@ -1,0 +1,61 @@
+<?php
+//
+// Translation by FakE  (2016-07-24)
+
+$w_allServicesRunning = 'Alle Dienste laufen';
+$w_oneServiceRunning = '%n von %t Diensten laufen';
+$w_allServicesStopped = 'Aktuell läuft kein Dienst';
+
+$w_serverOffline = 'lokaler Server';
+$w_serverOnline = 'öffentlicher Server';
+
+$w_about = 'Über...';
+$w_helpFile = 'Hilfe';
+$w_help = 'Hilfe';
+$w_forum = 'Forum';
+$w_exit = 'Beenden';
+$w_version = 'Version';
+$w_service = 'Dienst Administration';
+
+$w_localhost = 'localhost';
+$w_phpmyadmin = 'phpMyAdmin';
+$w_sqlitemanager = 'SQLiteManager';
+$w_wwwDirectory = 'www';
+$w_logFiles = 'LOG Dateien';
+$w_configFiles = 'Einstellungsdateien';
+$w_apacheModules = 'Apache Module';
+$w_phpSettings = 'PHP Einstellungen';
+$w_aliasDirectories = 'Alias Ordner';
+$w_services = 'Dienste';
+$w_apache = 'Apache';
+$w_mysql = 'MySQL';
+$w_startServices = 'Alle Dienste starten';
+$w_stopServices = 'Alle Dienste beenden';
+$w_restartServices = 'Alle Dienste neustarten';
+$w_putOnline = 'Webserver >> öffentlich';
+$w_putOffline = 'Webserver >> lokal';
+
+$w_apacheErrorLog = 'Apache Fehler LOG';
+$w_apacheAccessLog = 'Apache Zugriffe LOG';
+$w_phpLog = 'PHP Fehler LOG';
+$w_mysqlLog = 'MySQL LOG';
+$w_addAlias = 'Alias hinzufügen';
+$w_editAlias = 'Alias bearbeiten';
+$w_editHtaccess = '.htaccess bearbeiten';
+$w_deleteAlias = 'Alias löschen';
+$w_refresh = 'Aktualisieren';
+$w_phpExtensions = 'PHP Erweiterungen';
+$w_addExtension = 'Erweiterung hinzufügen';
+
+$w_startResume = 'Dienst starten';
+$w_pauseService = 'Dienst pausieren';
+$w_stopService = 'Dienst beenden';
+$w_restartService = 'Dienst neustarten';
+$w_testPort80 = 'Port 80 testen';
+$w_installService = 'Dienst installieren';
+$w_removeService = 'Dienst deinstallieren';
+$w_mysqlConsole = 'MySQL Konsole';
+
+$w_language = 'Sprache';
+
+?>
