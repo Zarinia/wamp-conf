@@ -5,7 +5,7 @@ wamp signature
 
 ## 10/11/2016
 
-Wampserver 2.5.18 upgraded to `3.0.6` 32bits - Apache `2.4.23`/2.2.31 - Nginx 1.11.5 - OpenSSL 1.0.2h - PHP `7.0.13`/5.6.28/5.5.38/5.4.45/5.3.29/5.2.17 - MySQL 5.7.16/`5.6.34`/5.5.53 - MariaDB 10.1.18/`10.0.27`/5.5.52 - PhpMyAdmin 4.6.4 - Xdebug `2.4.1` - MysqlDumper 1.24.4 - Adminer 4.2.5 - PhpSysInfo 3.2.6 - PhpServerMonitor 3.1.1 - (Windows 8.1 Professional 64bits) --- _Si debugger, c'est supprimer des bugs, alors programmer ne peut être que les ajouter._
+Wampserver 2.5.18 upgraded to `3.0.6` 32bits - Apache `2.4.23`/2.2.31 - Nginx 1.11.5 - OpenSSL 1.0.2h - PHP `7.0.13`/5.6.28/5.5.38/5.4.45/5.3.29/5.2.17 - MySQL 5.7.16/`5.6.34`/5.5.53 - MariaDB 10.1.19/`10.0.28`/5.5.53 - PhpMyAdmin 4.6.4 - Xdebug `2.4.1` - MysqlDumper 1.24.4 - Adminer 4.2.5 - PhpSysInfo 3.2.6 - PhpServerMonitor 3.1.1 - (Windows 8.1 Professional 64bits) --- _Si debugger, c'est supprimer des bugs, alors programmer ne peut être que les ajouter._
 
 - - -
 
