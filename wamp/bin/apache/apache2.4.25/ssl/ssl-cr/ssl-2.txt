@@ -1,0 +1,62 @@
+# -------------------------- #
+#     Localhost avec SSL     #
+# -------------------------- #
+
+<VirtualHost 127.0.0.51:443>
+	ServerName localhost
+	ServerAdmin artemus@jcz.fr
+	DocumentRoot "${Repertoire}/www/"
+#
+	ErrorLog  "${Repertoire}/www/Logs/error.log"
+	CustomLog "${Repertoire}/www/Logs/custom.log" common
+#
+	SSLEngine on
+	SSLCertificateFile      "${Version_Apache}/conf/Certificat/Site/localhost.crt"
+	SSLCertificateKeyFile   "${Version_Apache}/conf/Certificat/Site/localhost.key"
+#
+	SSLCACertificatePath    "${Version_Apache}/conf/Certificat/Ca"
+	SSLCACertificateFile    "${Version_Apache}/conf/Certificat/Ca/Ca.crt"
+#
+	SSLVerifyClient require
+	SSLVerifyDepth  10
+#
+	<Directory />
+		SSLOptions +StdEnvVars
+		Options    -Indexes +FollowSymLinks +MultiViews
+		AllowOverride none
+#
+		<RequireAny>
+			Require local
+		</RequireAny>
+	</Directory>
+#
+	<FilesMatch "\.(cgi|shtml|phtml|php)$">
+#		SSLOptions +StdEnvVars
+	</FilesMatch>
+#
+	BrowserMatch "MSIE [2-5]" nokeepalive ssl-unclean-shutdown downgrade-1.0 force-response-1.0
+	CustomLog "f:/wamp/www/Logs/custom.log" "%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b"
+</VirtualHost>
+
+# -------------------------- #
+#     Localhost sans SSL     #
+# -------------------------- #
+
+<VirtualHost 127.0.0.51:80>
+	ServerName localhost
+	ServerAdmin artemus@jcz.fr
+	DocumentRoot "${Repertoire}/www/"
+#
+#	Redirect / https://localhost/
+#
+	ErrorLog  "${Repertoire}/www/Logs/error.log"
+	CustomLog "${Repertoire}/www/Logs/custom.log" common
+#
+	<Directory />
+		Options -Indexes +FollowSymLinks +MultiViews
+		AllowOverride none
+		<RequireAny>
+			Require local
+		</RequireAny>
+	</Directory>
+</VirtualHost>

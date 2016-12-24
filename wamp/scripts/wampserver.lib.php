@@ -382,7 +382,7 @@ function check_virtualhost($check_files_only = false) {
 		'nb_duplicateIp' => 0,
 		'duplicateIp' => array(),
 	);
-	$httpConfFileContents = file_get_contents($c_apacheConfFile);
+	$httpConfFileContents = @file_get_contents($c_apacheConfFile);
 	//is Include conf/extra/httpd-vhosts.conf uncommented?
 	if(preg_match("~^[ \t]*#[ \t]*Include[ \t]*conf/extra/httpd-vhosts.conf.*$~m",$httpConfFileContents) > 0) {
 		$virtualHost['include_vhosts'] = false;
