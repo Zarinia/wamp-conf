@@ -7,7 +7,7 @@ Both CakePHP and WordPress were designed to work with Apache, because they come 
 
 Opening the .htaccess from CakePHP’s root dir, we have:
 
-```
+``` Apache
 RewriteEngine on
 RewriteRule    ^$   app/webroot/    [L]
 RewriteRule    (.*) app/webroot/$1  [L]
@@ -15,7 +15,7 @@ RewriteRule    (.*) app/webroot/$1  [L]
 
 Opening the .htaccess at /app:
 
-```
+``` Apache
 RewriteEngine on
 RewriteRule    ^$    webroot/    [L]
 RewriteRule    (.*)  webroot/$1  [L]
@@ -23,7 +23,7 @@ RewriteRule    (.*)  webroot/$1  [L]
 
 And finally, the .htaccess from /app/webroot:
 
-```
+``` Apache
 RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
@@ -32,7 +32,7 @@ RewriteRule ^(.*)$ index.php?/$1 [QSA,L]
 
 Observing these rules, the logic that I understood was: ROOT DIRECTS TO APP, THAT DIRECTS TO WEBROOT, THAT TREATS THE URL. Then I wrote a rule so that NGINX could do the same thing. Remembering that my CakePHP project was inside a subdir at the root of my web server, so if the root was public_html, my project was a subdir inside public_html. Suppose it’s name is foobar, the rule stayed like this:
 
-```
+``` Nginx
 location /foobar {
     rewrite ^/foobar/(.*)$ /foobar/app/webroot/$1 break;
     try_files $uri $uri/ /foobar/app/webroot/index.php?q=$uri&amp;$args;
