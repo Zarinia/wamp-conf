@@ -583,6 +583,9 @@ $pageContents .= <<<EOPAGE
 	            <ul class="tools">
 		            <li><a href="?phpinfo=1">phpinfo()</a></li>
 		            <li><a href="phpmyadmin/">phpmyadmin</a></li>
+		            <li><a href="adminer/">adminer</a></li>
+		            <li><a href="mywebsql/">mywebsql</a></li>
+		            <li><a href="phpsysinfo/">phpsysinfo</a></li>
 		            {$addVhost}
 	            </ul>
 	        </div>
