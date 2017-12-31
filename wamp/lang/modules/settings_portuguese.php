@@ -1,0 +1,53 @@
+<?php
+// Default English language file for
+// Projects and VirtualHosts sub-menus
+// Settings and Tools right-click sub-menus
+
+// Projects sub-menu
+$w_projectsSubMenu = 'Seus Projetos';
+// VirtualHosts sub-menu
+$w_virtualHostsSubMenu = 'Seus VirtualHosts';
+$w_portUsed = 'Porta usada pelo Apache: ';
+$w_portUsedMysql = 'Porta usada pelo MySQL: ';
+$w_testPortUsed = 'Testar porta usada: ';
+$w_portForApache = 'Porta para o Apache';
+$w_portForMysql = 'Porta para o MySQL';
+$w_testPortMysql = 'Testar porta 3306';
+$w_testPortMysqlUsed = 'Testar porta usada pelo MySQL: ';
+$w_enterPort = 'Digite o número da porta desejada';
+
+// Right-click Settings
+$w_wampSettings = 'Opções do Wamp';
+$w_settings['urlAddLocalhost'] = 'Mostrar localhost nas url';
+$w_settings['VirtualHostSubMenu'] = 'Mostar sub-menu VirtualHosts';
+$w_settings['ProjectSubMenu'] = 'Mostar sub-menu Projetos ';
+$w_settings['HomepageAtStartup'] = 'Abrir Home do Wamp ao iniciar';
+$w_settings['MenuItemOnline'] = 'Mostar: Online / Offline';
+$w_settings['ItemServicesNames'] = 'Mostrar em Ferramentas: alterar nomes dos serviços';
+
+// Right-click Tools
+$w_wampTools = 'Ferramentas';
+$w_restartDNS = 'Reiniciar DNS';
+$w_testConf = 'Verificar sintaxe em httpd.conf';
+$w_testServices = 'Verificar estado dos serviços';
+$w_changeServices = 'Mude os nomes de serviços';
+$w_enterServiceNameApache = "Insira um número de índice para o serviço Apache. Ele será adicionado a 'wampapache'";
+$w_enterServiceNameMysql = "Insira um número de índice para o serviço de Mysql. Ele será adicionado a 'wampmysqld'";
+$w_compilerVersions = 'Verificar Compatibilidade do Compiler VC e Arquivos .ini';
+$w_UseAlternatePort = 'Use uma porta diferente de %s';
+$w_vhostConfig = 'Mostrar VirtualHost Checados pelo Apache';
+$w_apacheLoadedModules = 'Mostrar Extensões Carregadas do Apache';
+$w_empty = 'Limpar';
+$w_emptyAll = 'Limpar Todos os';
+$w_dnsorder = 'Verifique ordem de pesquisa DNS';
+
+//miscellaneous
+$w_ext_spec = 'Extensões Especiais';
+$w_phpparam_info = 'Apenas para informação';
+$w_ext_nodll = 'Sem arquivo dll';
+$w_ext_noline = "Sem 'extension='";
+$w_mod_fixed = "Módulo Irreversível";
+$w_no_module = 'Sem arquivo de modulo';
+$w_no_moduleload = "Sem 'LoadModule'";
+
+?>

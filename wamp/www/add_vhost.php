@@ -8,11 +8,15 @@
 // Check / at first position of $vh_folder
 // Possibility to suppress VirtualHost
 // Possibility for VirtualHost by IP
+// Update 3.0.7
+// Support Apache listen ports
 
 $server_dir = "../";
 
 require $server_dir.'scripts/config.inc.php';
 require $server_dir.'scripts/wampserver.lib.php';
+
+$c_PortToUse = $c_UsedPort;
 
 // Language
 $langue = isset($wampConf['language']) ? $wampConf['language'] : $wampConf['defaultLanguage'];
@@ -67,6 +71,23 @@ if(isset($_POST['seedelete']) && $_POST['seedelete'] == 'afficher')
 
 /* Some tests about httpd-vhosts.conf file */
 $virtualHost = check_virtualhost();
+$listenPort = listen_ports();
+$w_VirtualPortForm = '';
+$authorizedPorts = array();
+if(count($listenPort) > 1) {
+	$c_listenPort = '';
+	foreach($listenPort as $value) {
+		if($value != '80' && $value != $c_UsedPort) {
+			$c_listenPort .= $value." ";
+			$authorizedPorts[] = $value;
+		}
+	}
+	$portsAccepted = sprintf($langues['VirtualHostPort'],$c_listenPort);
+	$w_VirtualPortForm = <<< EOF
+		<label>{$portsAccepted}<code class="option"><i>{$langues['Optional']}</i></code></label><br>
+			<input class="optional" type="text" name="vh_port"/><br>
+EOF;
+}
 
 /* If form suppress VirtualHost submitted */
 if(isset($_POST['vhostdelete'])) {
@@ -139,7 +160,8 @@ if($virtualHost['nb_Server'] > 0) {
 		$ip ='';
 		if(!empty($virtualHost['virtual_ip'][$i]))
 			$ip = " - VirtualHost ip = <span style='color:blue;'>".$virtualHost['virtual_ip'][$i].'</span>';
-		$VhostDefine .= "<li><i>ServerName : </i><span style='color:blue;'>".$value."</span> - <i>Directory : </i>".$virtualHost['documentPath'][$i].$ip."</li>\n";
+		$UrlPortVH = ($virtualHost['ServerNamePort'][$value] != '80') ? "<span style='color:red;'>:".$virtualHost['ServerNamePort'][$value]."</span>" : "";
+		$VhostDefine .= "<li><i>ServerName : </i><span style='color:blue;'>".$value."</span>".$UrlPortVH." - <i>Directory : </i>".$virtualHost['documentPath'][$i].$ip."</li>\n";
 		if($value != 'localhost')
 			$VhostDelete .= "<li><i>ServerName : </i><input type='checkbox' name='virtual_del[]' value='".$value."'/> <span style='color:blue;'>".$value."</span></li>";
 		$i++;
@@ -189,9 +211,9 @@ if(empty($virtualHost['FirstServerName']) && !$errors) {
 		if(substr($wampConf['apacheVersion'],0,3) == '2.2') {
 		$virtual_localhost = <<<EOFLOCAL
 
-NameVirtualHost *:{$c_UsedPort}
+NameVirtualHost *:{$c_PortToUse}
 
-<VirtualHost *:{$c_UsedPort}>
+<VirtualHost *:{$c_PortToUse}>
 	ServerName localhost
 	DocumentRoot "{$wwwDir}"
 	<Directory  "{$wwwDir}/">
@@ -209,7 +231,7 @@ EOFLOCAL;
 		$virtual_localhost = <<<EOFLOCAL
 
 #
-<VirtualHost *:{$c_UsedPort}>
+<VirtualHost *:{$c_PortToUse}>
 	ServerName localhost
 	DocumentRoot "{$wwwDir}"
 	<Directory  "{$wwwDir}/">
@@ -242,6 +264,10 @@ if (isset($_POST['submit']) && !$errors) {
 	$c_hostsFile_escape = str_replace('\\', '\\\\', $c_hostsFile);
 	$vh_name = trim(strip_tags($_POST['vh_name']));
 	$vh_ip = trim(strip_tags($_POST['vh_ip']));
+	$vh_port = '';
+	if(isset($_POST['vh_port'])) {
+		$vh_port = trim(strip_tags($_POST['vh_port']));
+	}
 	$vh_folder = str_replace(array('\\','//'), '/',trim(strip_tags($_POST['vh_folder'])));
 	if(substr($vh_folder,-1) == "/")
 		$vh_folder = substr($vh_folder,0,-1);
@@ -298,12 +324,26 @@ if (isset($_POST['submit']) && !$errors) {
 		else
 			$c_UsedIp = $c_HostIp = $vh_ip;
 	}
+	if(!$errors && !empty($vh_port)) {
+		if($vh_port == '80' || $vh_port == $c_UsedPort) {
+			$message[] = '<p class="warning">'.sprintf($langues['VirtualPortExist'],$vh_port).'</p>';
+			$errors = true;
+		}
+		elseif(!in_array($vh_port, $authorizedPorts)) {
+			$message[] = '<p class="warning">'.sprintf($langues['VirtualPortNotExist'],$vh_port).'</p>';
+			$errors = true;
+		}
+		else {
+			$key = array_search($vh_port, $c_ApacheDefine);
+			$c_PortToUse = '${'.$key.'}';
+		}
+	}
 	if($errors === false) {
 		/* Préparation du contenu des fichiers */
 		if(substr($wampConf['apacheVersion'],0,3) == '2.2') {
 		$httpd_vhosts_add = <<<EOFNEWVHOST
 
-<VirtualHost {$c_UsedIp}:{$c_UsedPort}>
+<VirtualHost {$c_UsedIp}:{$c_PortToUse}>
 	ServerName {$vh_name}
 	DocumentRoot "{$vh_folder}"
 	<Directory  "{$vh_folder}/">
@@ -321,7 +361,7 @@ EOFNEWVHOST;
 		$httpd_vhosts_add = <<<EOFNEWVHOST
 
 
-<VirtualHost {$c_UsedIp}:{$c_UsedPort}>
+<VirtualHost {$c_UsedIp}:{$c_PortToUse}>
 	ServerName {$vh_name}
 	DocumentRoot "{$vh_folder}"
 	<Directory  "{$vh_folder}/">
@@ -352,7 +392,8 @@ EOFHOSTS;
 			   mais pas si elle est lancée via http
 			   et il n'existe pas de "graceful restart" Apache sous Windows*/
 
-			$command = array(
+			/*$command = array(
+				'net stop wampapache',
 				'ipconfig /flushdns',
 				'net stop Dnscache',
 				'net start Dnscache',
@@ -364,7 +405,7 @@ EOFHOSTS;
 				passthru($value);
 			}
 			$output = iconv("CP850","UTF-8//TRANSLIT", ob_get_contents());
-			ob_end_clean();
+			ob_end_clean();*/
 			//$dns_refresh_message = '<pre><code>'.$output.'</code></pre>';
 			$dns_refresh_message = "";
 
@@ -457,19 +498,23 @@ $pageContents = <<<EOPAGE
 			}
 
 			input[type="text"] {
-				width: 96%;
+				width: 80%;
 				margin: 0.2% 1% 1% 1%;
-				padding: 1%;
+				padding: 0.3% 1%;
 				border: 1px solid #999;
 			}
-
+			input.required {
+				border:1px solid red;
+			}
+			input.optional {
+				border:1px solid green;
+			}
 			input[type="submit"] {
 				min-width: 50%;
-                width: 50%;
 				background: #DDD;
 				border: 1px solid #999;
 				margin: 1%;
-				padding: 1%;
+				padding: 0.3% 1%;
 			}
 
 			input[type="checkbox"] {
@@ -579,11 +624,14 @@ EOPAGEB;
 	else {
 	$pageContents .= <<<EOPAGEB
 		<p><label>{$langues['VirtualHostName']}<code class="requis"><i>{$langues['Required']}</i></code></label><br>
-			<input type="text" name="vh_name" required="required" /><br>
+			<input class='required' type="text" name="vh_name" required="required" /><br>
 		<label>{$langues['VirtualHostIP']}<code class="option"><i>{$langues['Optional']}</i></code></label><br>
 			<input type="text" name="vh_ip"/><br>
 		<label>{$langues['VirtualHostFolder']}<code class="requis"><i>{$langues['Required']}</i></code></label><br>
-			<input type="text" name="vh_folder" required="required"/></p>
+			<input class='required' type="text" name="vh_folder" required="required"/></p>
+		{$w_VirtualPortForm}
+		<label>{$langues['VirtualHostIP']}<code class="option"><i>{$langues['Optional']}</i></code></label><br>
+			<input class='optional' type="text" name="vh_ip"/><br>
 		<p style="text-align: right;"><input type="submit" name="submit" value="{$langues['Start']}" /></p>
 
 EOPAGEB;

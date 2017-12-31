@@ -1,4 +1,6 @@
 <?php
+// 3.0.7 - MariaDB
+// 3.1.1 - txtDocRoot
 $langues = array(
 	'langue' => 'Français',
 	'locale' => 'french',
@@ -9,6 +11,7 @@ $langues = array(
 	'doca2.4' => 'httpd.apache.org/docs/2.4/fr/',
 	'versp' => 'Version de PHP :',
 	'server' => 'Server Software :',
+	'documentation' => 'Documentation',
 	'docp' => 'www.php.net/manual/fr/',
 	'versm' => 'Version de MySQL :',
 	'docm' => 'dev.mysql.com/doc/index.html',
@@ -18,6 +21,7 @@ $langues = array(
 	'titrePage' => 'Outils',
 	'txtProjet' => 'Vos Projets',
 	'txtServerName' => 'Le ServerName %s comporte des erreurs de syntaxe dans le fichier %s',
+	'txtDocRoot' => 'Le ServerName %s utilise le DocumentRoot %s réservé à localhost',
 	'txtServerNameIp' => 'L\'IP %s du Servername %s n\'est pas valide dans le fichier %s',
 	'txtVhostNotClean' => 'Le fichier %s n\'a pas été nettoyé. Il reste des exemples de VirtualHost comme : dummy-host.example.com',
 	'txtNoProjet' => 'Aucun projet.<br /> Pour en ajouter un nouveau, créez simplement un répertoire dans \'www\'.',

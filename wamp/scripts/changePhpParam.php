@@ -36,6 +36,19 @@ EOF1ERROR;
 		$newvalue = '128M';
 		}
 	}
+	elseif($choose == 'Integer') {
+		$newvalue = intval($newvalue);
+		list($min, $max, $default) = explode("^",$_SERVER['argv'][5]);
+		if($newvalue < $min || $newvalue > $max) {
+		$changeError = <<< EOF2ERROR
+The value you entered ({$newvalue}) is out of range.
+The number must be between {$min} and {$max}.
+And must be an integer value.
+The value is set to {$default} by default.
+EOF2ERROR;
+		$newvalue = $default;
+		}
+	}
 }
 if($quoted)
 	$newvalue = '"'.$newvalue.'"';

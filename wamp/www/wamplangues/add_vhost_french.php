@@ -1,5 +1,8 @@
 <?php
 //3.0.6
+//3.0.7 - VirtualHostPort - VirtualPortNotExist - VirtualPortExist
+//3.1.1 - NotwwwDir
+
 $langues = array(
 	'langue' => 'Français',
 	'locale' => 'french',
@@ -10,6 +13,7 @@ $langues = array(
 	'FileNotExists' => 'Le fichier <code>%s</code> n\'existe pas',
 	'FileNotWritable' => 'Le fichier <code>%s</code> est protégé en écriture.',
 	'DirNotExists' => '<code>%s</code> n\'existe pas ou n\'est pas un dossier',
+	'NotwwwDir' => 'Le dossier <code>%s</code> est réservé à "localhost". Veuillez utiliser un autre dossier',
 	'NotCleaned' => 'Le fichier <code>%s</code> n\'a pas été nettoyé.<br>Il reste des exemples de VirtualHost comme : dummy-host.example.com',
 	'NoVirtualHost' => 'Aucun VirtualHost n\'est défini dans <code>%s</code><br>Il doit y avoir au moins un VirtualHost pour localhost.',
 	'NoFirst' => 'Le premier VirtualHost doit être <code>localhost</code> dans le fichier <code>%s</code>',
@@ -18,8 +22,11 @@ $langues = array(
 	'VirtualHostName' => 'Nom du <code>Virtual Host</code> Pas de caractères diacritiques (éçëñ) - Pas d\'espace - Pas de tiret bas (_) ',
 	'VirtualHostFolder' => '<code>Chemin</code> complet absolu du <code>dossier</code> VirtualHost - <i>Exemples : C:/wamp/www/projet/ ou E:/www/site1/</i> ',
 	'VirtualHostIP' => '<code class="option">Si</code> vous voulez utiliser les VirtualHost par IP : <code class="option">IP locale</code> 127.x.y.z ',
+	'VirtualHostPort' => '<code class="option">Si</code> vous voulez utiliser un "Listen port" autre que celui par défaut <code class="option">Ports acceptés</code> %s',
 	'VirtualAlreadyExist' => 'Le ServerName <code>%s</code> existe déjà',
 	'VirtualIpAlreadyUsed' => 'L\'IP locale <code>%s</code> existe déjà',
+	'VirtualPortNotExist' => 'Le port <code>%s</code> ne fait pas partie des "Listen port" Apache',
+	'VirtualPortExist' => 'Le port <code>%s</code> fait partie des "Listen port" Apache par défaut et ne doit pas être mentionné',
 	'VirtualHostExists' => 'VirtualHost déjà définis :',
 	'Start' => 'Démarrer la création du VirtualHost (Peut prendre un certain temps)',
 	'GreenErrors' => 'Les erreurs encadrées en vert peuvent être corrigées automatiquement"',

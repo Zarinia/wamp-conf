@@ -15,6 +15,10 @@
 // Update 3.0.6
 // Check duplicate ServerName
 // Support of VitualHost by IP
+// Update 3.0.8
+// Accept different port number
+// Check if port used is a Listen port
+// MariaDB support
 
 //Par défaut la valeur est "../"
 //$server_dir = "WAMPROOT/";

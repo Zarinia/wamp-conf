@@ -130,9 +130,9 @@ $helpFile = $c_installDir.'/help/wamp5.chm';
 $wwwDir = $c_installDir.'/www';
 
 //dll to create symbolic links from php to apache/bin
-// // Versions of ICU are 38, 40, 42, 44, 46, 48 to 57
+// // Versions of ICU are 38, 40, 42, 44, 46, 48 to 57, 60 (PHP 7.2)
 $icu = array(
-	'number' => array('57', '56', '55', '54', '53', '52', '51', '50', '49', '48', '46', '44', '42', '40', '38'),
+	'number' => array('60', '57', '56', '55', '54', '53', '52', '51', '50', '49', '48', '46', '44', '42', '40', '38'),
 	'name' => array('icudt', 'icuin', 'icuio', 'icule', 'iculx', 'icutest', 'icutu', 'icuuc'),
 	);
 $php_icu_dll = array();
@@ -150,6 +150,7 @@ $phpDllToCopy = array_merge(
 	'libsasl.dll',
 	'libpq.dll',
 	'libssh2.dll', //For php 5.5.17
+	'libsodium.dll', //For php 7.2.0
 	'php5isapi.dll',
 	'php5nsapi.dll',
 	'ssleay32.dll',
@@ -209,7 +210,7 @@ $phpParams = array (
 //PHP parameters with values not On or Off cannot be switched on or off
 //Can be changed if 'change' = true && 'title' && 'values'
 //Parameter name must be also into $phpParams array
-//To manualy enter value, 'Choose' must be the last 'values' and 'title' must be 'Size' or 'Seconds'
+//To manualy enter value, 'Choose' must be the last 'values' and 'title' must be 'Size' or 'Seconds' or 'Integer'
 //Warning : specific treatment for date.timezone - Don't modify.
 $phpParamsNotOnOff = array(
 	'date.timezone' => array(
@@ -226,6 +227,7 @@ $phpParamsNotOnOff = array(
 		'values' => array('16M', '32M', '64M', '128M', '256M', '512M', '1G', 'Choose'),
 		),
 	'output_buffering' => array('change' => false),
+	'error_reporting' => array('change' => false),
 	'max_execution_time' => array(
 		'change' => true,
 		'title' => 'Seconds',
@@ -237,6 +239,15 @@ $phpParamsNotOnOff = array(
 		'title' => 'Seconds',
 		'quoted' => false,
 		'values' => array('20', '30', '60', '120', '180', '240', '300', 'Choose'),
+		),
+	'max_input_vars' => array(
+		'change' => true,
+		'title' => 'Integer',
+		'quoted' => false,
+		'values' => array('1000', '2000', '2500', '5000', '10000', 'Choose'),
+		'min' => '1000',
+		'max' => '20000',
+		'default' => '2500',
 		),
 	'post_max_size' => array(
 		'change' => true,
@@ -312,6 +323,134 @@ $mysqlParamsNotOnOff = array(
 		'quoted' => false,
 		'values' => array('20', '30', '50', '120', 'Choose'),
 		),
+	'innodb_buffer_pool_size' => array(
+		'change' => true,
+		'title' => 'Size',
+		'quoted' => false,
+		'values' => array('16M', '32M', '64M', '128M', '256M', 'Choose'),
+		),
+	'innodb_log_file_size' => array(
+		'change' => true,
+		'title' => 'Size',
+		'quoted' => false,
+		'values' => array('4M', '8M', '16M', '32M', '64M', 'Choose'),
+		),
+	'myisam_sort_buffer_size' => array(
+		'change' => true,
+		'title' => 'Size',
+		'quoted' => false,
+		'values' => array('16M', '32M', '64M', 'Choose'),
+		),
+	'innodb_log_file_size' => array(
+		'change' => true,
+		'title' => 'Size',
+		'quoted' => false,
+		'values' => array('4M', '8M', '16M', '32M', '64M', 'Choose'),
+		),
+	'query_cache_size' => array(
+		'change' => true,
+		'title' => 'Size',
+		'quoted' => false,
+		'values' => array('4M', '8M', '16M', 'Choose'),
+		),
+	'sql-mode' => array(
+		'change' => true,
+		'title' => 'Special',
+		'quoted' => 'true',
+		),
+	'sort_buffer_size' => array(
+		'change' => true,
+		'title' => 'Size',
+		'quoted' => false,
+		'values' => array('2M', '4M', '16M', 'Choose'),
+		),
+	'skip-grant-tables' => array(
+		'change' => false,
+		'msg' => "\n\nWARNING!! WARNING!!\nThis option causes the server to start without using the privilege system at all, WHICH GIVES ANYONE WITH ACCESS TO THE SERVER UNRESTRICTED ACCESS TO ALL DATABASES.\nThis option also causes the server to suppress during its startup sequence the loading of user-defined functions (UDFs), scheduled events, and plugins that were installed.\n\nYou should leave this option 'uncommented' ONLY for the time required to perform certain operations such as the replacement of a lost password for 'root'.\n",
+		),
+);
+
+//MariaDB parameters
+$mariadbParams = array (
+	'basedir',
+	'datadir',
+	'key_buffer_size',
+	'lc-messages',
+	'max_allowed_packet',
+	'innodb_lock_wait_timeout',
+	'innodb_buffer_pool_size',
+	'myisam_sort_buffer_size',
+	'innodb_log_file_size',
+	'query_cache_size',
+	'sql-mode',
+	'sort_buffer_size',
+	'skip-grant-tables',
+);
+//MariaDB parameters with values not On or Off cannot be switched on or off
+//Can be changed if 'change' = true && 'title' && 'values'
+//Parameter name must be also into $mariadbParams array
+//To manualy enter value, 'Choose' must be the last 'values' and 'title' must be 'Size' or 'Seconds' or 'Number'
+$mariadbParamsNotOnOff = array(
+	'basedir' => array(
+		'change' => false,
+		'msg' => "\nThis setting should not be changed, otherwise you risk losing your existing databases.\n",
+		),
+	'datadir' => array(
+		'change' => false,
+		'msg' => "\nThis setting should not be changed, otherwise you risk losing your existing databases.\n",
+		),
+	'key_buffer_size' => array(
+		'change' => true,
+		'title' => 'Size',
+		'quoted' => false,
+		'values' => array('16M', '32M', '64M', '128M', '256M', 'Choose'),
+		),
+	'lc-messages' => array(
+		'change' => false,
+		'msg' => "\nTo set the Error Message Language see:\n\nhttps://mariadb.com/kb/en/mariadb/server-system-variables/#lc_messages\n",
+		),
+	'max_allowed_packet' => array(
+		'change' => true,
+		'title' => 'Size',
+		'quoted' => false,
+		'values' => array('16M', '32M', '64M', 'Choose'),
+		),
+	'innodb_lock_wait_timeout' => array(
+		'change' => true,
+		'title' => 'Seconds',
+		'quoted' => false,
+		'values' => array('20', '30', '50', '120', 'Choose'),
+		),
+	'innodb_buffer_pool_size' => array(
+		'change' => true,
+		'title' => 'Size',
+		'quoted' => false,
+		'values' => array('16M', '32M', '64M', '128M', '256M', 'Choose'),
+		),
+	'innodb_log_file_size' => array(
+		'change' => true,
+		'title' => 'Size',
+		'quoted' => false,
+		'values' => array('4M', '8M', '16M', '32M', '64M', 'Choose'),
+		),
+	'key_buffer_size' => array(
+		'change' => true,
+		'title' => 'Size',
+		'quoted' => false,
+		'values' => array('16M', '32M', '64M', '128M', '256M', 'Choose'),
+		),
+	'myisam_sort_buffer_size' => array(
+		'change' => true,
+		'title' => 'Size',
+		'quoted' => false,
+		'values' => array('16M', '32M', '64M', 'Choose'),
+		),
+	'query_cache_size' => array(
+		'change' => true,
+		'title' => 'Size',
+		'quoted' => false,
+		'values' => array('4M', '8M', '16M', 'Choose'),
+		),
 	'sql-mode' => array(
 		'change' => true,
 		'title' => 'Special',
@@ -339,7 +478,12 @@ $wamp_Param = array(
 	'NotCheckVirtualHost',
 	'NotCheckDuplicate',
 	'VhostAllLocalIp',
+	'SupportMySQL',
+	'SupportMariaDB',
 	'HomepageAtStartup',
+	'ShowphmyadMenu',
+	'ShowadminerMenu',
+	'##DaredevilOptions',
 	'MenuItemOnline',
 	'ItemServicesNames',
 	'urlAddLocalhost',
@@ -376,6 +520,7 @@ $phpNotLoadExt = array(
 // Apache modules which should not be disabled
 $apacheModNotDisable = array(
 	'authz_core_module',
+	'authz_host_module',
 	'php5_module',
 	'php7_module',
 	);

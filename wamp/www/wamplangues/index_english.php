@@ -1,4 +1,6 @@
 <?php
+// 3.0.7 MariaDB
+// 3.1.1 - txtDocRoot
 $langues = array(
 	'langue' => 'English',
 	'locale' => 'english',
@@ -9,11 +11,12 @@ $langues = array(
 	'doca2.4' => 'httpd.apache.org/docs/2.4/en/',
 	'versp' => 'PHP Version:',
 	'server' => 'Server Software:',
+	'documentation' => 'Documentation',
 	'docp' => 'www.php.net/manual/en/',
 	'versm' => 'MySQL Version:',
 	'docm' => 'dev.mysql.com/doc/index.html',
 	'versmariadb' => 'MariaDB Version:',
-	'docmariadb' => 'mariadb.com/kb/en/mariadb/',
+	'docmariadb' => 'mariadb.com/kb/en/mariadb/documentation',
 	'phpExt' => 'Loaded Extensions : ',
 	'titrePage' => 'Tools',
 	'txtProjet' => 'Your Projects',
@@ -22,6 +25,7 @@ $langues = array(
 	'txtNoAlias' => 'No Alias yet.<br />To create a new one, use the WAMPSERVER menu.',
 	'txtVhost' => 'Your VirtualHost',
 	'txtServerName' => 'The ServerName %s has syntax error in file %s',
+	'txtDocRoot' => 'The ServerName %s use DocumentRoot %s reserved to localhost',
 	'txtServerNameIp' => 'IP %s for Servername %s is not valid in file %s',
 	'txtVhostNotClean' => 'The %s file has not been cleaned. There remain VirtualHost examples like: dummy-host.example.com',
 	'txtNoVhost' => 'No VirtualHost yet. Add one for each project in the file: wamp/bin/apache/apache%s/conf/extra/httpd-vhosts.conf',

@@ -1,5 +1,10 @@
 <?php
 //3.0.6
+//3.0.7 - $w_mariadbConsole - $w_mariadbLog - $w_mariaSettings
+//        $w_apacheDoc - $w_mysqlDoc - $w_mariadbDoc - $w_phpDoc
+//        $w_Doc
+//3.0.8   $w_noDBMS
+//3.1.1   $w_cmdWindows - $w_mysqlCommand - $w_mariadbCommand - $w_apacheCommand - $w_services_msc
 
 $w_allServicesRunning = 'Tous les services sont lancés';
 $w_oneServiceRunning = '%n service sur %t est lancé';
@@ -15,6 +20,9 @@ $w_forum = 'Forum';
 $w_exit = 'Fermer';
 $w_version = 'Version';
 $w_service = 'Administration du service';
+$w_services_msc = 'Gestionnaire des services';
+$w_doc = 'Documentation';
+$w_cmdWindows = 'Fenêtre de commande';
 
 $w_localhost = 'Localhost';
 $w_phpmyadmin = 'phpMyAdmin';
@@ -27,19 +35,24 @@ $w_phpSettings = 'Configuration PHP';
 $w_aliasDirectories = 'Répertoires Alias';
 $w_services = 'Services';
 $w_apache = 'Apache';
+$w_apacheCommand = $w_cmdWindows.' '.$w_apache.'/bin';
+$w_apacheDoc = $w_doc.' Apache';
 $w_mysql = 'MySQL';
+$w_mysqlDoc = $w_doc.' MySQL';
 $w_mysqlSettings = 'Configuration MySQL';
 $w_mariadb = 'MariaDB';
 $w_mariadbSettings = 'Configuration MariaDB';
-$w_startServices = 'Démarrer les services';
-$w_stopServices = 'Arrêter les services';
-$w_restartServices = 'Redémarrer les services';
+$w_mariadbDoc = $w_doc.' MariaDB';
+$w_startServices = '&Démarrer les services';
+$w_stopServices = 'A&rrêter les services';
+$w_restartServices = '&Redémarrer les services';
 $w_putOnline = 'Passer en ligne';
 $w_putOffline = 'Passer hors ligne';
 
 $w_apacheErrorLog = 'Apache error log';
 $w_apacheAccessLog = 'Apache access log';
 $w_phpLog = 'PHP error log';
+$w_phpDoc = $w_doc.' PHP';
 $w_mysqlLog = 'MySQL log';
 $w_mariadbLog = 'MariaDB log';
 $w_addAlias = 'Créer un alias';
@@ -58,7 +71,11 @@ $w_testPort80 = 'Tester le Port 80';
 $w_installService = '&Installer le service';
 $w_removeService = '&Supprimer le Service';
 $w_mysqlConsole = 'Console MySQL';
+$w_mysqlCommand = $w_cmdWindows.' '.$w_mysql.'/bin';
 $w_mariadbConsole = 'Console MariaDB';
+$w_mariadbCommand = $w_cmdWindows.' MariaDB/bin';
+
+$w_noDBMS = 'Sans base de données';
 
 $w_language = 'Langue';
 

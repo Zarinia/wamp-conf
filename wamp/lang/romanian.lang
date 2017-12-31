@@ -2,9 +2,15 @@
 // Romanian language file for
 // Menu
 // Translated by Ciprian Murariu <ciprianmp[at]yahoo[dot]com>
+//3.0.7 - $w_mariadbConsole - $w_mariadbLog - $w_mariaSettings
+//        $w_apacheDoc - $w_mysqlDoc - $w_mariadbDoc - $w_phpDoc
+//        $w_Doc
+//3.0.8 - $w_noDBMS
 
-$w_allServicesRunning = 'Toate serviciile funcþioneazã';
-$w_oneServiceRunning = '%n din %t servicii ruleazã';
+$w_translated_by = 'Tradus în limba românã de Ciprian Murariu';
+
+$w_allServicesRunning = 'Toate serviciile ruleazã normal';
+$w_oneServiceRunning = 'Doar %n din %t servicii ruleazã';
 $w_allServicesStopped = 'Nu ruleazã niciunul dintre cele %t servicii';
 
 $w_serverOffline = 'Server local';
@@ -15,41 +21,47 @@ $w_helpFile = 'Fiºier Ajutor';
 $w_help = 'Ajutor';
 $w_forum = 'Forum';
 $w_exit = 'Ieºire';
+$w_version = 'Schimbã Versiunea';
+$w_service = 'Administreazã Serviciul';
+$w_doc = 'Documentaþie';
 
 $w_localhost = 'Localhost';
 $w_phpmyadmin = 'phpMyAdmin';
 $w_sqlitemanager = 'SQLiteManager';
 $w_wwwDirectory = 'directorul www';
-$w_logFiles = 'Fiºiere Istoric';
+$w_logFiles = 'Fiºiere Jurnal';
 $w_configFiles = 'Fiºiere Configurare';
 $w_apacheModules = 'Module Apache';
 $w_phpSettings = 'Setãri PHP';
 $w_aliasDirectories = 'Directoare Alias';
 $w_services = 'Servicii';
 $w_apache = 'Apache';
+$w_apacheDoc = $w_Doc.' Apache';
 $w_mysql = 'MySQL';
-$w_mariadb = 'MariaDB';
+$w_mysqlDoc = $w_Doc.' MySQL';
+$w_mysqlSettings = 'Setãri MySQL';
+$w_mariaSettings = 'Setãri MariaDB';
+$w_mariadbDoc = $w_Doc.' MariaDB';
 $w_startServices = 'Porneºte Toate Serviciile';
 $w_stopServices = 'Opreºte Toate Serviciile';
 $w_restartServices = 'Reporneºte Toate Serviciile';
 $w_putOnline = 'Pune Online';
 $w_putOffline = 'Pune Offline';
 
-$w_apacheErrorLog = 'Istoric Erori Apache';
-$w_apacheAccessLog = 'Istoric Acces Apache';
-$w_phpLog = 'Istoric Erori PHP';
-$w_mysqlLog = 'Istoric MySQL';
-$w_mariadbLog = 'Istoric MariaDB';
+$w_apacheErrorLog = 'Jurnal Erori Apache';
+$w_apacheAccessLog = 'Jurnal Acces Apache';
+$w_phpLog = 'Jurnal Erori PHP';
+$w_phpDoc = $w_Doc.' PHP';
+$w_mysqlLog = 'Jurnal MySQL';
+$w_mariadbLog = 'Jurnal MariaDB';
 $w_addAlias = 'Adaugã un alias';
 $w_editAlias = 'Modificã alias';
 $w_editHtaccess = 'Modificã .htaccess';
-$w_deleteAlias = 'ªterge alias';
+$w_deleteAlias = 'Eliminã alias';
 $w_refresh = 'Reîncarcã';
 $w_phpExtensions = 'Extensii PHP';
 $w_addExtension = 'Adaugã extensie';
 
-$w_version = 'Schimbã Versiunea';
-$w_service = 'Administreazã Serviciul';
 $w_startResume = 'Porneºte/Reia &Serviciul';
 $w_pauseService = 'Sus&pendã Serviciul';
 $w_stopService = 'Opreº&te Serviciul';
@@ -60,6 +72,8 @@ $w_removeService = 'Eliminã Se&rviciul';
 $w_mysqlConsole = 'Consolã MySQL';
 $w_mariadbConsole = 'Consolã MariaDB';
 
-$w_language = 'Limbã';
+$w_noDBMS = 'Fara a bazei de date';
+
+$w_language = 'Alege Limba';
 
 ?>
