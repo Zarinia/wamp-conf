@@ -5,14 +5,14 @@
  * manual configuration. For easier setup you can use setup/
  *
  * All directives are explained in documentation in the doc/ folder
- * or at <http://docs.phpmyadmin.net/>.
+ * or at <https://docs.phpmyadmin.net/>.
  *
  * @package PhpMyAdmin
  */
 
 /**
  * This is needed for cookie based authentication to encrypt password in
- * cookie
+ * cookie. Needs to be 32 chars long.
  */
 $cfg['blowfish_secret'] = 'wamp'; /* YOU MUST FILL IN THIS FOR COOKIE AUTH! */
 
@@ -86,7 +86,6 @@ $i++;
 /* Authentication type */
 $cfg['Servers'][$i]['auth_type'] = 'cookie';
 // $cfg['Servers'][$i]['user']          = 'phlyper';      // MySQL user
-
 // $cfg['Servers'][$i]['password']      = 'azerty';          // MySQL password (only needed)
 /* Server parameters */
 $cfg['Servers'][$i]['verbose'] = 'localhost MariaDB port 3307';
@@ -138,12 +137,18 @@ $cfg['Servers'][$i]['export_templates'] = 'pma__export_templates';
 /* Contrib / Swekey authentication */
 // $cfg['Servers'][$i]['auth_swekey_config'] = '/etc/swekey-pma.conf';
 
+// for 3326
+// $i++;
+// $cfg['Servers'][$i] = $cfg['Servers'][$i-1];
+// $cfg['Servers'][$i]['verbose'] = 'localhost MariaDB port 3326';
+// $cfg['Servers'][$i]['port'] = 3326;
+
 /**
  * End of servers configuration
  */
 
 $cfg['DefaultConnectionCollation'] = 'utf8_general_ci';
-$cfg['ServerDefault'] = stripos($_SERVER["HTTP_HOST"], 'mariadb') !== false ? 2 : 1;
+$cfg['ServerDefault'] = isset($_SERVER["HTTP_HOST"]) && stripos($_SERVER["HTTP_HOST"], 'mariadb') !== false ? 2 : 1;
 $cfg['ShowPhpInfo'] = true;
 //$cfg['ThemeDefault'] = 'metro';
 # Debug
@@ -251,10 +256,7 @@ $cfg['QueryHistoryDB'] = true;
 
 /**
  * You can find more configuration options in the documentation
- * in the doc/ folder or at <http://docs.phpmyadmin.net/>.
+ * in the doc/ folder or at <https://docs.phpmyadmin.net/>.
  */
 
 $cfg['ExecTimeLimit'] = 0;
-$cfg['PersistentConnections'] = true;
-
-?>
