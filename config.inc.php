@@ -260,3 +260,34 @@ $cfg['QueryHistoryDB'] = true;
  */
 
 $cfg['ExecTimeLimit'] = 0;
+
+/**
+ * maximum number of db's displayed in database list
+ *
+ * @global integer $cfg['MaxDbList']
+ */
+$cfg['MaxDbList'] = 100;
+
+/**
+ * maximum number of tables displayed in table list
+ *
+ * @global integer $cfg['MaxTableList']
+ */
+$cfg['MaxTableList'] = 250;
+/**
+ * maximum number of first level databases displayed in navigation panel
+ *
+ * @global integer $cfg['FirstLevelNavigationItems']
+ */
+$cfg['FirstLevelNavigationItems'] = 100;
+
+/**
+ * maximum number of items displayed in navigation panel
+ *
+ * @global integer $cfg['MaxNavigationItems']
+ */
+$cfg['MaxNavigationItems'] = 100;
+
+
+
+
