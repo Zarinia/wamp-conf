@@ -16,6 +16,7 @@ sudo iptables -L
 
 # voir les processus en ecoute
 sudo netstat --inet -npl -a
+sudo netstat -nap
 
 # ne pas casser les conexions etablies
 sudo iptables -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT

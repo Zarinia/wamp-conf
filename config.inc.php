@@ -14,7 +14,7 @@
  * This is needed for cookie based authentication to encrypt password in
  * cookie. Needs to be 32 chars long.
  */
-$cfg['blowfish_secret'] = 'wamp'; /* YOU MUST FILL IN THIS FOR COOKIE AUTH! */
+$cfg['blowfish_secret'] = 'wamp-32-4dqkBBGfL9PIjIMX-JP9HfvGMb1WP3IUp'; /* YOU MUST FILL IN THIS FOR COOKIE AUTH! */
 
 /**
  * Servers configuration
@@ -135,13 +135,14 @@ $cfg['Servers'][$i]['central_columns'] = 'pma__central_columns';
 $cfg['Servers'][$i]['designer_settings'] = 'pma__designer_settings';
 $cfg['Servers'][$i]['export_templates'] = 'pma__export_templates';
 /* Contrib / Swekey authentication */
-// $cfg['Servers'][$i]['auth_swekey_config'] = '/etc/swekey-pma.conf';
+$cfg['Servers'][$i]['auth_swekey_config'] = '/etc/swekey-pma.conf';
 
-// for 3326
-// $i++;
-// $cfg['Servers'][$i] = $cfg['Servers'][$i-1];
-// $cfg['Servers'][$i]['verbose'] = 'localhost MariaDB port 3326';
-// $cfg['Servers'][$i]['port'] = 3326;
+// foreach([3316, 3326, 3317, 3327] as $port):
+	// $i++;
+	// $cfg['Servers'][$i] = $cfg['Servers'][$i-1];
+	// $cfg['Servers'][$i]['verbose'] = "localhost ".($port % 10 == 6 ? "MySQL" : ($port % 10 == 7 ? "MariaDB" : ""))." port {$port}";
+	// $cfg['Servers'][$i]['port'] = $port;
+// endforeach;
 
 /**
  * End of servers configuration
@@ -158,6 +159,7 @@ $cfg['ShowPhpInfo'] = true;
 # Lien vers la documentation francophone
 $cfg['MySQLManualBase'] = 'http://dev.mysql.com/doc/refman/5.0/fr/';
 $cfg['MySQLManualBase'] = 'http://dev.mysql.com/doc/refman/5.6/en/';
+$cfg['MySQLManualBase'] = 'http://dev.mysql.com/doc/refman/5.7/en/';
 
 /**
   * Type:	integer [number of seconds]

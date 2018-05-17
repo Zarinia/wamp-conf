@@ -15,6 +15,8 @@ GRANT ALL PRIVILEGES ON *.* TO 'phlyper'@'localhost' WITH GRANT OPTION;
 CREATE USER IF NOT EXISTS 'phlyper'@'localhost' IDENTIFIED BY 'azerty';
 GRANT ALL PRIVILEGES ON  *.* to 'phlyper'@'localhost' WITH GRANT OPTION;
 
+
+FLUSH PRIVILEGES;
 --------------------------------------
 
 REM upgrade shutdown mysql server
