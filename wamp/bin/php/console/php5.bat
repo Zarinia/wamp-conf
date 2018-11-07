@@ -1,6 +1,6 @@
 @ECHO ON
 
-set php_console=C:\wamp\bin\php\console
+set php_console=d:\wamp\bin\php\console
 
 REM call %php_console%\php52.bat %*
 REM call %php_console%\php53.bat %*
